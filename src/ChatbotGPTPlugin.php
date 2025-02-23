@@ -14,8 +14,8 @@ class ChatbotGPTPlugin {
 	 * Initialize the plugin.
 	 */
 	public function init() {
+		ChatbotGPTSettings::register();
 		ChatbotGPTShortcode::register();
-
 		add_action( 'wp_ajax_chatbot_gpt_request', array( $this, 'handle_chatbot_request' ) );
 		add_action( 'wp_ajax_nopriv_chatbot_gpt_request', array( $this, 'handle_chatbot_request' ) );
 	}

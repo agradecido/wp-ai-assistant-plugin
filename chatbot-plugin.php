@@ -16,16 +16,16 @@ require_once plugin_dir_path( __FILE__ ) . 'vendor/autoload.php';
 
 use Dotenv\Dotenv;
 use ChatbotGPT\ChatbotGPTPlugin;
-use ChatbotGPT\ChatbotGPTSettings;
 
-$dotenv = Dotenv::createImmutable( __DIR__ );
-$dotenv->load();
+if ( file_exists( __DIR__ . '/.env' ) ) {
+	$dotenv = Dotenv::createMutable( __DIR__ );
+	$dotenv->load();
+}
 
 /**
  * Initialize the plugin.
  */
 function chatbot_gpt_init() {
-	ChatbotGPTSettings::register();
 	$plugin = new ChatbotGPTPlugin();
 	$plugin->init();
 }
