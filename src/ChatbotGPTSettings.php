@@ -15,7 +15,7 @@ class ChatbotGPTSettings {
 		add_action( 'admin_init', array( self::class, 'register_settings' ) );
 		add_action( 'admin_enqueue_scripts', array( self::class, 'enqueue_admin_assets' ) );
 	}
-	
+
 	/**
 	 * Enqueue assets for admin pages.
 	 *
@@ -41,8 +41,7 @@ class ChatbotGPTSettings {
 			'dashicons-format-chat',
 			25
 		);
-		
-		// Añadir submenú para pruebas del asistente
+
 		add_submenu_page(
 			'chatbot-gpt-settings',
 			'Probar Asistente',
@@ -142,19 +141,18 @@ class ChatbotGPTSettings {
 		</div>
 		<?php
 	}
-	
+
 	/**
 	 * Renders the test page for the assistant.
 	 */
 	public static function render_test_page() {
-		// Obtener información del asistente
 		$assistant_info = ChatbotGPTAssistant::get_assistant_info();
 		?>
 		<div class="wrap">
 			<h1>Prueba del Asistente ChatGPT</h1>
 			<p>Usa esta sección para probar consultas al asistente configurado.</p>
 			
-			<?php if ( !$assistant_info['error'] ) : ?>
+			<?php if ( ! $assistant_info['error'] ) : ?>
 			<div class="assistant-info">
 				<h3>Información del Asistente</h3>
 				<table class="widefat striped" style="max-width: 800px; margin-bottom: 20px;">
@@ -167,7 +165,7 @@ class ChatbotGPTSettings {
 							<th>Modelo</th>
 							<td><strong><?php echo esc_html( $assistant_info['model'] ); ?></strong></td>
 						</tr>
-						<?php if ( !empty( $assistant_info['description'] ) ) : ?>
+						<?php if ( ! empty( $assistant_info['description'] ) ) : ?>
 						<tr>
 							<th>Descripción</th>
 							<td><?php echo esc_html( $assistant_info['description'] ); ?></td>
@@ -177,7 +175,7 @@ class ChatbotGPTSettings {
 							<th>ID</th>
 							<td><?php echo esc_html( $assistant_info['id'] ); ?></td>
 						</tr>
-						<?php if ( !empty( $assistant_info['created_at'] ) ) : ?>
+						<?php if ( ! empty( $assistant_info['created_at'] ) ) : ?>
 						<tr>
 							<th>Creado</th>
 							<td><?php echo esc_html( $assistant_info['created_at'] ); ?></td>
@@ -220,25 +218,21 @@ class ChatbotGPTSettings {
 					let userInput = chatInput.value.trim();
 					if (userInput === "") return;
 					
-					// Añadir mensaje del usuario
 					addUserMessage(userInput);
 					chatSpinner.style.display = "block";
 					
-					// Preparar datos para AJAX
 					let data = {
 						action: 'chatbot_gpt_admin_test',
 						query: userInput,
-						_ajax_nonce: '<?php echo wp_create_nonce('chatbot_gpt_admin_test_nonce'); ?>'
+						_ajax_nonce: '<?php echo wp_create_nonce( 'chatbot_gpt_admin_test_nonce' ); ?>'
 					};
 					
 					if (threadId) {
 						data.thread_id = threadId;
 					}
 					
-					// Vaciar el input después de enviar
 					chatInput.value = "";
 					
-					// Enviar petición AJAX
 					$.post(ajaxurl, data, function(response) {
 						chatSpinner.style.display = "none";
 						
@@ -271,8 +265,7 @@ class ChatbotGPTSettings {
 					chatOutput.appendChild(assistantMessage);
 					chatOutput.scrollTop = chatOutput.scrollHeight;
 				}
-				
-				// Event Listeners
+
 				chatSubmit.addEventListener("click", sendChat);
 				chatInput.addEventListener("keydown", function(e) {
 					if (e.key === "Enter" && e.ctrlKey) {
@@ -339,5 +332,4 @@ class ChatbotGPTSettings {
 	}
 }
 
-// Register the settings page.
 ChatbotGPTSettings::register();

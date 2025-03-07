@@ -69,27 +69,22 @@ class ChatbotGPTAssistant {
 			}
 		}
 
-		// Send message to thread.
 		$message_status = self::send_message_to_thread( $thread_id, $query );
 		if ( $message_status !== true ) {
 			return array( 'error' => 'Error: Unable to send message to Assistant.' );
 		}
 
-		// Run the Assistant.
 		$run_id = self::run_assistant( $thread_id );
 		if ( empty( $run_id ) ) {
 			return array( 'error' => 'Error: Unable to Run the query process.' );
 		}
 
-		// Wait for the Assistant to complete the response.
 		if ( ! self::wait_for_response( $thread_id, $run_id ) ) {
 			return array( 'error' => 'Error: Failed to retrieve Assistant response.' );
 		}
 
-		// Get the Assistant's response.
 		$assistant_response = self::get_assistant_response( $thread_id );
 
-		// Format the response text.
 		$assistant_response = self::format_response( $assistant_response );
 
 		return array(
@@ -244,7 +239,6 @@ class ChatbotGPTAssistant {
 
 		$body = json_decode( wp_remote_retrieve_body( $response ), true );
 
-		// Search for the last Assistant's response.
 		foreach ( $body['data'] as $message ) {
 			if ( 'assistant' === $message['role'] ) {
 				return $message['content'][0]['text']['value'] ?? 'No response from Assistant.';
@@ -264,7 +258,7 @@ class ChatbotGPTAssistant {
 		$parsedown = new Parsedown();
 		return $parsedown->text( $text );
 	}
-	
+
 	/**
 	 * Get assistant information including the model being used.
 	 *
@@ -272,15 +266,14 @@ class ChatbotGPTAssistant {
 	 */
 	public static function get_assistant_info(): array {
 		self::init();
-		
-		// Verify that we have the required settings
+
 		if ( empty( self::$api_key ) || empty( self::$assistant_id ) ) {
-			return array( 
-				'error' => true,
-				'message' => 'Error: API key or Assistant ID is missing.' 
+			return array(
+				'error'   => true,
+				'message' => 'Error: API key or Assistant ID is missing.',
 			);
 		}
-		
+
 		$response = wp_remote_get(
 			self::$api_url . '/assistants/' . self::$assistant_id,
 			array(
@@ -292,40 +285,40 @@ class ChatbotGPTAssistant {
 				'timeout' => 20,
 			)
 		);
-		
+
 		if ( is_wp_error( $response ) ) {
 			ChatbotGPTLogger::error( 'Error retrieving assistant information: ' . $response->get_error_message() );
-			return array( 
-				'error' => true,
-				'message' => 'Error: ' . $response->get_error_message() 
+			return array(
+				'error'   => true,
+				'message' => 'Error: ' . $response->get_error_message(),
 			);
 		}
-		
+
 		$status_code = wp_remote_retrieve_response_code( $response );
 		if ( 200 !== $status_code ) {
 			ChatbotGPTLogger::error( 'Error retrieving assistant info. Status code: ' . $status_code );
 			return array(
-				'error' => true,
-				'message' => 'Error: Unable to retrieve assistant information. Status code: ' . $status_code
+				'error'   => true,
+				'message' => 'Error: Unable to retrieve assistant information. Status code: ' . $status_code,
 			);
 		}
-		
+
 		$body = json_decode( wp_remote_retrieve_body( $response ), true );
-		
-		if ( empty( $body ) || !isset( $body['model'] ) ) {
+
+		if ( empty( $body ) || ! isset( $body['model'] ) ) {
 			return array(
-				'error' => true,
-				'message' => 'Error: Retrieved assistant info is empty or invalid.'
+				'error'   => true,
+				'message' => 'Error: Retrieved assistant info is empty or invalid.',
 			);
 		}
-		
+
 		return array(
-			'error' => false,
-			'id' => $body['id'] ?? '',
-			'name' => $body['name'] ?? '',
-			'model' => $body['model'] ?? '',
+			'error'       => false,
+			'id'          => $body['id'] ?? '',
+			'name'        => $body['name'] ?? '',
+			'model'       => $body['model'] ?? '',
 			'description' => $body['description'] ?? '',
-			'created_at' => isset($body['created_at']) ? date('Y-m-d H:i:s', $body['created_at']) : '',
+			'created_at'  => isset( $body['created_at'] ) ? date( 'Y-m-d H:i:s', $body['created_at'] ) : '',
 		);
 	}
 }
