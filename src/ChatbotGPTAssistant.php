@@ -264,4 +264,68 @@ class ChatbotGPTAssistant {
 		$parsedown = new Parsedown();
 		return $parsedown->text( $text );
 	}
+	
+	/**
+	 * Get assistant information including the model being used.
+	 *
+	 * @return array Information about the assistant or error.
+	 */
+	public static function get_assistant_info(): array {
+		self::init();
+		
+		// Verify that we have the required settings
+		if ( empty( self::$api_key ) || empty( self::$assistant_id ) ) {
+			return array( 
+				'error' => true,
+				'message' => 'Error: API key or Assistant ID is missing.' 
+			);
+		}
+		
+		$response = wp_remote_get(
+			self::$api_url . '/assistants/' . self::$assistant_id,
+			array(
+				'headers' => array(
+					'Content-Type'  => 'application/json',
+					'Authorization' => 'Bearer ' . self::$api_key,
+					'OpenAI-Beta'   => 'assistants=v2',
+				),
+				'timeout' => 20,
+			)
+		);
+		
+		if ( is_wp_error( $response ) ) {
+			ChatbotGPTLogger::error( 'Error retrieving assistant information: ' . $response->get_error_message() );
+			return array( 
+				'error' => true,
+				'message' => 'Error: ' . $response->get_error_message() 
+			);
+		}
+		
+		$status_code = wp_remote_retrieve_response_code( $response );
+		if ( 200 !== $status_code ) {
+			ChatbotGPTLogger::error( 'Error retrieving assistant info. Status code: ' . $status_code );
+			return array(
+				'error' => true,
+				'message' => 'Error: Unable to retrieve assistant information. Status code: ' . $status_code
+			);
+		}
+		
+		$body = json_decode( wp_remote_retrieve_body( $response ), true );
+		
+		if ( empty( $body ) || !isset( $body['model'] ) ) {
+			return array(
+				'error' => true,
+				'message' => 'Error: Retrieved assistant info is empty or invalid.'
+			);
+		}
+		
+		return array(
+			'error' => false,
+			'id' => $body['id'] ?? '',
+			'name' => $body['name'] ?? '',
+			'model' => $body['model'] ?? '',
+			'description' => $body['description'] ?? '',
+			'created_at' => isset($body['created_at']) ? date('Y-m-d H:i:s', $body['created_at']) : '',
+		);
+	}
 }

@@ -15,7 +15,7 @@ class ChatbotGPTSettings {
 		add_action( 'admin_init', array( self::class, 'register_settings' ) );
 		add_action( 'admin_enqueue_scripts', array( self::class, 'enqueue_admin_assets' ) );
 	}
-
+	
 	/**
 	 * Enqueue assets for admin pages.
 	 *
@@ -34,14 +34,14 @@ class ChatbotGPTSettings {
 	public static function add_settings_page() {
 		add_menu_page(
 			'Chatbot GPT Settings',
-			'Configuración Asistente',
+			'Chatbot GPT',
 			'manage_options',
 			'chatbot-gpt-settings',
 			array( self::class, 'render_settings_page' ),
 			'dashicons-format-chat',
 			25
 		);
-
+		
 		// Añadir submenú para pruebas del asistente
 		add_submenu_page(
 			'chatbot-gpt-settings',
@@ -142,15 +142,55 @@ class ChatbotGPTSettings {
 		</div>
 		<?php
 	}
-
+	
 	/**
 	 * Renders the test page for the assistant.
 	 */
 	public static function render_test_page() {
+		// Obtener información del asistente
+		$assistant_info = ChatbotGPTAssistant::get_assistant_info();
 		?>
 		<div class="wrap">
 			<h1>Prueba del Asistente ChatGPT</h1>
 			<p>Usa esta sección para probar consultas al asistente configurado.</p>
+			
+			<?php if ( !$assistant_info['error'] ) : ?>
+			<div class="assistant-info">
+				<h3>Información del Asistente</h3>
+				<table class="widefat striped" style="max-width: 800px; margin-bottom: 20px;">
+					<tbody>
+						<tr>
+							<th>Nombre</th>
+							<td><?php echo esc_html( $assistant_info['name'] ); ?></td>
+						</tr>
+						<tr>
+							<th>Modelo</th>
+							<td><strong><?php echo esc_html( $assistant_info['model'] ); ?></strong></td>
+						</tr>
+						<?php if ( !empty( $assistant_info['description'] ) ) : ?>
+						<tr>
+							<th>Descripción</th>
+							<td><?php echo esc_html( $assistant_info['description'] ); ?></td>
+						</tr>
+						<?php endif; ?>
+						<tr>
+							<th>ID</th>
+							<td><?php echo esc_html( $assistant_info['id'] ); ?></td>
+						</tr>
+						<?php if ( !empty( $assistant_info['created_at'] ) ) : ?>
+						<tr>
+							<th>Creado</th>
+							<td><?php echo esc_html( $assistant_info['created_at'] ); ?></td>
+						</tr>
+						<?php endif; ?>
+					</tbody>
+				</table>
+			</div>
+			<?php elseif ( isset( $assistant_info['message'] ) ) : ?>
+			<div class="notice notice-error">
+				<p><?php echo esc_html( $assistant_info['message'] ); ?></p>
+			</div>
+			<?php endif; ?>
 			
 			<div id="chatbot-admin-test">
 				<div id="chat-output" class="admin-chat-output"></div>
@@ -188,7 +228,7 @@ class ChatbotGPTSettings {
 					let data = {
 						action: 'chatbot_gpt_admin_test',
 						query: userInput,
-						_ajax_nonce: '<?php echo wp_create_nonce( 'chatbot_gpt_admin_test_nonce' ); ?>'
+						_ajax_nonce: '<?php echo wp_create_nonce('chatbot_gpt_admin_test_nonce'); ?>'
 					};
 					
 					if (threadId) {
@@ -247,6 +287,7 @@ class ChatbotGPTSettings {
 			#chatbot-admin-test {
 				margin-top: 20px;
 				max-width: 800px;
+				position: relative;
 			}
 			.admin-chat-output {
 				height: 400px;
@@ -255,6 +296,7 @@ class ChatbotGPTSettings {
 				padding: 15px;
 				margin-bottom: 15px;
 				background-color: #f9f9f9;
+				position: relative;
 			}
 			.chat-message {
 				margin-bottom: 10px;
@@ -277,10 +319,19 @@ class ChatbotGPTSettings {
 			.admin-spinner {
 				display: none;
 				text-align: center;
-				margin: 10px 0;
+				background-color: rgba(255, 255, 255, 0.8);
+				padding: 20px;
+				border-radius: 5px;
+				position: absolute;
+				left: 50%;
+				top: 50%;
+				transform: translate(-50%, -50%);
+				z-index: 100;
+				box-shadow: 0 0 10px rgba(0,0,0,0.1);
 			}
 			.spinner circle {
 				stroke: #0073aa;
+				stroke-width: 3px;
 			}
 			</style>
 		</div>
