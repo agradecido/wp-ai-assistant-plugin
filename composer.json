@@ -10,6 +10,12 @@
         "erusev/parsedown": "^1.7"
     },
     "require-dev": {
-        "johnpbloch/wordpress": "*"
+        "johnpbloch/wordpress": "*",
+        "php-stubs/wordpress-stubs": "^6.7"
+    },
+    "config": {
+        "allow-plugins": {
+            "johnpbloch/wordpress-core-installer": true
+        }
     }
 }

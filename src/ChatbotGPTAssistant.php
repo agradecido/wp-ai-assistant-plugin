@@ -34,15 +34,22 @@ class ChatbotGPTAssistant {
 	 * @var int
 	 */
 	private static $sleep_time;
+	/**
+	 * System instructions for the assistant.
+	 *
+	 * @var string
+	 */
+	private static $system_instructions;
 
 	/**
 	 * Initialize the Assistant settings.
 	 */
 	public static function init() {
-		self::$api_key      = get_option( 'chatbot_gpt_api_key' );
-		self::$api_url      = get_option( 'chatbot_gpt_api_url' ) ?? 'https://api.openai.com/v1';
-		self::$assistant_id = get_option( 'chatbot_gpt_assistant_id' ) ?? '';
-		self::$sleep_time   = intval( get_option( 'chatbot_gpt_assistant_waiting_time_in_seconds' ) ) ?? 5;
+		self::$api_key             = get_option( 'chatbot_gpt_api_key' );
+		self::$api_url             = get_option( 'chatbot_gpt_api_url' ) ?? 'https://api.openai.com/v1';
+		self::$assistant_id        = get_option( 'chatbot_gpt_assistant_id' ) ?? '';
+		self::$sleep_time          = intval( get_option( 'chatbot_gpt_assistant_waiting_time_in_seconds' ) ) ?? 5;
+		self::$system_instructions = get_option( 'chatbot_gpt_system_instructions' ) ?? '';
 	}
 
 	/**
@@ -154,10 +161,16 @@ class ChatbotGPTAssistant {
 	 * @return string|null Run ID or null if failed.
 	 */
 	private static function run_assistant( string $thread_id ): ?string {
+		$body = array( 'assistant_id' => self::$assistant_id );
+
+		if ( ! empty( self::$system_instructions ) ) {
+			$body['instructions'] = self::$system_instructions;
+		}
+
 		$response = wp_remote_post(
 			self::$api_url . "/threads/$thread_id/runs",
 			array(
-				'body'    => wp_json_encode( array( 'assistant_id' => self::$assistant_id ) ),
+				'body'    => wp_json_encode( $body ),
 				'headers' => array(
 					'Content-Type'  => 'application/json',
 					'Authorization' => 'Bearer ' . self::$api_key,
@@ -240,7 +253,6 @@ class ChatbotGPTAssistant {
 
 		return 'No response from Assistant.';
 	}
-
 
 	/**
 	 * Format the response text using Parsedown.

@@ -4,3 +4,7 @@ vendor
 CLAUDE.md
 vendor
 .env
+/wordpress
+.htaccess
+.htexclude
+robots.txt
