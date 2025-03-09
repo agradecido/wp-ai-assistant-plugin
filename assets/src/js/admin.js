@@ -13,9 +13,9 @@ jQuery(document).ready(function($) {
 		chatSpinner.style.display = "block";
 
 		let data = {
-			action: 'chatbot_gpt_admin_test',
+			action: 'wp_ai_chatbot_admin_test',
 			query: userInput,
-			_ajax_nonce: chatbotGPT.nonce // Usar el nonce pasado desde PHP
+			_ajax_nonce: wpAIChatbot.nonce // Usar el nonce pasado desde PHP
 		};
 
 		if (threadId) {
@@ -24,7 +24,7 @@ jQuery(document).ready(function($) {
 
 		chatInput.value = "";
 
-		$.post(chatbotGPT.ajaxurl, data, function(response) { // Usar la URL AJAX pasada desde PHP
+		$.post(wpAIChatbot.ajaxurl, data, function(response) { // Usar la URL AJAX pasada desde PHP
 			chatSpinner.style.display = "none";
 
 			if (response.success) {

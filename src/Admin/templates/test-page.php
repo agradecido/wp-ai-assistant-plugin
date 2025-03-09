@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<?php if ( ! $assistant_info['error'] ) : ?>
 	<div class="assistant-info">
 		<h3>Información del Asistente</h3>
-		<table class="widefat striped" style="max-width: 800px; margin-bottom: 20px;">
+		<table class="widefat striped">
 			<tbody>
 				<tr>
 					<th>Nombre</th>
