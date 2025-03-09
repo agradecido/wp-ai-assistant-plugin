@@ -34,10 +34,13 @@ jobs:
       - name: Install PHP dependencies
         run: composer install --no-dev --optimize-autoloader
 
-      # - name: Generate plugin ZIP
-      #   uses: 10up/action-wordpress-plugin-build-zip@stable
-      #   env:
-      #     SLUG: wp-ai-assistant  # Ajusta el slug según tu plugin
+      - name: Generate plugin ZIP
+        run: |
+          mkdir -p build
+          rsync -av --exclude-from=.distignore ./ build/wp-ai-assistant/
+          cd build/wp-ai-assistant
+          zip -r ../../wp-ai-assistant.zip ./*
+        shell: bash
 
       - name: Upload ZIP as artifact
         uses: actions/upload-artifact@v4
