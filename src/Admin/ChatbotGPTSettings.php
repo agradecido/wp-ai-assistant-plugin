@@ -9,6 +9,7 @@ use ChatbotGPT\Api\ChatbotGPTAssistant;
  * Handles the settings page for configuring the chatbot in the WordPress admin panel.
  */
 class ChatbotGPTSettings {
+	
 	/**
 	 * Registers the settings page in the WordPress admin menu.
 	 */
@@ -24,11 +25,22 @@ class ChatbotGPTSettings {
 	 * @param string $hook Current admin page hook.
 	 */
 	public static function enqueue_admin_assets( $hook ) {
-		if ( 'chatbot-gpt_page_chatbot-gpt-test' === $hook ) {
-			wp_enqueue_style( 'chatbot-gpt-admin-style', plugin_dir_path( __DIR__ ) . 'assets/css/chatbot.css', array(), '1.0' );
-			wp_enqueue_script( 'jquery' );
+		if (  'chatbot-gpt_page_chatbot-gpt-test' === $hook ) {
+			$plugin_url = plugin_dir_url( dirname( __DIR__ ) );
+			wp_enqueue_style( 'chatbot-gpt-admin-style', $plugin_url . 'assets/css/admin.css', array(), '1.0' );
+			wp_enqueue_script( 'chatbot-gpt-admin-js', $plugin_url . 'assets/js/admin.js', array( 'jquery' ), '1.0', true );
+			wp_localize_script(
+				'chatbot-gpt-admin-js',
+				'chatbotGPT',
+				array(
+					'ajaxurl' => admin_url( 'admin-ajax.php' ),
+					'nonce'   => wp_create_nonce( 'chatbot_gpt_admin_test_nonce' ),
+				)
+			);
 		}
 	}
+
+
 
 	/**
 	 * Adds the settings page as a top-level menu in WordPress admin.

@@ -20,6 +20,7 @@ class ChatbotGPTPlugin {
 	public function init() {
 		ChatbotGPTSettings::register();
 		ChatbotGPTShortcode::register();
+
 		add_action( 'wp_ajax_chatbot_gpt_request', array( $this, 'handle_chatbot_request' ) );
 		add_action( 'wp_ajax_nopriv_chatbot_gpt_request', array( $this, 'handle_chatbot_request' ) );
 
@@ -70,7 +71,6 @@ class ChatbotGPTPlugin {
 			wp_die();
 		}
 
-		// Utilizar la clase existente para consultar al asistente
 		$response = ChatbotGPTAssistant::query_assistant( $query, $thread_id );
 
 		if ( isset( $response['error'] ) ) {

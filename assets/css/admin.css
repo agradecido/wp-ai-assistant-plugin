@@ -1,0 +1,78 @@
+#chatbot-admin-test {
+	margin-top: 20px;
+	max-width: 800px;
+	position: relative;
+}
+.admin-chat-output {
+	height: 400px;
+	overflow-y: auto;
+	border: 1px solid #ddd;
+	padding: 15px;
+	margin-bottom: 15px;
+	background-color: #f9f9f9;
+	position: relative;
+}
+.chat-message {
+	margin-bottom: 10px;
+	padding: 10px;
+	border-radius: 5px;
+	max-width: 80%;
+}
+.chat-message.user {
+	background-color: #e1f3d8;
+	margin-left: auto;
+	text-align: right;
+}
+.chat-message.assistant {
+	background-color: #f0f0f0;
+}
+#chat-input {
+	width: 100%;
+	margin-bottom: 10px;
+}
+.admin-spinner {
+	display: none;
+	text-align: center;
+	background-color: rgba(255, 255, 255, 0.8);
+	padding: 20px;
+	border-radius: 5px;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	z-index: 100;
+	box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+/* Dot spinner */
+.dot-spinner {
+	margin: 0 auto;
+	width: 70px;
+	text-align: center;
+}
+
+.dot-spinner > div {
+	width: 14px;
+	height: 14px;
+	margin: 0 5px;
+	background-color: #0073aa;
+	border-radius: 100%;
+	display: inline-block;
+	animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+}
+
+.dot-spinner .dot1 {
+	animation-delay: -0.32s;
+}
+
+.dot-spinner .dot2 {
+	animation-delay: -0.16s;
+}
+
+@keyframes sk-bouncedelay {
+	0%, 80%, 100% { 
+		transform: scale(0);
+	} 40% { 
+		transform: scale(1.0);
+	}
+}

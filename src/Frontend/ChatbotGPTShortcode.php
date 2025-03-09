@@ -31,12 +31,12 @@ class ChatbotGPTShortcode {
 	 * Retrieves an option with a default value.
 	 *
 	 * @param string $option_name Option key.
-	 * @param mixed  $default Default value if the option is not set.
+	 * @param mixed  $default_value Default value if the option is not set.
 	 * @return mixed
 	 */
-	private static function get_option_with_default( string $option_name, $default ) {
-		$value = get_option( $option_name, $default );
-		return ! empty( $value ) ? $value : $default;
+	private static function get_option_with_default( string $option_name, $default_value ) {
+		$value = get_option( $option_name, $default_value );
+		return ! empty( $value ) ? $value : $default_value;
 	}
 
 	/**
