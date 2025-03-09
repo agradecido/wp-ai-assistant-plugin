@@ -45,9 +45,12 @@ jobs:
           name: wp-ai-assistant
           path: wp-ai-assistant.zip
 
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: wp-ai-assistant.zip
+          files: ai-assistant-wp-plugin.zip
           generate_release_notes: true
-
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+# Usa el PAT en lugar del GITHUB_TOKEN
