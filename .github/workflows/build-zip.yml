@@ -37,16 +37,17 @@ jobs:
       - name: Generate plugin ZIP
         uses: 10up/action-wordpress-plugin-build-zip@stable
         env:
-          SLUG: ai-assistant-wp-plugin  # Ajusta el slug según tu plugin
+          SLUG: ai-assistant-wp  # Ajusta el slug según tu plugin
 
       - name: Upload ZIP as artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ai-assistant-wp-plugin
-          path: ai-assistant-wp-plugin.zip
+          name: ai-assistant-wp
+          path: ai-assistant-wp.zip
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: ai-assistant-wp-plugin.zip
+          files: ai-assistant-wp.zip
           generate_release_notes: true
+
