@@ -1,0 +1,12 @@
+/.git
+/.github
+/node_modules
+.gitignore
+.distignore
+*.sh
+/assets/src
+.vscode
+CLAUDE.md
+package.json
+package-lock.json
+webpack.config.json

@@ -1,0 +1,52 @@
+name: Build Plugin ZIP
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'  # Se ejecuta en cada nuevo tag con formato vX.X.X
+
+jobs:
+  build:
+    name: Compile & Build ZIP
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18' # Usa la versión que necesites
+
+      - name: Install npm dependencies
+        run: npm install
+
+      - name: Build assets
+        run: npm run build
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1' # Ajusta según la versión que necesites
+          tools: composer
+
+      - name: Install PHP dependencies
+        run: composer install --no-dev --optimize-autoloader
+
+      - name: Generate plugin ZIP
+        uses: 10up/action-wordpress-plugin-build-zip@stable
+        env:
+          SLUG: ai-assistant-wp-plugin  # Ajusta el slug según tu plugin
+
+      - name: Upload ZIP as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ai-assistant-wp-plugin
+          path: ai-assistant-wp-plugin.zip
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ai-assistant-wp-plugin.zip
+          generate_release_notes: true
