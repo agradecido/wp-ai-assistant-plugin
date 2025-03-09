@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Chatbot OpenAI Assistant
- * Description: Plugin for chat with a OpenAI Assistant.
+ * Description: Plugin for chat with an OpenAI Assistant.
  * Version: 1.0
  * Author: Javier Sierra
  *

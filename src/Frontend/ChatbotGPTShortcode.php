@@ -1,5 +1,7 @@
 <?php
-namespace ChatbotGPT;
+namespace ChatbotGPT\Frontend;
+
+use ChatbotGPT\Utils\ChatbotGPTLogger;
 
 /**
  * Shortcode for the chatbot.
@@ -94,7 +96,7 @@ class ChatbotGPTShortcode {
 	private static function get_html( string $nonce ): string {
 		ob_start();
 
-		$template_path = plugin_dir_path( __DIR__ ) . 'templates/chatbot-template.php';
+		$template_path = plugin_dir_path( __DIR__ ) . 'src/Frontend/templates/chatbot-template.php';
 
 		if ( file_exists( $template_path ) ) {
 			include $template_path;

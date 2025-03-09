@@ -1,6 +1,7 @@
 vendor
 .env
 .vscode
+.dbdata
 CLAUDE.md
 vendor
 .env
@@ -8,3 +9,5 @@ vendor
 .htaccess
 .htexclude
 robots.txt
+akismet
+hello.php

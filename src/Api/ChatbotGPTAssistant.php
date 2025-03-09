@@ -1,8 +1,8 @@
 <?php
-namespace ChatbotGPT;
+namespace ChatbotGPT\Api;
 
-use ChatbotGPT\ChatbotGPTLogger;
 use Parsedown;
+use ChatbotGPT\Utils\ChatbotGPTLogger;
 
 /**
  * Class ChatbotGPTAssistant
