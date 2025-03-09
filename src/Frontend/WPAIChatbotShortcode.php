@@ -1,21 +1,21 @@
 <?php
-namespace ChatbotGPT\Frontend;
+namespace WPAIChatbot\Frontend;
 
-use ChatbotGPT\Utils\ChatbotGPTLogger;
+use WPAIChatbot\Utils\WPAIChatbotLogger;
 
 /**
  * Shortcode for the chatbot.
  *
- * @package ChatbotGPT
+ * @package WPAIChatbot
  * @since 1.0
  */
-class ChatbotGPTShortcode {
+class WPAIChatbotShortcode {
 
 	/**
 	 * Registers the shortcode.
 	 */
 	public static function register() {
-		add_shortcode( 'chatbot_gpt', array( self::class, 'render' ) );
+		add_shortcode( 'wp_ai_chatbot', array( self::class, 'render' ) );
 	}
 
 	/**
@@ -24,7 +24,7 @@ class ChatbotGPTShortcode {
 	 * @return bool
 	 */
 	private static function is_enabled(): bool {
-		return get_option( 'chatbot_gpt_enable' ) === '1';
+		return get_option( 'wp_ai_chatbot_enable' ) === '1';
 	}
 
 	/**
@@ -47,7 +47,7 @@ class ChatbotGPTShortcode {
 	 */
 	private static function get_assistant_id( array $atts ): ?string {
 		$assistant_id = $atts['assistant_id'] ?? '';
-		return ! empty( $assistant_id ) ? $assistant_id : self::get_option_with_default( 'chatbot_gpt_assistant_id', '' );
+		return ! empty( $assistant_id ) ? $assistant_id : self::get_option_with_default( 'wp_ai_chatbot_assistant_id', '' );
 	}
 
 	/**
@@ -55,20 +55,21 @@ class ChatbotGPTShortcode {
 	 */
 	private static function enqueue_assets() {
 		$plugin_url = plugin_dir_url( __DIR__ );
+		$version    = defined( 'WP_DEBUG' ) && WP_DEBUG ? time() : '1.0.1';
 
-		wp_enqueue_style( 'chatbot-gpt-style', $plugin_url . 'assets/css/chatbot.css', array(), '1.0' );
-		wp_enqueue_script( 'chatbot-gpt-script', $plugin_url . 'assets/js/chatbot.js', array( 'jquery' ), '1.0', true );
+		wp_enqueue_style( 'wp-ai-chatbot-style', $plugin_url . 'assets/dist/css/chatbot.css', array(), $version );
+		wp_enqueue_script( 'wp-ai-chatbot-script', $plugin_url . 'assets/dist/js/chatbot.js', array( 'jquery' ), $version, true );
 
 		wp_localize_script(
-			'chatbot-gpt-script',
-			'ChatbotGPT',
+			'wp-ai-chatbot-script',
+			'wpAIChatbot',
 			array(
 				'ajax_url' => admin_url( 'admin-ajax.php' ),
-				'nonce'    => wp_create_nonce( 'chatbot_gpt_nonce' ),
+				'nonce'    => wp_create_nonce( 'wp_ai_chatbot_nonce' ),
 			)
 		);
 
-		wp_add_inline_style( 'chatbot-gpt-style', self::get_styles() );
+		wp_add_inline_style( 'wp-ai-chatbot-style', self::get_styles() );
 	}
 
 	/**
@@ -77,8 +78,8 @@ class ChatbotGPTShortcode {
 	 * @return string
 	 */
 	private static function get_styles(): string {
-		$main_color      = self::get_option_with_default( 'chatbot_gpt_main_color', '#93c462' );
-		$secondary_color = self::get_option_with_default( 'chatbot_gpt_secondary_color', '#549626' );
+		$main_color      = self::get_option_with_default( 'wp_ai_chatbot_main_color', '#93c462' );
+		$secondary_color = self::get_option_with_default( 'wp_ai_chatbot_secondary_color', '#549626' );
 
 		return "
 			#chatbot-container {
@@ -121,12 +122,12 @@ class ChatbotGPTShortcode {
 		$assistant_id = self::get_assistant_id( $atts );
 
 		if ( empty( $assistant_id ) ) {
-			ChatbotGPTLogger::log( 'Error: No assistant ID' );
+			WPAIChatbotLogger::log( 'Error: No assistant ID' );
 			return '<p>Error: No assistant ID</p>';
 		}
 
 		self::enqueue_assets();
-		$nonce = wp_create_nonce( 'chatbot_gpt_nonce' );
+		$nonce = wp_create_nonce( 'wp_ai_chatbot_nonce' );
 
 		return self::get_html( $nonce );
 	}

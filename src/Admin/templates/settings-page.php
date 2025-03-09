@@ -5,7 +5,7 @@
  * @package ChatbotGPT
  */
 
-// Exit if accessed directly
+// Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -36,10 +36,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<tr>
 				<th><label for="chatbot_gpt_api_key">OpenAI API Key</label></th>
 				<td><input type="password" id="chatbot_gpt_api_key" name="chatbot_gpt_api_key" value="<?php echo esc_attr( get_option( 'chatbot_gpt_api_key' ) ); ?>" class="regular-text" /></td>
-			</tr>
-			<tr>
-				<th><label for="chatbot_gpt_assistant_api_url">Assistant API URL</label></th>
-				<td><input type="text" id="chatbot_gpt_assistant_api_url" name="chatbot_gpt_assistant_api_url" value="<?php echo esc_attr( get_option( 'chatbot_gpt_assistant_api_url' ) ); ?>" class="regular-text" /></td>
 			</tr>
 			<tr>
 				<th><label for="chatbot_gpt_assistant_id">Assistant ID</label></th>

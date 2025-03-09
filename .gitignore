@@ -11,3 +11,7 @@ vendor
 robots.txt
 akismet
 hello.php
+node_modules
+assets/dist
+*.zip
+

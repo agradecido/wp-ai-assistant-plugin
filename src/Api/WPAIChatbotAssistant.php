@@ -1,15 +1,15 @@
 <?php
-namespace ChatbotGPT\Api;
+namespace WPAIChatbot\Api;
 
 use Parsedown;
-use ChatbotGPT\Utils\ChatbotGPTLogger;
+use WPAIChatbot\Utils\WPAIChatbotLogger as ChatbotGPTLogger;
 
 /**
- * Class ChatbotGPTAssistant
+ * Class WPAIChatbotAssistant
  *
  * Handles communication with OpenAI Assistant API.
  */
-class ChatbotGPTAssistant {
+class WPAIChatbotAssistant {
 	/**
 	 * OpenAI API key.
 	 *
@@ -45,11 +45,11 @@ class ChatbotGPTAssistant {
 	 * Initialize the Assistant settings.
 	 */
 	public static function init() {
-		self::$api_key             = get_option( 'chatbot_gpt_api_key' );
-		self::$api_url             = get_option( 'chatbot_gpt_api_url' ) ?? 'https://api.openai.com/v1';
-		self::$assistant_id        = get_option( 'chatbot_gpt_assistant_id' ) ?? '';
-		self::$sleep_time          = intval( get_option( 'chatbot_gpt_assistant_waiting_time_in_seconds' ) ) ?? 5;
-		self::$system_instructions = get_option( 'chatbot_gpt_system_instructions' ) ?? '';
+		self::$api_key             = get_option( 'wp_ai_chatbot_api_key' );
+		self::$api_url             = get_option( 'wp_ai_chatbot_api_url' ) ?? 'https://api.openai.com/v1';
+		self::$assistant_id        = get_option( 'wp_ai_chatbot_assistant_id' ) ?? '';
+		self::$sleep_time          = intval( get_option( 'wp_ai_chatbot_assistant_waiting_time_in_seconds' ) ) ?? 5;
+		self::$system_instructions = get_option( 'wp_ai_chatbot_system_instructions' ) ?? '';
 	}
 
 	/**
@@ -207,7 +207,7 @@ class ChatbotGPTAssistant {
 			}
 
 			if ( key_exists( 'response', $response ) && key_exists( 'response', $response['response'] ) && key_exists( 'code', $response['response']['response'] ) && 400 === $response['response']['response']['code'] ) {
-				ChatbotGPTLogger::error( 'Error: ' . $response['response']['response']['message'] );
+				WPAIChatbotLogger::error( 'Error: ' . $response['response']['response']['message'] );
 				return false;
 			}
 		}
