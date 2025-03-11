@@ -22,9 +22,10 @@ A WordPress plugin that integrates OpenAI's Assistant API to create an interacti
 
 ## Installation
 
-1. Upload the plugin files to the `/wp-content/plugins/wp-ai-chatbot` directory
-2. Activate the plugin through the 'Plugins' menu in WordPress
-3. Configure the plugin settings via the 'WP AI Chatbot' menu in your admin dashboard
+1. Download the zip with the latest release from Github https://github.com/agradecido/wp-ai-assistant-plugin/releases
+2. Upload the plugin files to your WordPress `/wp-content/plugins/` directory
+3. Activate the plugin through the 'Plugins' menu in WordPress
+4. Configure the plugin settings via the 'WP AI Chatbot' menu in your admin dashboard
 
 ## Configuration
 
