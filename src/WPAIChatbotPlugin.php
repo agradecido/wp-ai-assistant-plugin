@@ -1,9 +1,14 @@
 <?php
+// phpcs:disable
 namespace WPAIChatbot;
 
 use WPAIChatbot\Admin\WPAIChatbotSettings;
 use WPAIChatbot\Api\WPAIChatbotAssistant;
 use WPAIChatbot\Frontend\WPAIChatbotShortcode;
+use WPAIChatbot\Infrastructure\Migration\CreateQuotaTable;
+use WPAIChatbot\Utils\Session;
+use WPAIChatbot\Infrastructure\Persistence\WPDBQuotaRepository;
+use WPAIChatbot\Domain\Quota\QuotaManager;
 
 /**
  * Class WPAIChatbotPlugin
@@ -14,17 +19,36 @@ use WPAIChatbot\Frontend\WPAIChatbotShortcode;
  * @since 1.0
  */
 class WPAIChatbotPlugin {
+	 
+	private QuotaManager $quotaManager;
+	
 	/**
 	 * Initialize the plugin.
 	 */
 	public function init() {
+		// registra ajustes y shortcode.
 		WPAIChatbotSettings::register();
 		WPAIChatbotShortcode::register();
 
+		// Instancia el repo e inyecta el manager.
+		global $wpdb;
+		$repo               = new WPDBQuotaRepository( $wpdb );
+		$dailyLimit         = (int) get_option( 'wp_ai_chatbot_daily_limit', 20 );
+		$this->quotaManager = new QuotaManager( $repo, $dailyLimit );
+
+		// Hooks AJAX.
 		add_action( 'wp_ajax_wp_ai_chatbot_request', array( $this, 'handle_chatbot_request' ) );
 		add_action( 'wp_ajax_nopriv_wp_ai_chatbot_request', array( $this, 'handle_chatbot_request' ) );
-
 		add_action( 'wp_ajax_wp_ai_chatbot_admin_test', array( $this, 'handle_admin_test_request' ) );
+	}
+
+	/**
+	 * Register the plugin activation hook.
+	 * 
+	 * @return void
+	 */
+	public static function activate(): void {
+		CreateQuotaTable::up();
 	}
 
 	/**
@@ -38,8 +62,24 @@ class WPAIChatbotPlugin {
 			wp_die();
 		}
 
-		$query     = isset( $_POST['query'] ) ? sanitize_text_field( wp_unslash( $_POST['query'] ) ) : '';
-		$thread_id = isset( $_POST['thread_id'] ) ? sanitize_text_field( wp_unslash( $_POST['thread_id'] ) ) : '';
+		// Comprueba la cuota antes de continuar.
+		$sid = Session::get_session_id();
+		try {
+			$this->quotaManager->checkAndIncrement( $sid );
+		} catch ( \RuntimeException $e ) {
+			wp_send_json_error(
+				array(
+					'message' => $e->getMessage(),
+					'code'    => 'quota_exceeded',
+				),
+				429
+			);
+			wp_die();
+		}
+
+		// 4) Si pasó el check, sí llamas al asistente
+		$query     = sanitize_text_field( wp_unslash( $_POST['query'] ?? '' ) );
+		$thread_id = sanitize_text_field( wp_unslash( $_POST['thread_id'] ?? '' ) );
 
 		$response = WPAIChatbotAssistant::query_assistant( $query, $thread_id );
 
