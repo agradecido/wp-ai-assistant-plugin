@@ -14,6 +14,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 require_once plugin_dir_path( __FILE__ ) . 'vendor/autoload.php';
 
+register_activation_hook(
+	__FILE__,
+	array( \WPAIChatbot\WPAIChatbotPlugin::class, 'activate' )
+);
+
 use WPAIChatbot\WPAIChatbotPlugin;
 
 /**
