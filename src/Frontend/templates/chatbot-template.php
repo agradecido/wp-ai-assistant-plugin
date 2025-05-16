@@ -1,11 +1,11 @@
 <?php
 /**
- * Chatbot GPT Template
+ * Chatbot Template
  *
  * This template is used to render the chatbot.
  *
  * @var string $nonce Security nonce for AJAX requests.
- * @package ChatbotGPT
+ * @package WPAIS
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

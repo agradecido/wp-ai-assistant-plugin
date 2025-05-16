@@ -1,13 +1,13 @@
 <?php
 // phpcs:disable WordPress.PHP.DevelopmentFunctions.error_log_error_log
-namespace WPAIChatbot\Utils;
+namespace WPAIS\Utils;
 
 /**
- * Class WPAIChatbotLogger
+ * Class Logger
  *
  * Handles logging for WP-CLI and file logs.
  */
-class WPAIChatbotLogger {
+class Logger {
 	/**
 	 * Logs a message to WP-CLI or the error log.
 	 *
@@ -16,11 +16,11 @@ class WPAIChatbotLogger {
 	public static function log( $message ) {
 
 		if ( defined( 'WP_CLI' ) && WP_CLI ) {
-			WP_CLI::log( '[WP AI Chatbot]' . $message );
+			WP_CLI::log( '[WP AI Assistant]' . $message );
 		}
 
 		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-			error_log( '[WP AI Chatbot]' . $message );
+			error_log( '[WP AI Assistant] ' . $message );
 		}
 	}
 
@@ -31,11 +31,11 @@ class WPAIChatbotLogger {
 	 */
 	public static function success( $message ) {
 		if ( defined( 'WP_CLI' ) && WP_CLI ) {
-			WP_CLI::success( '[WP AI Chatbot]' . $message );
+			WP_CLI::success( '[WP AI Assistant] ' . $message );
 		}
 
 		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-			error_log( '[WP AI Chatbot] SUCCESS: ' . $message );
+			error_log( '[WP AI Assistant] SUCCESS: ' . $message );
 		}
 	}
 
@@ -47,11 +47,11 @@ class WPAIChatbotLogger {
 	 */
 	public static function error( $message, $exit = false ) {
 		if ( defined( 'WP_CLI' ) && WP_CLI ) {
-			WP_CLI::error( '[WP AI Chatbot]' . $message, $exit );
+			WP_CLI::error( '[WP AI Assistant] ' . $message, $exit );
 		}
 
 		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-			error_log( '[WP AI Chatbot] ERROR: ' . $message );
+			error_log( '[WP AI Assistant] ERROR: ' . $message );
 		}
 	}
 }

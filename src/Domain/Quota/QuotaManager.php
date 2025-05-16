@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace WPAIChatbot\Domain\Quota;
+namespace WPAIS\Domain\Quota;
 
-use WPAIChatbot\Domain\Quota\QuotaRepository;
+use WPAIS\Domain\Quota\QuotaRepository;
 use RuntimeException;
 
 /**
@@ -16,10 +16,12 @@ class QuotaManager {
 	 *
 	 * @param QuotaRepository $repo The repository to use for quota data.
 	 * @param int             $dailyLimit The daily limit of messages.
+	 * @param string          $quotaExceededMessage The message to display when quota is exceeded.
 	 */
 	public function __construct(
 		private QuotaRepository $repo,
-		private int $dailyLimit
+		private int $dailyLimit,
+		private string $quotaExceededMessage = ''
 	) {}
 
 	/**
@@ -33,8 +35,11 @@ class QuotaManager {
 		$used = $this->repo->getTodayUsage( $sessionId );
 
 		if ( $used >= $this->dailyLimit ) {
+			$message = ! empty( $this->quotaExceededMessage )
+				? $this->quotaExceededMessage
+				: 'Cuota diaria excedida. Vuelve mañana 🤖';
 			throw new RuntimeException(
-				__( 'Daily quota exceeded. Come back tomorrow 🤖', 'wp-ai-chatbot' )
+				esc_html( $message )
 			);
 		}
 

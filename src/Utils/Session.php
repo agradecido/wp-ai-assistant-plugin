@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace WPAIChatbot\Utils;
+namespace WPAIS\Utils;
 
 class Session
 {

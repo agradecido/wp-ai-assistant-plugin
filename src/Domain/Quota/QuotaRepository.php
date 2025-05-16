@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace WPAIChatbot\Domain\Quota;
+namespace WPAIS\Domain\Quota;
 
 /**
  * Persistence contract for quota data.

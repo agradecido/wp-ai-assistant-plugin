@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace WPAIChatbot\Infrastructure\Persistence;
+namespace WPAIS\Infrastructure\Persistence;
 
-use WPAIChatbot\Domain\Quota\QuotaRepository;
+use WPAIS\Domain\Quota\QuotaRepository;
 use wpdb;
 
 /**

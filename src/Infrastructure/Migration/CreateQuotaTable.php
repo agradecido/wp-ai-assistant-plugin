@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace WPAIChatbot\Infrastructure\Migration;
+namespace WPAIS\Infrastructure\Migration;
 
 /**
  * Creates the wp_ai_quota table on plugin activation.

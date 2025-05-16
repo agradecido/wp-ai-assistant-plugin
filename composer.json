@@ -1,9 +1,7 @@
 {
     "autoload": {
         "psr-4": {
-            "WPAIChatbot\\": "src/",
-            "WPAIChatbot\\Domain\\": "src/Domain/",
-            "WPAIChatbot\\Infrastructure\\": "src/Infrastructure/"
+            "WPAIS\\": "src/"
         }
     },
     "require": {

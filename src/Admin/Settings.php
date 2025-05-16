@@ -1,14 +1,14 @@
 <?php
-namespace WPAIChatbot\Admin;
+namespace WPAIS\Admin;
 
-use WPAIChatbot\Api\WPAIChatbotAssistant;
+use WPAIS\Api\Assistant;
 
 /**
- * Class WPAIChatbotSettings
+ * Class Settings
  *
  * Handles the settings page for configuring the chatbot in the WordPress admin panel.
  */
-class WPAIChatbotSettings {
+class Settings {
 
 	/**
 	 * Registers the settings page in the WordPress admin menu.
@@ -25,44 +25,48 @@ class WPAIChatbotSettings {
 	 * @param string $hook Current admin page hook.
 	 */
 	public static function enqueue_admin_assets( $hook ) {
-		if ( 'wp-ai-chatbot_page_wp-ai-chatbot-test' === $hook ) {
+		if ( 'wp-ai-assistant_page_wp-ai-assistant-test' === $hook ) {
 			$plugin_url = plugin_dir_url( dirname( __DIR__ ) );
 			$version    = defined( 'WP_DEBUG' ) && WP_DEBUG ? time() : '1.0.1';
-			wp_enqueue_style( 'wp-ai-chatbot-admin-style', $plugin_url . 'assets/dist/css/admin.css', array(), $version );
-			wp_enqueue_script( 'wp-ai-chatbot-admin-js', $plugin_url . 'assets/dist/js/admin.js', array( 'jquery' ), $version, true );
+
+			wp_enqueue_style( 'wp-ai-assistant-admin-style', $plugin_url . 'assets/dist/css/admin.css', array(), $version );
+			wp_enqueue_script( 'wp-ai-assistant-admin-js', $plugin_url . 'assets/dist/js/admin.js', array( 'jquery' ), $version, true );
+
 			wp_localize_script(
-				'wp-ai-chatbot-admin-js',
-				'wpAIChatbot',
+				'wp-ai-assistant-admin-js',
+				'wpAIAssistant',
 				array(
 					'ajaxurl' => admin_url( 'admin-ajax.php' ),
-					'nonce'   => wp_create_nonce( 'wp_ai_chatbot_admin_test_nonce' ),
+					'nonce'   => wp_create_nonce( 'wp_ai_assistant_admin_test_nonce' ),
 				)
 			);
+
+			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+				error_log( 'WPAIS admin asset path: ' . $plugin_url . 'assets/dist/css/admin.css' );
+			}
 		}
 	}
-
-
 
 	/**
 	 * Adds the settings page as a top-level menu in WordPress admin.
 	 */
 	public static function add_settings_page() {
 		add_menu_page(
-			'WP AI Chatbot Settings',
-			'WP AI Chatbot',
+			'WP AI Assistant Settings',
+			'WP AI Assistant',
 			'manage_options',
-			'wp-ai-chatbot-settings',
+			'wp-ai-assistant-settings',
 			array( self::class, 'render_settings_page' ),
 			'dashicons-format-chat',
 			25
 		);
 
 		add_submenu_page(
-			'wp-ai-chatbot-settings',
+			'wp-ai-assistant-settings',
 			'Probar Asistente',
 			'Probar Asistente',
 			'manage_options',
-			'wp-ai-chatbot-test',
+			'wp-ai-assistant-test',
 			array( self::class, 'render_test_page' )
 		);
 	}
@@ -71,15 +75,16 @@ class WPAIChatbotSettings {
 	 * Registers the settings fields.
 	 */
 	public static function register_settings() {
-		register_setting( 'wp_ai_chatbot_settings_group', 'wp_ai_chatbot_enable', array( 'default' => 0 ) );
-		register_setting( 'wp_ai_chatbot_settings_group', 'wp_ai_chatbot_api_url', array( 'default' => 'https://api.openai.com/v1' ) );
-		register_setting( 'wp_ai_chatbot_settings_group', 'wp_ai_chatbot_api_key' );
-		register_setting( 'wp_ai_chatbot_settings_group', 'wp_ai_chatbot_assistant_id' );
-		register_setting( 'wp_ai_chatbot_settings_group', 'wp_ai_chatbot_assistant_waiting_time_in_seconds' );
-		register_setting( 'wp_ai_chatbot_settings_group', 'wp_ai_chatbot_system_instructions' );
+		register_setting( 'wp_ai_assistant_settings_group', 'wp_ai_assistant_enable', array( 'default' => 0 ) );
+		register_setting( 'wp_ai_assistant_settings_group', 'wp_ai_assistant_api_url', array( 'default' => 'https://api.openai.com/v1' ) );
+		register_setting( 'wp_ai_assistant_settings_group', 'wp_ai_assistant_api_key' );
+		register_setting( 'wp_ai_assistant_settings_group', 'wp_ai_assistant_assistant_id' );
+		register_setting( 'wp_ai_assistant_settings_group', 'wp_ai_assistant_assistant_waiting_time_in_seconds' );
+		register_setting( 'wp_ai_assistant_settings_group', 'wp_ai_assistant_system_instructions' );
+		register_setting( 'wp_ai_assistant_settings_group', 'wp_ai_assistant_quota_exceeded_message', array( 'default' => 'Cuota diaria excedida. Vuelve mañana 🤖' ) );
 		register_setting(
-			'wp_ai_chatbot_settings_group',
-			'wp_ai_chatbot_main_color',
+			'wp_ai_assistant_settings_group',
+			'wp_ai_assistant_main_color',
 			array(
 				'type'              => 'string',
 				'sanitize_callback' => 'sanitize_hex_color',
@@ -87,14 +92,15 @@ class WPAIChatbotSettings {
 			)
 		);
 		register_setting(
-			'wp_ai_chatbot_settings_group',
-			'wp_ai_chatbot_secondary_color',
+			'wp_ai_assistant_settings_group',
+			'wp_ai_assistant_secondary_color',
 			array(
 				'type'              => 'string',
 				'sanitize_callback' => 'sanitize_hex_color',
 				'default'           => '#549626',
 			)
 		);
+		register_setting( 'wp_ai_assistant_settings_group', 'wp_ai_assistant_daily_limit', array( 'default' => 20 ) );
 	}
 
 	/**
@@ -108,9 +114,9 @@ class WPAIChatbotSettings {
 	 * Renders the test page for the assistant.
 	 */
 	public static function render_test_page() {
-		$assistant_info = WPAIChatbotAssistant::get_assistant_info();
+		$assistant_info = Assistant::get_assistant_info();
 		include_once plugin_dir_path( __DIR__ ) . 'Admin/templates/test-page.php';
 	}
 }
 
-WPAIChatbotSettings::register();
+Settings::register();

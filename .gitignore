@@ -15,3 +15,4 @@ node_modules
 assets/dist
 *.zip
 create-plugin-package.sh
+*.bak
