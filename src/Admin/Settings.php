@@ -81,7 +81,6 @@ class Settings {
 		register_setting( 'wp_ai_assistant_settings_group', 'wp_ai_assistant_assistant_id' );
 		register_setting( 'wp_ai_assistant_settings_group', 'wp_ai_assistant_assistant_waiting_time_in_seconds' );
 		register_setting( 'wp_ai_assistant_settings_group', 'wp_ai_assistant_system_instructions' );
-		register_setting( 'wp_ai_assistant_settings_group', 'wp_ai_assistant_quota_exceeded_message', array( 'default' => 'Cuota diaria excedida. Vuelve mañana 🤖' ) );
 		register_setting(
 			'wp_ai_assistant_settings_group',
 			'wp_ai_assistant_main_color',
@@ -101,6 +100,14 @@ class Settings {
 			)
 		);
 		register_setting( 'wp_ai_assistant_settings_group', 'wp_ai_assistant_daily_limit', array( 'default' => 20 ) );
+		register_setting(
+			'wp_ai_assistant_settings_group',
+			'wp_ai_assistant_quota_exceeded_message',
+			array(
+				'default'           => 'Cuota diaria excedida. Vuelve mañana 🤖',
+				'sanitize_callback' => 'sanitize_text_field',
+			)
+		);
 	}
 
 	/**

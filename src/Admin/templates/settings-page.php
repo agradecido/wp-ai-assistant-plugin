@@ -50,10 +50,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<td><input type="number" id="wp_ai_assistant_daily_limit" name="wp_ai_assistant_daily_limit" value="<?php echo esc_attr( get_option( 'wp_ai_assistant_daily_limit', 20 ) ); ?>" class="regular-text" /></td>
 			</tr>
 			<tr>
-				<th><label for="wp_ai_assistant_quota_exceeded_message">Mensaje de cuota excedida</label></th>
+				<th><label for="wp_ai_assistant_quota_exceeded_message">Mensaje al exceder cuota</label></th>
 				<td>
-					<textarea id="wp_ai_assistant_quota_exceeded_message" name="wp_ai_assistant_quota_exceeded_message" rows="3" class="large-text" style="max-width: 600px;"><?php echo esc_textarea( get_option( 'wp_ai_assistant_quota_exceeded_message', 'Cuota diaria excedida. Vuelve mañana 🤖' ) ); ?></textarea>
-					<p class="description">Este mensaje se mostrará al usuario cuando haya excedido su cuota diaria de mensajes.</p>
+					<input type="text" id="wp_ai_assistant_quota_exceeded_message" name="wp_ai_assistant_quota_exceeded_message" value="<?php echo esc_attr( get_option( 'wp_ai_assistant_quota_exceeded_message', 'Cuota diaria excedida. Vuelve mañana 🤖' ) ); ?>" class="large-text" />
+					<p class="description">Mensaje a mostrar al usuario cuando exceda la cuota diaria de mensajes.</p>
 				</td>
 			</tr>
 			<tr>

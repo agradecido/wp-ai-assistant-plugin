@@ -16,12 +16,10 @@ class QuotaManager {
 	 *
 	 * @param QuotaRepository $repo The repository to use for quota data.
 	 * @param int             $dailyLimit The daily limit of messages.
-	 * @param string          $quotaExceededMessage The message to display when quota is exceeded.
 	 */
 	public function __construct(
 		private QuotaRepository $repo,
-		private int $dailyLimit,
-		private string $quotaExceededMessage = ''
+		private int $dailyLimit
 	) {}
 
 	/**
@@ -35,12 +33,11 @@ class QuotaManager {
 		$used = $this->repo->getTodayUsage( $sessionId );
 
 		if ( $used >= $this->dailyLimit ) {
-			$message = ! empty( $this->quotaExceededMessage )
-				? $this->quotaExceededMessage
-				: 'Cuota diaria excedida. Vuelve mañana 🤖';
-			throw new RuntimeException(
-				esc_html( $message )
+			$message = get_option( 
+				'wp_ai_assistant_quota_exceeded_message', 
+				'Cuota diaria excedida. Vuelve mañana 🤖'
 			);
+			throw new RuntimeException( $message );
 		}
 
 		$this->repo->increment( $sessionId );

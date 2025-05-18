@@ -54,7 +54,7 @@ class Shortcode {
 	 * Enqueues styles and scripts for the chatbot.
 	 */
 	private static function enqueue_assets() {
-		$plugin_url = plugin_dir_url( dirname( dirname( __FILE__ ) ) );
+		$plugin_url = plugin_dir_url( dirname( __DIR__ ) );
 		$version    = defined( 'WP_DEBUG' ) && WP_DEBUG ? time() : '1.0.1';
 
 		wp_enqueue_style( 'wp-ai-assistant-style', $plugin_url . 'assets/dist/css/chatbot.css', array(), $version );
