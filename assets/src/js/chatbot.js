@@ -13,9 +13,47 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
     }
 
+    // Check for thread ID in the container's data attribute
+    if (chatbotContainer.dataset.threadId) {
+        threadId = chatbotContainer.dataset.threadId;
+    }
+    
+    // Check if we have a thread ID in sessionStorage
+    try {
+        const storedThreadId = sessionStorage.getItem('wpai_current_thread');
+        if (storedThreadId && !threadId) {
+            threadId = storedThreadId;
+            chatbotContainer.dataset.threadId = threadId;
+            
+            // Indicate continuing conversation
+            chatInput.placeholder = "Continuar conversación...";
+        }
+    } catch (e) {
+        // Session storage not available
+    }
+
     const nonce = chatbotContainer.dataset.nonce;
     const assistantId = chatbotContainer.dataset.assistantId;
     const ajaxUrl = wpAIAssistant.ajax_url;
+    const isEnabled = chatbotContainer.dataset.enabled === '1';
+    const disabledMessage = chatbotContainer.dataset.disabledMessage || "Chat desactivado temporalmente, vuelva más tarde o póngase en contacto con nosotros";
+
+    // Show welcome message based on whether we're continuing a thread
+    if (chatOutput.children.length === 0) {
+        if (threadId) {
+            const botMessage = document.createElement('div');
+            botMessage.className = 'chat-message assistant';
+            botMessage.innerHTML = '<p>Continuando conversación anterior... ¿En qué más puedo ayudarte?</p>';
+            chatOutput.appendChild(botMessage);
+            chatOutput.style.display = 'block';
+        } else {
+            const botMessage = document.createElement('div');
+            botMessage.className = 'chat-message assistant';
+            botMessage.innerHTML = '<p>¡Hola! ¿En qué puedo ayudarte?</p>';
+            chatOutput.appendChild(botMessage);
+            chatOutput.style.display = 'block';
+        }
+    }
 
     /**
      * Sends the user's message to the server.
@@ -29,6 +67,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
         userInput = sanitizeInput(userInput);
         addUserMessage(userInput);
+
+        // Check if chatbot is disabled
+        if (!isEnabled) {
+            addAssistantMessage(disabledMessage);
+            return;
+        }
+
         showSpinner(true);
 
         let formData = new URLSearchParams();
@@ -46,9 +91,24 @@ document.addEventListener("DOMContentLoaded", function () {
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
             body: formData.toString(),
         })
-        .then(response => response.json())
-        .then(data => handleResponse(data))
-        .catch(() => handleError());
+            .then(response => response.json())
+            .then(data => {
+                handleResponse(data);
+                
+                // Store thread ID if present
+                if (data.thread_id && !threadId) {
+                    threadId = data.thread_id;
+                    chatbotContainer.dataset.threadId = threadId;
+                    
+                    // Store in session storage for potential recovery
+                    try {
+                        sessionStorage.setItem('wpai_current_thread', threadId);
+                    } catch (e) {
+                        // Session storage not available
+                    }
+                }
+            })
+            .catch(() => handleError());
     }
 
     /**
@@ -88,7 +148,7 @@ document.addEventListener("DOMContentLoaded", function () {
             addAssistantMessage(data.data.message);
             return;
         }
-        
+
         // Then determine which field contains the message
         let message = null;
         if (data.message) {
@@ -97,7 +157,7 @@ document.addEventListener("DOMContentLoaded", function () {
             addAssistantMessage("Error desconocido en la respuesta del chatbot.");
             return;
         }
-        
+
         addAssistantMessage(message);
 
         if (data.thread_id) {

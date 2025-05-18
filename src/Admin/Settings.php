@@ -76,6 +76,14 @@ class Settings {
 	 */
 	public static function register_settings() {
 		register_setting( 'wp_ai_assistant_settings_group', 'wp_ai_assistant_enable', array( 'default' => 0 ) );
+		register_setting(
+			'wp_ai_assistant_settings_group',
+			'wp_ai_assistant_disabled_message',
+			array(
+				'default'           => 'Chat desactivado temporalmente, vuelva más tarde o póngase en contacto con nosotros',
+				'sanitize_callback' => 'sanitize_text_field',
+			)
+		);
 		register_setting( 'wp_ai_assistant_settings_group', 'wp_ai_assistant_api_url', array( 'default' => 'https://api.openai.com/v1' ) );
 		register_setting( 'wp_ai_assistant_settings_group', 'wp_ai_assistant_api_key' );
 		register_setting( 'wp_ai_assistant_settings_group', 'wp_ai_assistant_assistant_id' );

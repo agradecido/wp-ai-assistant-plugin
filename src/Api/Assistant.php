@@ -4,6 +4,8 @@ namespace WPAIS\Api;
 use Error;
 use Parsedown;
 use WPAIS\Utils\Logger;
+use WPAIS\Domain\Thread\ThreadRepository;
+use WPAIS\Utils\Session;
 
 /**
  * Class Assistant
@@ -43,6 +45,13 @@ class Assistant {
 	private static $system_instructions;
 
 	/**
+	 * Thread repository instance.
+	 *
+	 * @var ThreadRepository|null
+	 */
+	private static $thread_repository = null;
+
+	/**
 	 * Initialize the Assistant settings.
 	 */
 	public static function init() {
@@ -52,6 +61,15 @@ class Assistant {
 		self::$sleep_time          = intval( get_option( 'wp_ai_assistant_assistant_waiting_time_in_seconds' ) ) ?? 5;
 		self::$system_instructions = get_option( 'wp_ai_assistant_system_instructions' ) ?? '';
 		Logger::log( 'Assistant initialized with Assistant ID: ' . self::$assistant_id );
+	}
+
+	/**
+	 * Set the thread repository.
+	 *
+	 * @param ThreadRepository $repository The repository instance.
+	 */
+	public static function set_thread_repository( ThreadRepository $repository ) {
+		self::$thread_repository = $repository;
 	}
 
 	/**
@@ -134,6 +152,9 @@ class Assistant {
 		}
 
 		try {
+			$session_id = Session::get_session_id();
+			$user_id    = get_current_user_id();
+
 			// Create a new thread if no thread_id is provided.
 			if ( empty( $thread_id ) ) {
 				$thread = self::create_thread();
@@ -142,6 +163,13 @@ class Assistant {
 					return $thread;
 				}
 				$thread_id = $thread['thread_id'];
+
+				// Save new thread in WordPress
+				if ( self::$thread_repository ) {
+					$title = 'Conversación iniciada con: ' . substr( $query, 0, 50 ) . ( strlen( $query ) > 50 ? '...' : '' );
+					self::$thread_repository->saveThread( $thread_id, $session_id, $user_id ? (string) $user_id : null, $title );
+					Logger::log( 'Thread saved to database with ID: ' . $thread_id );
+				}
 			}
 
 			// Add the user message to the thread.
@@ -151,6 +179,12 @@ class Assistant {
 				return $message_result;
 			}
 			Logger::log( 'Message added to thread' . ( isset( $message_result['message'] ) ? ': ' . $message_result['message'] : '' ) );
+
+			// Save user message to WordPress
+			if ( self::$thread_repository ) {
+				self::$thread_repository->addMessage( $thread_id, $query, 'user' );
+				Logger::log( 'User message added to thread: ' . $thread_id );
+			}
 
 			// Run the assistant on the thread.
 			Logger::log( 'Running assistant on thread: ' . $thread_id );
@@ -162,9 +196,20 @@ class Assistant {
 			Logger::log( 'Assistant run completed successfully' );
 			// Get the assistant's response.
 			$messages = self::get_thread_messages( $thread_id );
-			Logger::log( 'Messages retrieved: ' . wp_remote_retrieve_body( $messages ) );
+			Logger::log( 'Messages retrieved for thread: ' . $thread_id );
 			if ( isset( $messages['error'] ) && $messages['error'] ) {
 				return $messages;
+			}
+
+			// Store the assistant's response in WordPress
+			$assistant_message = '';
+			if ( ! empty( $messages['messages'] ) ) {
+				$assistant_message = $messages['messages'][0]['content'];
+
+				if ( self::$thread_repository ) {
+					self::$thread_repository->addMessage( $thread_id, $assistant_message, 'assistant' );
+					Logger::log( 'Assistant message saved to thread: ' . $thread_id );
+				}
 			}
 
 			// Format and return the response.
@@ -172,7 +217,7 @@ class Assistant {
 			return array(
 				'error'     => false,
 				'thread_id' => $thread_id,
-				'message'   => isset( $messages['messages'][0]['content'] ) ? $parsedown->text( $messages['messages'][0]['content'] ) : '',
+				'message'   => $assistant_message ? $parsedown->text( $assistant_message ) : '',
 				'raw'       => $messages,
 			);
 		} catch ( \Exception $e ) {
@@ -291,12 +336,12 @@ class Assistant {
 		$response = wp_remote_post(
 			self::$api_url . '/threads/' . $thread_id . '/runs',
 			array(
-				'headers' => array(
+				'headers'  => array(
 					'Content-Type'  => 'application/json',
 					'Authorization' => 'Bearer ' . self::$api_key,
 					'OpenAI-Beta'   => 'assistants=v2',
 				),
-				'body'    => wp_json_encode(
+				'body'     => wp_json_encode(
 					array(
 						'assistant_id' => self::$assistant_id,
 						'instructions' => self::$system_instructions,

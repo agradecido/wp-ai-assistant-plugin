@@ -23,6 +23,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</td>
 			</tr>
 			<tr>
+				<th><label for="wp_ai_assistant_disabled_message">Mensaje cuando el chat está desactivado</label></th>
+				<td>
+					<input type="text" id="wp_ai_assistant_disabled_message" name="wp_ai_assistant_disabled_message" 
+							value="<?php echo esc_attr( get_option( 'wp_ai_assistant_disabled_message', 'Chat desactivado temporalmente, vuelva más tarde o póngase en contacto con nosotros' ) ); ?>" class="large-text" />
+					<p class="description">Este mensaje se muestra cuando el chat está desactivado pero el shortcode aún está presente en la página.</p>
+				</td>
+			</tr>
+			<tr>
 				<th><label for="wp_ai_assistant_system_instructions">Instrucciones del sistema</label></th>
 				<td>
 					<textarea id="wp_ai_assistant_system_instructions" name="wp_ai_assistant_system_instructions" rows="6" class="large-text" style="max-width: 600px; min-height: 300px;"><?php echo esc_textarea( get_option( 'wp_ai_assistant_system_instructions' ) ); ?></textarea>

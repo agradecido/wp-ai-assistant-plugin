@@ -9,7 +9,7 @@ use WPAIS\Utils\Logger;
  * @package WPAIS
  * @since 1.0
  */
-class Shortcode {
+class ChatShortcode {
 
 	/**
 	 * Registers the shortcode.
@@ -57,9 +57,21 @@ class Shortcode {
 		$plugin_url = plugin_dir_url( dirname( __DIR__ ) );
 		$version    = defined( 'WP_DEBUG' ) && WP_DEBUG ? time() : '1.0.1';
 
+		// Enqueue main chatbot styles and scripts.
 		wp_enqueue_style( 'wp-ai-assistant-style', $plugin_url . 'assets/dist/css/chatbot.css', array(), $version );
 		wp_enqueue_script( 'wp-ai-assistant-script', $plugin_url . 'assets/dist/js/chatbot.js', array( 'jquery' ), $version, true );
 
+		// Also enqueue history-related assets if they exist.
+		if ( file_exists( plugin_dir_path( dirname( __DIR__ ) ) . 'assets/dist/js/history.js' ) ) {
+			wp_enqueue_script( 'wp-ai-assistant-history-script', $plugin_url . 'assets/dist/js/history.js', array( 'jquery', 'wp-ai-assistant-script' ), $version, true );
+		}
+
+		// If history CSS exists, enqueue it too.
+		if ( file_exists( plugin_dir_path( dirname( __DIR__ ) ) . 'assets/dist/css/history.css' ) ) {
+			wp_enqueue_style( 'wp-ai-assistant-history-style', $plugin_url . 'assets/dist/css/history.css', array( 'wp-ai-assistant-style' ), $version );
+		}
+
+		// Pass data to scripts.
 		wp_localize_script(
 			'wp-ai-assistant-script',
 			'wpAIAssistant',
@@ -92,9 +104,11 @@ class Shortcode {
 	 * Loads the chatbot HTML template.
 	 *
 	 * @param string $nonce Security nonce.
+	 * @param bool   $is_enabled Whether the chatbot is enabled.
+	 * @param string $disabled_message Message to show when chatbot is disabled.
 	 * @return string
 	 */
-	private static function get_html( string $nonce ): string {
+	private static function get_html( string $nonce, bool $is_enabled, string $disabled_message ): string {
 		ob_start();
 
 		$template_path = dirname( dirname( __DIR__ ) ) . '/src/Frontend/templates/chatbot-template.php';
@@ -113,20 +127,22 @@ class Shortcode {
 	 * @return string
 	 */
 	public static function render( $atts ): string {
-		if ( ! self::is_enabled() ) {
-			return '';
-		}
+		$is_enabled = self::is_enabled();
 
 		$assistant_id = self::get_assistant_id( $atts );
 
-		if ( empty( $assistant_id ) ) {
+		if ( empty( $assistant_id ) && $is_enabled ) {
 			Logger::log( 'Error: No assistant ID' );
 			return '<p>Error: No assistant ID</p>';
 		}
 
 		self::enqueue_assets();
-		$nonce = wp_create_nonce( 'wp_ai_assistant_nonce' );
+		$nonce            = wp_create_nonce( 'wp_ai_assistant_nonce' );
+		$disabled_message = self::get_option_with_default(
+			'wp_ai_assistant_disabled_message',
+			'Chat desactivado temporalmente, vuelva más tarde o póngase en contacto con nosotros'
+		);
 
-		return self::get_html( $nonce );
+		return self::get_html( $nonce, $is_enabled, $disabled_message );
 	}
 }

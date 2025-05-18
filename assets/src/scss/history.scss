@@ -1,0 +1,158 @@
+/* Conversation history styling */
+
+.wpai-history-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+    h2 {
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #e5e5e5;
+    }
+}
+
+.wpai-no-history {
+    padding: 20px;
+    text-align: center;
+    color: #666;
+    background-color: #f9f9f9;
+    border-radius: 4px;
+}
+
+.wpai-history-threads {
+    margin-top: 20px;
+}
+
+.wpai-thread {
+    margin-bottom: 20px;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,.1);
+    background-color: #fff;
+
+    &:hover {
+        box-shadow: 0 2px 8px rgba(0,0,0,.15);
+    }
+}
+
+.wpai-thread-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #eee;
+
+    h3 {
+        margin: 0;
+        font-size: 16px;
+        font-weight: 500;
+    }
+}
+
+.wpai-thread-date {
+    font-size: 12px;
+    color: #666;
+}
+
+.wpai-thread-preview {
+    font-size: 14px;
+    color: #444;
+    margin-bottom: 15px;
+}
+
+.wpai-preview-user, 
+.wpai-preview-assistant {
+    margin-bottom: 5px;
+}
+
+.wpai-thread-actions {
+    display: flex;
+    gap: 10px;
+
+    button {
+        padding: 8px 15px;
+        border: none;
+        border-radius: 4px;
+        font-size: 14px;
+        cursor: pointer;
+    }
+}
+
+.wpai-view-thread {
+    background-color: #f0f0f0;
+    color: #333;
+
+    &:hover {
+        background-color: #e0e0e0;
+    }
+}
+
+.wpai-continue-chat {
+    background-color: var(--button-color, #4CAF50);
+    color: white;
+
+    &:hover {
+        opacity: 0.9;
+    }
+}
+
+.wpai-thread-messages {
+    display: none;
+    margin-top: 15px;
+    border-top: 1px solid #eee;
+    padding-top: 15px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.wpai-message {
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+
+    &.wpai-message-user {
+        background-color: #e9f7fe;
+        border-left: 3px solid #2196F3;
+    }
+
+    &.wpai-message-assistant {
+        background-color: #f1f1f1;
+        border-left: 3px solid #4CAF50;
+    }
+}
+
+.wpai-message-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+    font-size: 12px;
+    color: #666;
+}
+
+.wpai-message-content {
+    font-size: 14px;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .wpai-thread-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .wpai-thread-date {
+        margin-top: 5px;
+    }
+    
+    .wpai-thread-actions {
+        flex-direction: column;
+        gap: 5px;
+
+        button {
+            width: 100%;
+        }
+    }
+}

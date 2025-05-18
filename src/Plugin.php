@@ -2,14 +2,17 @@
 namespace WPAIS;
 
 use WPAIS\Admin\Settings;
+use WPAIS\Admin\ConversationMetaBox;
 use WPAIS\Api\Assistant;
-use WPAIS\Frontend\Shortcode;
+use WPAIS\Frontend\ChatShortcode;
+use WPAIS\Frontend\HistoryShortcode;
 use WPAIS\Infrastructure\Migration\CreateQuotaTable;
 use WPAIS\Utils\Session;
 use WPAIS\Infrastructure\Persistence\WPDBQuotaRepository;
+use WPAIS\Infrastructure\Persistence\WPThreadRepository;
 use WPAIS\Domain\Quota\QuotaManager;
 use WPAIS\Utils\Logger;
-
+use WPAIS\Domain\Thread\ChatThreadPostType;
 /**
  * Class Plugin
  *
@@ -28,13 +31,23 @@ class Plugin {
 	public function init() {
 		// registra ajustes y shortcode.
 		Settings::register();
-		Shortcode::register();
+		ChatShortcode::register();
+		HistoryShortcode::register();
 
 		// Instancia el repo e inyecta el manager.
 		global $wpdb;
 		$repo               = new WPDBQuotaRepository( $wpdb );
 		$dailyLimit         = (int) get_option( 'wp_ai_assistant_daily_limit', 20 );
 		$this->quotaManager = new QuotaManager( $repo, $dailyLimit );
+
+		add_action( 'init', array( ChatThreadPostType::class, 'register' ) );
+
+		// Register conversation meta box.
+		ConversationMetaBox::register();
+
+		// Initialize thread repository and connect with Assistant.
+		$thread_repository = new WPThreadRepository();
+		Assistant::set_thread_repository( $thread_repository );
 
 		// Hooks AJAX.
 		add_action( 'wp_ajax_wp_ai_assistant_request', array( $this, 'handle_chatbot_request' ) );
@@ -60,6 +73,22 @@ class Plugin {
 		if ( empty( $nonce ) || ! wp_verify_nonce( $nonce, 'wp_ai_assistant_nonce' ) ) {
 			Logger::error( 'Nonce verification failed' );
 			wp_send_json_error( array( 'message' => 'Nonce verification failed' ), 403 );
+			wp_die();
+		}
+
+		// Check if the chatbot is enabled.
+		if ( get_option( 'wp_ai_assistant_enable' ) !== '1' ) {
+			$disabled_message = get_option(
+				'wp_ai_assistant_disabled_message',
+				'Chat desactivado temporalmente, vuelva más tarde o póngase en contacto con nosotros'
+			);
+
+			wp_send_json(
+				array(
+					'success' => true,
+					'message' => $disabled_message,
+				)
+			);
 			wp_die();
 		}
 
@@ -153,7 +182,7 @@ class Plugin {
 				);
 			} else {
 				Logger::log( 'Admin test successful' );
-				// Make the response compatible with existing code
+				// Make the response compatible with existing code.
 				if ( isset( $response['message'] ) && ! isset( $response['text'] ) ) {
 					$response['text'] = $response['message'];
 				}
