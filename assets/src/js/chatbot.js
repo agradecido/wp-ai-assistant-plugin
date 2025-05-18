@@ -1,3 +1,5 @@
+const { Logger } = require("sass");
+
 document.addEventListener("DOMContentLoaded", function () {
     let threadId = null;
     const chatInput = document.getElementById("chat-input");
@@ -7,13 +9,13 @@ document.addEventListener("DOMContentLoaded", function () {
     const chatbotContainer = document.getElementById("chatbot-container");
 
     if (!chatInput || !chatSubmit || !chatOutput || !chatSpinner || !chatbotContainer) {
-        console.error("Chatbot elements missing.");
+        // console.error("Chatbot elements missing.");
         return;
     }
 
     const nonce = chatbotContainer.dataset.nonce;
     const assistantId = chatbotContainer.dataset.assistantId;
-    const ajaxUrl = ChatbotGPT.ajax_url;
+    const ajaxUrl = wpAIAssistant.ajax_url;
 
     /**
      * Sends the user's message to the server.
@@ -30,7 +32,7 @@ document.addEventListener("DOMContentLoaded", function () {
         showSpinner(true);
 
         let formData = new URLSearchParams();
-        formData.append("action", "chatbot_gpt_request");
+        formData.append("action", "wp_ai_assistant_request");
         formData.append("query", userInput);
         formData.append("assistant_id", assistantId);
         formData.append("_ajax_nonce", nonce);
@@ -81,12 +83,22 @@ document.addEventListener("DOMContentLoaded", function () {
     function handleResponse(data) {
         showSpinner(false);
 
-        if (!data.text) {
-            addAssistantMessage("Error en la respuesta del chatbot.");
+        // First, check if we have a valid response
+        if (false === data.success) {
+            addAssistantMessage(data.data.message);
             return;
         }
-
-        addAssistantMessage(data.text);
+        
+        // Then determine which field contains the message
+        let message = null;
+        if (data.message) {
+            message = data.message;
+        } else {
+            addAssistantMessage("Error desconocido en la respuesta del chatbot.");
+            return;
+        }
+        
+        addAssistantMessage(message);
 
         if (data.thread_id) {
             threadId = data.thread_id;

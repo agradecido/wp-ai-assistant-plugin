@@ -13,9 +13,11 @@ jQuery(document).ready(function($) {
 		chatSpinner.style.display = "block";
 
 		let data = {
-			action: 'wp_ai_chatbot_admin_test',
+			// Actualizar el nombre de la acción AJAX
+			action: 'wp_ai_assistant_admin_test',
 			query: userInput,
-			_ajax_nonce: wpAIChatbot.nonce // Usar el nonce pasado desde PHP
+			// Usar el objeto global correcto
+			_ajax_nonce: wpAIAssistant.nonce
 		};
 
 		if (threadId) {
@@ -24,16 +26,31 @@ jQuery(document).ready(function($) {
 
 		chatInput.value = "";
 
-		$.post(wpAIChatbot.ajaxurl, data, function(response) { // Usar la URL AJAX pasada desde PHP
+		// Usar el objeto global correcto
+		$.post(wpAIAssistant.ajaxurl, data, function(response) {
 			chatSpinner.style.display = "none";
-
-			if (response.success) {
-				addAssistantMessage(response.data.text);
-				if (response.data.thread_id) {
-					threadId = response.data.thread_id;
+			
+			if (response.success && response.data) {
+				// Handle standard success response with data
+				if (response.data.message) {
+					// Direct response format
+					addAssistantMessage(response.data.message);
+					if (response.data.thread_id) {
+						threadId = response.data.thread_id;
+					}
+				} else if (response.data.text) {
+					// Legacy format
+					addAssistantMessage(response.data.text);
+					if (response.data.thread_id) {
+						threadId = response.data.thread_id;
+					}
+				} else {
+					// console.error('Unknown response format:', response);
+					addAssistantMessage("<strong>Error:</strong> Formato de respuesta desconocido");
 				}
 			} else {
-				addAssistantMessage("<strong>Error:</strong> " + (response.data.message || "No se pudo obtener respuesta"));
+				// Handle error responses.
+				addAssistantMessage("<strong>Error:</strong> " + (response.data?.message || "No se pudo obtener respuesta"));
 			}
 		}).fail(function() {
 			chatSpinner.style.display = "none";
