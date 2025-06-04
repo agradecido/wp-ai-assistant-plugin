@@ -109,7 +109,7 @@ class ChatShortcode {
 	 * @param string $disabled_message Message to show when chatbot is disabled.
 	 * @return string
 	 */
-	private static function get_html(): string {
+	private static function get_html( string $nonce, bool $is_enabled, string $disabled_message ): string {
 		ob_start();
 
 		$template_path = dirname( dirname( __DIR__ ) ) . '/src/Frontend/templates/chatbot-template.php';

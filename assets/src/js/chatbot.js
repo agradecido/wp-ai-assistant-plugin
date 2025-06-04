@@ -45,13 +45,19 @@ document.addEventListener("DOMContentLoaded", function () {
             botMessage.className = 'chat-message assistant';
             botMessage.innerHTML = '<p>Continuando conversación anterior... ¿En qué más puedo ayudarte?</p>';
             chatOutput.appendChild(botMessage);
-            chatOutput.style.display = 'block';
+            chatOutput.style.display = 'flex';
         } else {
             const botMessage = document.createElement('div');
             botMessage.className = 'chat-message assistant';
             botMessage.innerHTML = '<p>¡Hola! ¿En qué puedo ayudarte?</p>';
             chatOutput.appendChild(botMessage);
-            chatOutput.style.display = 'block';
+            chatOutput.style.display = 'flex';
+        }
+        
+        // Scroll to bottom of the container after displaying the message
+        const chatMessagesContainer = document.getElementById('chat-messages-container');
+        if (chatMessagesContainer) {
+            chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
         }
     }
 
@@ -65,12 +71,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (userInput === "") return;
 
+        // Disable the submit button while processing
+        chatSubmit.disabled = true;
+
         userInput = sanitizeInput(userInput);
         addUserMessage(userInput);
 
         // Check if chatbot is disabled
         if (!isEnabled) {
             addAssistantMessage(disabledMessage);
+            chatSubmit.disabled = false;
             return;
         }
 
@@ -118,9 +128,9 @@ document.addEventListener("DOMContentLoaded", function () {
     function addUserMessage(message) {
         let userMessage = document.createElement("div");
         userMessage.classList.add("chat-message", "user");
-        userMessage.textContent = message;
+        userMessage.innerHTML = `<p>${message}</p>`;
         chatOutput.appendChild(userMessage);
-        chatOutput.style.display = "block";
+        chatOutput.style.display = "flex";
         scrollToBottom();
     }
 
@@ -131,6 +141,22 @@ document.addEventListener("DOMContentLoaded", function () {
     function addAssistantMessage(message) {
         let assistantMessage = document.createElement("div");
         assistantMessage.classList.add("chat-message", "assistant");
+        
+        // Si el mensaje no comienza con <p>, lo envolvemos en un párrafo
+        if (!message.trim().startsWith('<p>')) {
+            // Además, procesamos posibles bloques de código
+            message = message.replace(/```([^`]+)```/g, '<pre><code>$1</code></pre>');
+            // Procesamos código en línea
+            message = message.replace(/`([^`]+)`/g, '<code>$1</code>');
+            // Envolvemos el resto en párrafos
+            message = `<p>${message}</p>`;
+            
+            // Aseguramos que los párrafos estén bien formados cuando hay saltos de línea dobles
+            message = message.replace(/\n\n/g, '</p><p>');
+            // Saltos de línea simples dentro de párrafos
+            message = message.replace(/\n/g, '<br>');
+        }
+        
         assistantMessage.innerHTML = message;
         chatOutput.appendChild(assistantMessage);
         scrollToBottom();
@@ -142,6 +168,12 @@ document.addEventListener("DOMContentLoaded", function () {
      */
     function handleResponse(data) {
         showSpinner(false);
+        
+        // Re-enable the submit button
+        chatSubmit.disabled = false;
+        
+        // Focus the input for better UX
+        chatInput.focus();
 
         // First, check if we have a valid response
         if (false === data.success) {
@@ -170,6 +202,8 @@ document.addEventListener("DOMContentLoaded", function () {
      */
     function handleError() {
         showSpinner(false);
+        chatSubmit.disabled = false;
+        chatInput.focus();
         addAssistantMessage("<strong>Error:</strong> No se pudo obtener respuesta.");
     }
 
@@ -185,7 +219,10 @@ document.addEventListener("DOMContentLoaded", function () {
      * Scrolls the chat output to the latest message.
      */
     function scrollToBottom() {
-        chatOutput.scrollTop = chatOutput.scrollHeight;
+        const chatMessagesContainer = document.getElementById('chat-messages-container');
+        if (chatMessagesContainer) {
+            chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
+        }
     }
 
     /**
