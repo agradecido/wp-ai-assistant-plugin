@@ -52,8 +52,8 @@ class Settings {
 	 */
 	public static function add_settings_page() {
 		add_menu_page(
-			'WP AI Assistant Settings',
-			'WP AI Assistant',
+			__( 'WP AI Assistant Settings', 'wp-ai-assistant' ),
+			__( 'WP AI Assistant', 'wp-ai-assistant' ),
 			'manage_options',
 			'wp-ai-assistant-settings',
 			array( self::class, 'render_settings_page' ),
@@ -63,8 +63,8 @@ class Settings {
 
 		add_submenu_page(
 			'wp-ai-assistant-settings',
-			'Probar Asistente',
-			'Probar Asistente',
+			__( 'Test Assistant', 'wp-ai-assistant' ),
+			__( 'Test Assistant', 'wp-ai-assistant' ),
 			'manage_options',
 			'wp-ai-assistant-test',
 			array( self::class, 'render_test_page' )

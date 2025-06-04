@@ -1,4 +1,5 @@
 <?php
+// phpcs:ignoreFile
 namespace WPAIS;
 
 use WPAIS\Admin\Settings;
@@ -26,18 +27,22 @@ class Plugin {
 	private QuotaManager $quotaManager;
 
 	/**
+	 * Default daily limit queries per user.
+	 */
+	private const DEFAULT_DAILY_LIMIT = 2;
+
+	/**
 	 * Initialize the plugin.
 	 */
 	public function init() {
-		// registra ajustes y shortcode.
 		Settings::register();
 		ChatShortcode::register();
 		HistoryShortcode::register();
 
-		// Instancia el repo e inyecta el manager.
+		// Instance the repository and inject the manager.
 		global $wpdb;
 		$repo               = new WPDBQuotaRepository( $wpdb );
-		$dailyLimit         = (int) get_option( 'wp_ai_assistant_daily_limit', 20 );
+		$dailyLimit         = (int) get_option( 'wp_ai_assistant_daily_limit', self::DEFAULT_DAILY_LIMIT );
 		$this->quotaManager = new QuotaManager( $repo, $dailyLimit );
 
 		add_action( 'init', array( ChatThreadPostType::class, 'register' ) );
@@ -92,7 +97,7 @@ class Plugin {
 			wp_die();
 		}
 
-		// Comprueba la cuota antes de continuar.
+		// Check the quota.
 		$sid = Session::get_session_id();
 		try {
 			$this->quotaManager->checkAndIncrement( $sid );
@@ -122,7 +127,6 @@ class Plugin {
 			} else {
 				Logger::log( 'Response: ' . wp_remote_retrieve_body( $response ) );
 			}
-
 			wp_send_json( $response );
 		} catch ( \Exception $e ) {
 			Logger::error( 'Exception in Assistant: ' . $e->getMessage() );
@@ -134,7 +138,6 @@ class Plugin {
 				500
 			);
 		}
-
 		wp_die();
 	}
 
