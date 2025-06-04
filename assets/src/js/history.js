@@ -16,10 +16,10 @@ document.addEventListener("DOMContentLoaded", function() {
                 
                 if (messagesContainer.style.display === 'block') {
                     messagesContainer.style.display = 'none';
-                    this.textContent = 'Ver conversación completa';
+                    this.textContent = wpAIAssistantHistory.i18n.viewFullConversation;
                 } else {
                     messagesContainer.style.display = 'block';
-                    this.textContent = 'Ocultar conversación';
+                    this.textContent = wpAIAssistantHistory.i18n.hideConversation;
                 }
             });
         });
@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 try {
                     sessionStorage.setItem('wpai_current_thread', threadId);
                 } catch (e) {
-                    console.log('Session storage not available');
+                    console.log(wpAIAssistantHistory.i18n.sessionStorageNotAvailable);
                 }
                 
                 // Find chatbot container on page
@@ -56,7 +56,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     if (outputEl) {
                         const botMessage = document.createElement('div');
                         botMessage.className = 'chat-message assistant';
-                        botMessage.innerHTML = '<p>Continuando conversación anterior... ¿En qué más puedo ayudarte?</p>';
+                        botMessage.innerHTML = wpAIAssistantHistory.i18n.continueConversationMessage;
                         outputEl.appendChild(botMessage);
                         outputEl.style.display = 'block';
                         outputEl.scrollTop = outputEl.scrollHeight;
@@ -65,7 +65,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     // Update input placeholder
                     const inputEl = chatbotContainer.querySelector('#chat-input');
                     if (inputEl) {
-                        inputEl.setAttribute('placeholder', 'Continuar conversación...');
+                        inputEl.setAttribute('placeholder', wpAIAssistantHistory.i18n.continueConversationPlaceholder);
                         inputEl.focus();
                     }
                     
@@ -80,7 +80,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     if (redirectUrl) {
                         window.location.href = redirectUrl;
                     } else {
-                        alert('El chatbot no está disponible en esta página. Ve a una página con el chatbot para continuar la conversación.');
+                        alert(wpAIAssistantHistory.i18n.chatbotNotAvailableAlert);
                     }
                 }
             });

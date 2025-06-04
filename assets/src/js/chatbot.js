@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", function () {
             chatbotContainer.dataset.threadId = threadId;
             
             // Indicate continuing conversation
-            chatInput.placeholder = "Continuar conversación...";
+            chatInput.placeholder = wpAIAssistant.i18n.continueConversationPlaceholder;
         }
     } catch (e) {
         // Session storage not available
@@ -36,20 +36,20 @@ document.addEventListener("DOMContentLoaded", function () {
     const assistantId = chatbotContainer.dataset.assistantId;
     const ajaxUrl = wpAIAssistant.ajax_url;
     const isEnabled = chatbotContainer.dataset.enabled === '1';
-    const disabledMessage = chatbotContainer.dataset.disabledMessage || "Chat desactivado temporalmente, vuelva más tarde o póngase en contacto con nosotros";
+    const disabledMessage = chatbotContainer.dataset.disabledMessage || wpAIAssistant.i18n.chatDisabledDefault;
 
     // Show welcome message based on whether we're continuing a thread
     if (chatOutput.children.length === 0) {
         if (threadId) {
             const botMessage = document.createElement('div');
             botMessage.className = 'chat-message assistant';
-            botMessage.innerHTML = '<p>Continuando conversación anterior... ¿En qué más puedo ayudarte?</p>';
+            botMessage.innerHTML = wpAIAssistant.i18n.continueConversationMessage;
             chatOutput.appendChild(botMessage);
             chatOutput.style.display = 'flex';
         } else {
             const botMessage = document.createElement('div');
             botMessage.className = 'chat-message assistant';
-            botMessage.innerHTML = '<p>¡Hola! ¿En qué puedo ayudarte?</p>';
+            botMessage.innerHTML = wpAIAssistant.i18n.helloMessage;
             chatOutput.appendChild(botMessage);
             chatOutput.style.display = 'flex';
         }
@@ -186,7 +186,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (data.message) {
             message = data.message;
         } else {
-            addAssistantMessage("Error desconocido en la respuesta del chatbot.");
+            addAssistantMessage(wpAIAssistant.i18n.unknownChatbotError);
             return;
         }
 
@@ -204,7 +204,7 @@ document.addEventListener("DOMContentLoaded", function () {
         showSpinner(false);
         chatSubmit.disabled = false;
         chatInput.focus();
-        addAssistantMessage("<strong>Error:</strong> No se pudo obtener respuesta.");
+        addAssistantMessage(wpAIAssistant.i18n.couldNotGetResponseError);
     }
 
     /**

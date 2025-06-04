@@ -21,7 +21,7 @@ class ConversationMetaBox {
 	public static function add_meta_box(): void {
 		add_meta_box(
 			'ai_conversation_history',
-			'Historial de Conversación',
+			__( 'Conversation History', 'wp-ai-assistant' ),
 			array( self::class, 'render_meta_box' ),
 			'ai_chat_thread',
 			'normal',
@@ -39,7 +39,7 @@ class ConversationMetaBox {
 		$messages = get_post_meta( $post->ID, 'messages', true );
 
 		if ( empty( $messages ) ) {
-			echo '<p>No hay mensajes en esta conversación.</p>';
+			echo '<p>' . esc_html__( 'There are no messages in this conversation.', 'wp-ai-assistant' ) . '</p>';
 			return;
 		}
 
@@ -51,7 +51,7 @@ class ConversationMetaBox {
 			$timestamp = isset( $message['timestamp'] ) ? date( 'Y-m-d H:i:s', $message['timestamp'] ) : '';
 
 			$role_class = $role === 'user' ? 'user-message' : 'assistant-message';
-			$role_label = $role === 'user' ? 'Usuario' : 'Asistente';
+			$role_label = $role === 'user' ? __( 'User', 'wp-ai-assistant' ) : __( 'Assistant', 'wp-ai-assistant' );
 
 			echo '<div class="message ' . esc_attr( $role_class ) . '">';
 			echo '<div class="message-header">';
