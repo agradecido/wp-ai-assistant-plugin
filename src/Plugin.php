@@ -35,6 +35,7 @@ class Plugin {
 	 * Initialize the plugin.
 	 */
 	public function init() {
+		Logger::log( 'Initializing WP AI Assistant plugin' );
 		Settings::register();
 		ChatShortcode::register();
 		HistoryShortcode::register();

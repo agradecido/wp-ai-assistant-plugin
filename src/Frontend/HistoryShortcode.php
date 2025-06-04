@@ -5,6 +5,7 @@ namespace WPAIS\Frontend;
 use WPAIS\Infrastructure\Persistence\WPThreadRepository;
 use WPAIS\Utils\Session;
 use Parsedown;
+use WPAIS\Utils\Logger;
 
 /**
  * Class HistoryShortcode
@@ -22,7 +23,12 @@ class HistoryShortcode {
 	 * @return void
 	 */
 	public static function register() {
-		add_shortcode( 'wp_ai_assistant_history', array( self::class, 'render_history_shortcode' ) );
+		add_action(
+			'init',
+			function () {
+				add_shortcode( 'wp_ai_assistant_history', array( self::class, 'render' ) );
+			}
+		);
 		add_action( 'wp_enqueue_scripts', array( self::class, 'enqueue_history_assets' ) );
 	}
 
@@ -83,6 +89,9 @@ class HistoryShortcode {
 		// Get the current user or session.
 		$user_id    = get_current_user_id();
 		$session_id = Session::get_session_id();
+
+		// Debug log session and user info
+		error_log( 'WP AI Assistant: User ID: ' . ( $user_id ? $user_id : 'none' ) . ', Session ID: ' . $session_id );
 
 		// Get threads.
 		$repository = self::get_repository();

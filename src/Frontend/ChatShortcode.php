@@ -16,6 +16,7 @@ class ChatShortcode {
 	 */
 	public static function register() {
 		add_shortcode( 'wp_ai_assistant', array( self::class, 'render' ) );
+		add_action( 'wp_enqueue_scripts', array( self::class, 'enqueue_assets' ) );
 	}
 
 	/**
@@ -53,7 +54,7 @@ class ChatShortcode {
 	/**
 	 * Enqueues styles and scripts for the chatbot.
 	 */
-	private static function enqueue_assets() {
+	public static function enqueue_assets() {
 		$plugin_url = plugin_dir_url( dirname( __DIR__ ) );
 		$version    = defined( 'WP_DEBUG' ) && WP_DEBUG ? time() : '1.0.1';
 
@@ -108,7 +109,7 @@ class ChatShortcode {
 	 * @param string $disabled_message Message to show when chatbot is disabled.
 	 * @return string
 	 */
-	private static function get_html( string $nonce, bool $is_enabled, string $disabled_message ): string {
+	private static function get_html(): string {
 		ob_start();
 
 		$template_path = dirname( dirname( __DIR__ ) ) . '/src/Frontend/templates/chatbot-template.php';
@@ -136,7 +137,6 @@ class ChatShortcode {
 			return '<p>Error: No assistant ID</p>';
 		}
 
-		self::enqueue_assets();
 		$nonce            = wp_create_nonce( 'wp_ai_assistant_nonce' );
 		$disabled_message = self::get_option_with_default(
 			'wp_ai_assistant_disabled_message',
