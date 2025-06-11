@@ -18,3 +18,5 @@ create-plugin-package.sh
 *.bak
 /watch.sh
 AICompanionApp
+languages
+
