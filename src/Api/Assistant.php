@@ -164,7 +164,7 @@ class Assistant {
 				}
 				$thread_id = $thread['thread_id'];
 
-				// Save new thread in WordPress
+				// Save new thread in WordPress.
 				if ( self::$thread_repository ) {
 					$title = 'Conversación iniciada con: ' . substr( $query, 0, 50 ) . ( strlen( $query ) > 50 ? '...' : '' );
 					self::$thread_repository->saveThread( $thread_id, $session_id, $user_id ? (string) $user_id : null, $title );
@@ -180,7 +180,7 @@ class Assistant {
 			}
 			Logger::log( 'Message added to thread' . ( isset( $message_result['message'] ) ? ': ' . $message_result['message'] : '' ) );
 
-			// Save user message to WordPress
+			// Save user message to WordPress.
 			if ( self::$thread_repository ) {
 				self::$thread_repository->addMessage( $thread_id, $query, 'user' );
 				Logger::log( 'User message added to thread: ' . $thread_id );
@@ -201,7 +201,7 @@ class Assistant {
 				return $messages;
 			}
 
-			// Store the assistant's response in WordPress
+			// Store the assistant's response in WordPress.
 			$assistant_message = '';
 			if ( ! empty( $messages['messages'] ) ) {
 				$assistant_message = $messages['messages'][0]['content'];

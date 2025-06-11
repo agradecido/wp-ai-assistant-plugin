@@ -1,14 +1,14 @@
 # Copyright (C) 2025 Javier Sierra
 # This file is distributed under the same license as the WP AI Assistant plugin.
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: WP AI Assistant 1.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/app\n"
 "POT-Creation-Date: 2025-06-04 17:16+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2025-06-04 17:17+0200\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: es_ES\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -85,7 +85,9 @@ msgid "Message when chat is disabled"
 msgstr ""
 
 #: src/Admin/templates/settings-page.php:30
-msgid "This message is displayed when chat is disabled but the shortcode is still present on the page."
+msgid ""
+"This message is displayed when chat is disabled but the shortcode is still "
+"present on the page."
 msgstr ""
 
 #: src/Admin/templates/settings-page.php:34
@@ -93,7 +95,9 @@ msgid "System Instructions"
 msgstr ""
 
 #: src/Admin/templates/settings-page.php:37
-msgid "Define the system instructions for the assistant. These instructions control the behavior of the chatbot."
+msgid ""
+"Define the system instructions for the assistant. These instructions control "
+"the behavior of the chatbot."
 msgstr ""
 
 #: src/Admin/templates/settings-page.php:41
@@ -257,7 +261,9 @@ msgid "Hide conversation"
 msgstr ""
 
 #: src/Frontend/HistoryShortcode.php:60
-msgid "The chatbot is not available on this page. Please go to a page with the chatbot to continue the conversation."
+msgid ""
+"The chatbot is not available on this page. Please go to a page with the "
+"chatbot to continue the conversation."
 msgstr ""
 
 #: src/Frontend/HistoryShortcode.php:61
@@ -297,7 +303,9 @@ msgid "WP AI Assistant Activation Error: No WPAIS\\Plugin classes found"
 msgstr ""
 
 #: wp-ai-assistant.php:31 wp-ai-assistant.php:35
-msgid "Plugin could not be activated: Missing required class files. Please contact the plugin developer for support."
+msgid ""
+"Plugin could not be activated: Missing required class files. Please contact "
+"the plugin developer for support."
 msgstr ""
 
 #: wp-ai-assistant.php:50
@@ -305,5 +313,7 @@ msgid "WP AI Assistant Initialization Error: No WPAIS\\Plugin classes found"
 msgstr ""
 
 #: wp-ai-assistant.php:53
-msgid "Plugin could not be initialized: Missing required class files. Please contact the plugin developer for support."
+msgid ""
+"Plugin could not be initialized: Missing required class files. Please "
+"contact the plugin developer for support."
 msgstr ""
