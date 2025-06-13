@@ -54,7 +54,6 @@ You can also specify a different assistant ID for specific pages:
 
 ### Dependencies
 
-- `smalot/pdfparser`: For PDF content extraction
 - `erusev/parsedown`: For Markdown parsing
 
 ### Setup
