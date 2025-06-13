@@ -52,6 +52,14 @@ class HistoryShortcode {
 				array(
 					'ajaxurl' => admin_url( 'admin-ajax.php' ),
 					'nonce'   => wp_create_nonce( 'wp_ai_assistant_history_nonce' ),
+					'i18n'    => array(
+						'viewFullConversation'        => __( 'View full conversation', 'wp-ai-assistant' ),
+						'hideConversation'            => __( 'Hide conversation', 'wp-ai-assistant' ),
+						'continueConversationMessage' => __( '<p>Continuing previous conversation... How can I help you further?</p>', 'wp-ai-assistant' ),
+						'continueConversationPlaceholder' => __( 'Continue conversation...', 'wp-ai-assistant' ),
+						'chatbotNotAvailableAlert'    => __( 'The chatbot is not available on this page. Please go to a page with the chatbot to continue the conversation.', 'wp-ai-assistant' ),
+						'sessionStorageNotAvailable'  => __( 'Session storage not available', 'wp-ai-assistant' ),
+					),
 				)
 			);
 		}
@@ -80,7 +88,7 @@ class HistoryShortcode {
 		$atts = shortcode_atts(
 			array(
 				'limit'    => 10,
-				'title'    => 'Historial de Conversaciones',
+				'title'    => __( 'Conversation History', 'wp-ai-assistant' ),
 				'redirect' => '', // URL to redirect to when continuing a chat.
 			),
 			$atts,

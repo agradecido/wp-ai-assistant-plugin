@@ -54,7 +54,6 @@ You can also specify a different assistant ID for specific pages:
 
 ### Dependencies
 
-- `smalot/pdfparser`: For PDF content extraction
 - `erusev/parsedown`: For Markdown parsing
 
 ### Setup
@@ -89,6 +88,25 @@ Run the provided script to create a distribution package:
 ```
 
 This will compile assets, install production dependencies, and create a ZIP file ready for distribution.
+
+## Translating the Plugin
+
+This plugin is translation-ready!
+
+To translate the plugin into your language, follow these steps:
+
+1.  **Text Domain:** The text domain for this plugin is `wp-ai-assistant`.
+2.  **Template File:** A `.pot` (Portable Object Template) file is available at `languages/wp-ai-assistant.pot`. This file contains all translatable strings from the plugin.
+3.  **Create Translation Files:**
+    *   Use a program like [Poedit](https://poedit.net/) (available for Windows, macOS, and Linux) or any other `.po` file editor.
+    *   Open the `wp-ai-assistant.pot` file in your editor.
+    *   Translate the strings into your desired language.
+    *   Save your translation file. This will create a `.po` file (e.g., `wp-ai-assistant-es_ES.po` for Spanish from Spain).
+    *   The editor should also automatically generate a `.mo` file (e.g., `wp-ai-assistant-es_ES.mo`). This is the compiled translation file that WordPress uses.
+4.  **Upload Files:** Place both the `.po` and `.mo` files into the `languages/` directory of the plugin.
+5.  **Set WordPress Language:** If your WordPress site's language is set to the language you translated (e.g., Spanish), the plugin should now display in that language.
+
+If you create a translation, please consider sharing it with the plugin author or community!
 
 ## License
 

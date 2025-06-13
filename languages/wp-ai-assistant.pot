@@ -1,0 +1,318 @@
+# Copyright (C) 2025 Javier Sierra
+# This file is distributed under the same license as the WP AI Assistant plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: WP AI Assistant 1.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/app\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2025-06-04T15:01:19+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: wp-ai-assistant\n"
+
+#. Plugin Name of the plugin
+#: wp-ai-assistant.php
+#: src/Admin/Settings.php:66
+msgid "WP AI Assistant"
+msgstr ""
+
+#. Description of the plugin
+#: wp-ai-assistant.php
+msgid "Plugin for chat with an OpenAI Assistant."
+msgstr ""
+
+#. Author of the plugin
+#: wp-ai-assistant.php
+msgid "Javier Sierra"
+msgstr ""
+
+#: src/Admin/ConversationMetaBox.php:24
+#: src/Frontend/HistoryShortcode.php:91
+msgid "Conversation History"
+msgstr ""
+
+#: src/Admin/ConversationMetaBox.php:42
+msgid "There are no messages in this conversation."
+msgstr ""
+
+#: src/Admin/ConversationMetaBox.php:54
+msgid "User"
+msgstr ""
+
+#: src/Admin/ConversationMetaBox.php:54
+#: src/Frontend/templates/history-template.php:71
+msgid "Assistant"
+msgstr ""
+
+#: src/Admin/Settings.php:48
+msgid "<strong>Error:</strong> Unknown response format"
+msgstr ""
+
+#: src/Admin/Settings.php:49
+msgid "<strong>Error:</strong> Could not get response"
+msgstr ""
+
+#: src/Admin/Settings.php:50
+msgid "<strong>Error:</strong> Could not connect to the server"
+msgstr ""
+
+#: src/Admin/Settings.php:65
+#: src/Admin/templates/settings-page.php:14
+msgid "WP AI Assistant Settings"
+msgstr ""
+
+#: src/Admin/Settings.php:76
+#: src/Admin/Settings.php:77
+msgid "Test Assistant"
+msgstr ""
+
+#: src/Admin/Settings.php:93
+#: src/Admin/templates/settings-page.php:29
+#: src/Frontend/ChatShortcode.php:84
+#: src/Frontend/ChatShortcode.php:151
+msgid "Chat temporarily disabled, please try again later or contact us"
+msgstr ""
+
+#: src/Admin/Settings.php:125
+#: src/Admin/templates/settings-page.php:63
+msgid "Daily quota exceeded. Please try again tomorrow 🤖"
+msgstr ""
+
+#: src/Admin/templates/settings-page.php:20
+msgid "Enable chat?"
+msgstr ""
+
+#: src/Admin/templates/settings-page.php:26
+msgid "Message when chat is disabled"
+msgstr ""
+
+#: src/Admin/templates/settings-page.php:30
+msgid "This message is displayed when chat is disabled but the shortcode is still present on the page."
+msgstr ""
+
+#: src/Admin/templates/settings-page.php:34
+msgid "System Instructions"
+msgstr ""
+
+#: src/Admin/templates/settings-page.php:37
+msgid "Define the system instructions for the assistant. These instructions control the behavior of the chatbot."
+msgstr ""
+
+#: src/Admin/templates/settings-page.php:41
+msgid "OpenAI API URL"
+msgstr ""
+
+#: src/Admin/templates/settings-page.php:45
+msgid "OpenAI API Key"
+msgstr ""
+
+#: src/Admin/templates/settings-page.php:49
+msgid "Assistant ID"
+msgstr ""
+
+#: src/Admin/templates/settings-page.php:53
+msgid "Response waiting time in seconds"
+msgstr ""
+
+#: src/Admin/templates/settings-page.php:57
+msgid "Daily message limit per user"
+msgstr ""
+
+#: src/Admin/templates/settings-page.php:61
+msgid "Quota exceeded message"
+msgstr ""
+
+#: src/Admin/templates/settings-page.php:64
+msgid "Message to display when the user exceeds their daily message quota."
+msgstr ""
+
+#: src/Admin/templates/settings-page.php:68
+msgid "Main Color"
+msgstr ""
+
+#: src/Admin/templates/settings-page.php:72
+msgid "Secondary Color"
+msgstr ""
+
+#: src/Admin/templates/test-page.php:15
+msgid "AI Assistant Test"
+msgstr ""
+
+#: src/Admin/templates/test-page.php:16
+msgid "Use this section to test queries with the configured assistant."
+msgstr ""
+
+#: src/Admin/templates/test-page.php:20
+msgid "Assistant Information"
+msgstr ""
+
+#: src/Admin/templates/test-page.php:24
+msgid "Name"
+msgstr ""
+
+#: src/Admin/templates/test-page.php:28
+msgid "Model"
+msgstr ""
+
+#: src/Admin/templates/test-page.php:33
+msgid "Description"
+msgstr ""
+
+#: src/Admin/templates/test-page.php:38
+msgid "ID"
+msgstr ""
+
+#: src/Admin/templates/test-page.php:43
+msgid "Created"
+msgstr ""
+
+#: src/Admin/templates/test-page.php:65
+#: src/Frontend/templates/chatbot-template.php:36
+msgid "Type your query to the assistant here"
+msgstr ""
+
+#: src/Admin/templates/test-page.php:66
+msgid "Send Query"
+msgstr ""
+
+#: src/Domain/Thread/ChatThreadPostType.php:19
+#: src/Domain/Thread/ChatThreadPostType.php:21
+msgid "AI Conversations"
+msgstr ""
+
+#: src/Domain/Thread/ChatThreadPostType.php:20
+#: src/Domain/Thread/ChatThreadPostType.php:22
+msgid "AI Conversation"
+msgstr ""
+
+#: src/Domain/Thread/ChatThreadPostType.php:23
+msgid "Add New"
+msgstr ""
+
+#: src/Domain/Thread/ChatThreadPostType.php:24
+msgid "Add New Conversation"
+msgstr ""
+
+#: src/Domain/Thread/ChatThreadPostType.php:25
+msgid "New Conversation"
+msgstr ""
+
+#: src/Domain/Thread/ChatThreadPostType.php:26
+msgid "Edit Conversation"
+msgstr ""
+
+#: src/Domain/Thread/ChatThreadPostType.php:27
+msgid "View Conversation"
+msgstr ""
+
+#: src/Domain/Thread/ChatThreadPostType.php:28
+msgid "All Conversations"
+msgstr ""
+
+#: src/Domain/Thread/ChatThreadPostType.php:29
+msgid "Search Conversations"
+msgstr ""
+
+#: src/Domain/Thread/ChatThreadPostType.php:30
+msgid "No conversations found."
+msgstr ""
+
+#: src/Domain/Thread/ChatThreadPostType.php:31
+msgid "No conversations found in Trash."
+msgstr ""
+
+#: src/Domain/Thread/ChatThreadPostType.php:42
+msgctxt "URL slug"
+msgid "ai-conversations"
+msgstr ""
+
+#: src/Frontend/ChatShortcode.php:83
+#: src/Frontend/HistoryShortcode.php:59
+msgid "Continue conversation..."
+msgstr ""
+
+#: src/Frontend/ChatShortcode.php:85
+#: src/Frontend/HistoryShortcode.php:58
+msgid "<p>Continuing previous conversation... How can I help you further?</p>"
+msgstr ""
+
+#: src/Frontend/ChatShortcode.php:86
+msgid "<p>Hello! How can I help you?</p>"
+msgstr ""
+
+#: src/Frontend/ChatShortcode.php:87
+msgid "Unknown error in chatbot response."
+msgstr ""
+
+#: src/Frontend/ChatShortcode.php:88
+msgid "<strong>Error:</strong> Could not get response."
+msgstr ""
+
+#: src/Frontend/ChatShortcode.php:145
+msgid "Error: No assistant ID configured."
+msgstr ""
+
+#: src/Frontend/HistoryShortcode.php:56
+msgid "View full conversation"
+msgstr ""
+
+#: src/Frontend/HistoryShortcode.php:57
+msgid "Hide conversation"
+msgstr ""
+
+#: src/Frontend/HistoryShortcode.php:60
+msgid "The chatbot is not available on this page. Please go to a page with the chatbot to continue the conversation."
+msgstr ""
+
+#: src/Frontend/HistoryShortcode.php:61
+msgid "Session storage not available"
+msgstr ""
+
+#: src/Frontend/templates/chatbot-template.php:21
+msgid "T16 Assistant"
+msgstr ""
+
+#: src/Frontend/templates/history-template.php:23
+msgid "You have no saved conversations yet."
+msgstr ""
+
+#: src/Frontend/templates/history-template.php:36
+msgid "You:"
+msgstr ""
+
+#: src/Frontend/templates/history-template.php:42
+msgid "Assistant:"
+msgstr ""
+
+#: src/Frontend/templates/history-template.php:53
+msgid "View conversation"
+msgstr ""
+
+#: src/Frontend/templates/history-template.php:63
+msgid "Continue chat"
+msgstr ""
+
+#: src/Frontend/templates/history-template.php:71
+msgid "You"
+msgstr ""
+
+#: wp-ai-assistant.php:29
+msgid "WP AI Assistant Activation Error: No WPAIS\\Plugin classes found"
+msgstr ""
+
+#: wp-ai-assistant.php:31
+#: wp-ai-assistant.php:35
+msgid "Plugin could not be activated: Missing required class files. Please contact the plugin developer for support."
+msgstr ""
+
+#: wp-ai-assistant.php:50
+msgid "WP AI Assistant Initialization Error: No WPAIS\\Plugin classes found"
+msgstr ""
+
+#: wp-ai-assistant.php:53
+msgid "Plugin could not be initialized: Missing required class files. Please contact the plugin developer for support."
+msgstr ""

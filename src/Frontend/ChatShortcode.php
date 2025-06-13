@@ -79,6 +79,14 @@ class ChatShortcode {
 			array(
 				'ajax_url' => admin_url( 'admin-ajax.php' ),
 				'nonce'    => wp_create_nonce( 'wp_ai_assistant_nonce' ),
+				'i18n'     => array(
+					'continueConversationPlaceholder' => __( 'Continue conversation...', 'wp-ai-assistant' ),
+					'chatDisabledDefault'             => __( 'Chat temporarily disabled, please try again later or contact us', 'wp-ai-assistant' ),
+					'continueConversationMessage'     => __( '<p>Continuing previous conversation... How can I help you further?</p>', 'wp-ai-assistant' ),
+					'helloMessage'                    => __( '<p>Hello! How can I help you?</p>', 'wp-ai-assistant' ),
+					'unknownChatbotError'             => __( 'Unknown error in chatbot response.', 'wp-ai-assistant' ),
+					'couldNotGetResponseError'        => __( '<strong>Error:</strong> Could not get response.', 'wp-ai-assistant' ),
+				),
 			)
 		);
 
@@ -133,14 +141,14 @@ class ChatShortcode {
 		$assistant_id = self::get_assistant_id( $atts );
 
 		if ( empty( $assistant_id ) && $is_enabled ) {
-			Logger::log( 'Error: No assistant ID' );
-			return '<p>Error: No assistant ID</p>';
+			Logger::log( 'Error: No assistant ID configured.' );
+			return '<p>' . __( 'Error: No assistant ID configured.', 'wp-ai-assistant' ) . '</p>';
 		}
 
 		$nonce            = wp_create_nonce( 'wp_ai_assistant_nonce' );
 		$disabled_message = self::get_option_with_default(
 			'wp_ai_assistant_disabled_message',
-			'Chat desactivado temporalmente, vuelva más tarde o póngase en contacto con nosotros'
+			__( 'Chat temporarily disabled, please try again later or contact us', 'wp-ai-assistant' )
 		);
 
 		return self::get_html( $nonce, $is_enabled, $disabled_message );

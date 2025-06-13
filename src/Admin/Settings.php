@@ -41,6 +41,16 @@ class Settings {
 				)
 			);
 
+			wp_localize_script(
+				'wp-ai-assistant-admin-js',
+				'wpAIAssistantAdminStrings',
+				array(
+					'unknownResponseFormat' => __( '<strong>Error:</strong> Unknown response format', 'wp-ai-assistant' ),
+					'couldNotGetResponse'   => __( '<strong>Error:</strong> Could not get response', 'wp-ai-assistant' ),
+					'couldNotConnectToServer' => __( '<strong>Error:</strong> Could not connect to the server', 'wp-ai-assistant' ),
+				)
+			);
+
 			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 				error_log( 'WPAIS admin asset path: ' . $plugin_url . 'assets/dist/css/admin.css' );
 			}
@@ -80,7 +90,7 @@ class Settings {
 			'wp_ai_assistant_settings_group',
 			'wp_ai_assistant_disabled_message',
 			array(
-				'default'           => 'Chat desactivado temporalmente, vuelva más tarde o póngase en contacto con nosotros',
+				'default'           => __( 'Chat temporarily disabled, please try again later or contact us', 'wp-ai-assistant' ),
 				'sanitize_callback' => 'sanitize_text_field',
 			)
 		);
@@ -112,7 +122,7 @@ class Settings {
 			'wp_ai_assistant_settings_group',
 			'wp_ai_assistant_quota_exceeded_message',
 			array(
-				'default'           => 'Cuota diaria excedida. Vuelve mañana 🤖',
+				'default'           => __( 'Daily quota exceeded. Please try again tomorrow 🤖', 'wp-ai-assistant' ),
 				'sanitize_callback' => 'sanitize_text_field',
 			)
 		);
