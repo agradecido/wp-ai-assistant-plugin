@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: WP AI Assistant 1.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/app\n"
 "POT-Creation-Date: 2025-06-04T15:01:19+00:00\n"
-"PO-Revision-Date: 2025-06-13 13:56+0200\n"
+"PO-Revision-Date: 2025-06-13 16:57+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: es_ES\n"
@@ -23,7 +23,7 @@ msgstr ""
 #. Description of the plugin
 #: wp-ai-assistant.php
 msgid "Plugin for chat with an OpenAI Assistant."
-msgstr "Plugin para incluir un Assistant de OpenAI en WordPress"
+msgstr ""
 
 #. Author of the plugin
 #: wp-ai-assistant.php
@@ -32,11 +32,11 @@ msgstr ""
 
 #: src/Admin/ConversationMetaBox.php:24 src/Frontend/HistoryShortcode.php:91
 msgid "Conversation History"
-msgstr "Historial de chats"
+msgstr ""
 
 #: src/Admin/ConversationMetaBox.php:42
 msgid "There are no messages in this conversation."
-msgstr "No hay ningún mensaje"
+msgstr ""
 
 #: src/Admin/ConversationMetaBox.php:54
 msgid "User"
@@ -49,15 +49,15 @@ msgstr ""
 
 #: src/Admin/Settings.php:48
 msgid "<strong>Error:</strong> Unknown response format"
-msgstr "<strong>Error:</strong> Formato de respuesta desconocido"
+msgstr ""
 
 #: src/Admin/Settings.php:49
 msgid "<strong>Error:</strong> Could not get response"
-msgstr "<strong>Error:</strong> No puedo obtener una respuesta"
+msgstr ""
 
 #: src/Admin/Settings.php:50
 msgid "<strong>Error:</strong> Could not connect to the server"
-msgstr "<strong>Error:</strong> Imposible conectar con el servidor"
+msgstr ""
 
 #: src/Admin/Settings.php:65 src/Admin/templates/settings-page.php:14
 msgid "WP AI Assistant Settings"
@@ -71,20 +71,20 @@ msgstr ""
 #: src/Frontend/ChatShortcode.php:84 src/Frontend/ChatShortcode.php:151
 msgid "Chat temporarily disabled, please try again later or contact us"
 msgstr ""
-"Chat temporalmente desactivado, por favor inténtelo de nuevo pasado un rato "
-"o contacte con nosotros"
+"Chat temporalmente desactivado. Inténtalo pasado un rato o ponte en contacto "
+"con nosotros"
 
 #: src/Admin/Settings.php:125 src/Admin/templates/settings-page.php:63
 msgid "Daily quota exceeded. Please try again tomorrow 🤖"
-msgstr "Has excedido tu cuota diaria de consultas. Por favor vuelve mañana 🤖"
+msgstr "Has excedido tu cuota diaria. Por favor, vuelve mañana 🤖"
 
 #: src/Admin/templates/settings-page.php:20
 msgid "Enable chat?"
-msgstr "Activar chat?"
+msgstr ""
 
 #: src/Admin/templates/settings-page.php:26
 msgid "Message when chat is disabled"
-msgstr "Mensaje cuando el chat está desacivado"
+msgstr ""
 
 #: src/Admin/templates/settings-page.php:30
 msgid ""
@@ -173,7 +173,7 @@ msgstr ""
 #: src/Admin/templates/test-page.php:65
 #: src/Frontend/templates/chatbot-template.php:36
 msgid "Type your query to the assistant here"
-msgstr ""
+msgstr "Escribe tu consulta para el asistente aquí"
 
 #: src/Admin/templates/test-page.php:66
 msgid "Send Query"
@@ -232,7 +232,7 @@ msgstr ""
 
 #: src/Frontend/ChatShortcode.php:83 src/Frontend/HistoryShortcode.php:59
 msgid "Continue conversation..."
-msgstr "Continúa la conversación"
+msgstr "Continuar la conversación..."
 
 #: src/Frontend/ChatShortcode.php:85 src/Frontend/HistoryShortcode.php:58
 msgid "<p>Continuing previous conversation... How can I help you further?</p>"
@@ -240,7 +240,7 @@ msgstr ""
 
 #: src/Frontend/ChatShortcode.php:86
 msgid "<p>Hello! How can I help you?</p>"
-msgstr ""
+msgstr "<p>Hola! ¿Cómo puedo ayudarte?</p>"
 
 #: src/Frontend/ChatShortcode.php:87
 msgid "Unknown error in chatbot response."
@@ -256,7 +256,7 @@ msgstr ""
 
 #: src/Frontend/HistoryShortcode.php:56
 msgid "View full conversation"
-msgstr "Ver conversación completa"
+msgstr "Ver toda la conversación"
 
 #: src/Frontend/HistoryShortcode.php:57
 msgid "Hide conversation"
@@ -267,20 +267,18 @@ msgid ""
 "The chatbot is not available on this page. Please go to a page with the "
 "chatbot to continue the conversation."
 msgstr ""
-"El chatbot no esta disponible en esta página. Por favor, vaya a la página "
-"adecuada para continuar la conversación."
 
 #: src/Frontend/HistoryShortcode.php:61
 msgid "Session storage not available"
-msgstr "No se puede guardar la sesión."
+msgstr ""
 
 #: src/Frontend/templates/chatbot-template.php:21
 msgid "T16 Assistant"
-msgstr "Asistente T16"
+msgstr ""
 
 #: src/Frontend/templates/history-template.php:23
 msgid "You have no saved conversations yet."
-msgstr "No tienes ninguna conversación guardada todavía."
+msgstr "No tienes conversaciones guardadas."
 
 #: src/Frontend/templates/history-template.php:36
 msgid "You:"
@@ -288,7 +286,7 @@ msgstr "Tú:"
 
 #: src/Frontend/templates/history-template.php:42
 msgid "Assistant:"
-msgstr "Asistente T16:"
+msgstr "Asistente:"
 
 #: src/Frontend/templates/history-template.php:53
 msgid "View conversation"
