@@ -25,10 +25,10 @@ jobs:
 
       # (Opcional) Paso de construcción
       # Si necesitas compilar, instalar dependencias, etc.
-      # - name: Build project
-      - run: |
-           npm install
-           npm run build
+      - name: Build project
+        run: |
+          npm install
+          npm run build
 
       # 2. Despliegue con rsync
       # Usa una acción de la comunidad para simplificar la conexión SSH y rsync
