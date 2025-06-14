@@ -1,0 +1,51 @@
+# .github/workflows/deploy.yml
+
+name: Deploy to Server
+
+#  triggers
+# Se ejecuta en cada push a la rama 'main'
+# (una fusión de PR es un tipo de push)
+on:
+  push:
+    branches:
+      - main
+
+# jobs
+# Lista de trabajos a ejecutar
+jobs:
+  deploy:
+    name: Deploy Files
+    runs-on: ubuntu-latest # Usamos un corredor de Ubuntu
+
+    steps:
+      # 1. Checkout del código
+      # Descarga el código de tu repositorio al corredor
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # (Opcional) Paso de construcción
+      # Si necesitas compilar, instalar dependencias, etc.
+      # - name: Build project
+      #   run: |
+      #     npm install
+      #     npm run build
+
+      # 2. Despliegue con rsync
+      # Usa una acción de la comunidad para simplificar la conexión SSH y rsync
+      - name: Deploy with rsync
+        uses: easingthemes/ssh-deploy@v5.1.0
+        with:
+          # Clave privada SSH desde los Secrets
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          # Host del servidor desde los Secrets
+          REMOTE_HOST: ${{ secrets.SSH_HOST }}
+          # Usuario del servidor desde los Secrets
+          REMOTE_USER: ${{ secrets.SSH_USER }}
+          # Directorio de origen en el corredor. './dist/' si tienes build, './' para todo el repo.
+          SOURCE: "./"
+          # Directorio de destino en el servidor desde los Secrets
+          TARGET: ${{ secrets.REMOTE_PATH }}
+          # Argumentos para rsync. '--delete' elimina archivos en destino que ya no están en origen.
+          ARGS: "--recursive --delete"
+          # Excluir archivos o carpetas (muy útil)
+          EXCLUDE: "/.git/, /node_modules/, /.github/, /vendor/"
