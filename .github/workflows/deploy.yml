@@ -23,12 +23,24 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mbstring, xml, ctype, json, tokenizer
+          tools: composer
+
+      # 3. Instalar dependencias de Composer
+      # Instala las dependencias de producción y optimiza el autoloader
+      - name: Install Composer dependencies
+        run: composer install --no-dev --optimize-autoloader
+
       # (Opcional) Paso de construcción
       # Si necesitas compilar, instalar dependencias, etc.
       - name: Build project
         run: |
-          npm install
-          npm run build
+           npm install
+           npm run build
 
       # 2. Despliegue con rsync
       # Usa una acción de la comunidad para simplificar la conexión SSH y rsync
