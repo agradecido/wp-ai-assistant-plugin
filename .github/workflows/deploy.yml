@@ -48,4 +48,4 @@ jobs:
           # Argumentos para rsync. '--delete' elimina archivos en destino que ya no están en origen.
           ARGS: "--recursive --delete"
           # Excluir archivos o carpetas (muy útil)
-          EXCLUDE: "/.git/, /node_modules/, /.github/, /vendor/"
+          EXCLUDE: "/.git/, /node_modules/, /.github/"
