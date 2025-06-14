@@ -53,12 +53,12 @@ class HistoryShortcode {
 					'ajaxurl' => admin_url( 'admin-ajax.php' ),
 					'nonce'   => wp_create_nonce( 'wp_ai_assistant_history_nonce' ),
 					'i18n'    => array(
-						'viewFullConversation'        => __( 'View full conversation', 'wp-ai-assistant' ),
-						'hideConversation'            => __( 'Hide conversation', 'wp-ai-assistant' ),
-						'continueConversationMessage' => __( '<p>Continuing previous conversation... How can I help you further?</p>', 'wp-ai-assistant' ),
+						'viewFullConversation'            => __( 'View full conversation', 'wp-ai-assistant' ),
+						'hideConversation'                => __( 'Hide conversation', 'wp-ai-assistant' ),
+						'continueConversationMessage'     => __( '<p>Continuing previous conversation... How can I help you further?</p>', 'wp-ai-assistant' ),
 						'continueConversationPlaceholder' => __( 'Continue conversation...', 'wp-ai-assistant' ),
-						'chatbotNotAvailableAlert'    => __( 'The chatbot is not available on this page. Please go to a page with the chatbot to continue the conversation.', 'wp-ai-assistant' ),
-						'sessionStorageNotAvailable'  => __( 'Session storage not available', 'wp-ai-assistant' ),
+						'chatbotNotAvailableAlert'        => __( 'The chatbot is not available on this page. Please go to a page with the chatbot to continue the conversation.', 'wp-ai-assistant' ),
+						'sessionStorageNotAvailable'      => __( 'Session storage not available', 'wp-ai-assistant' ),
 					),
 				)
 			);
@@ -106,14 +106,14 @@ class HistoryShortcode {
 			$session_id,
 			(int) $atts['limit']
 		);
-		
+
 		ob_start();
 
 		// Set up Parsedown for Markdown rendering.
 		$parsedown = new Parsedown();
-		
+
 		// Extract variables for template.
-		$title = $atts['title'];
+		$title    = $atts['title'];
 		$redirect = $atts['redirect'];
 
 		$template_path = dirname( dirname( __DIR__ ) ) . '/src/Frontend/templates/history-template.php';
