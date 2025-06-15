@@ -1,15 +1,14 @@
 # .github/workflows/deploy.yml
 
-name: Deploy to Staging Server
+name: Deploy to Procuction Server
 
 #  triggers
-# Se ejecuta en cada push a la rama 'main'
-# (una fusión de PR es un tipo de push)
+# Se ejecuta en cada PR a la rama 'main'
 on:
-  pull_request:
-      branches:
-      - main
-
+    pull_request:
+        branches:
+        - main
+  
 # jobs
 # Lista de trabajos a ejecutar
 jobs:
