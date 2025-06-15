@@ -48,15 +48,15 @@ jobs:
         uses: easingthemes/ssh-deploy@v5.1.0
         with:
           # Clave privada SSH desde los Secrets
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY_PRO }}
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           # Host del servidor desde los Secrets
-          REMOTE_HOST: ${{ secrets.SSH_HOST_PRO }}
+          REMOTE_HOST: ${{ secrets.SSH_HOST }}
           # Usuario del servidor desde los Secrets
-          REMOTE_USER: ${{ secrets.SSH_USER_PRO }}
+          REMOTE_USER: ${{ secrets.SSH_USER }}
           # Directorio de origen en el corredor. './dist/' si tienes build, './' para todo el repo.
           SOURCE: "./"
           # Directorio de destino en el servidor desde los Secrets
-          TARGET: ${{ secrets.REMOTE_PATH_PRO }}
+          TARGET: ${{ secrets.REMOTE_PATH }}
           # Argumentos para rsync. '--delete' elimina archivos en destino que ya no están en origen.
           ARGS: "--recursive --delete"
           # Excluir archivos o carpetas (muy útil)

@@ -16,4 +16,4 @@ assets/dist
 *.zip
 create-plugin-package.sh
 *.bak
-/watch.sh
+watch.sh
