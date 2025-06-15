@@ -6,10 +6,10 @@ name: Deploy to Staging Server
 # Se ejecuta en cada push a la rama 'main'
 # (una fusión de PR es un tipo de push)
 on:
-  pull_request:
-      branches:
+  push:
+    branches:
       - main
-
+  
 # jobs
 # Lista de trabajos a ejecutar
 jobs:
