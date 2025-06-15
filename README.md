@@ -54,7 +54,6 @@ You can also specify a different assistant ID for specific pages:
 
 ### Dependencies
 
-- `smalot/pdfparser`: For PDF content extraction
 - `erusev/parsedown`: For Markdown parsing
 
 ### Setup
@@ -80,15 +79,6 @@ You can also specify a different assistant ID for specific pages:
 - `npm run dev`: Build assets in development mode
 - `npm run watch`: Watch for changes and rebuild assets
 - `npm run build`: Build assets for production
-
-### Packaging
-
-Run the provided script to create a distribution package:
-```
-./create-package.sh
-```
-
-This will compile assets, install production dependencies, and create a ZIP file ready for distribution.
 
 ## Translating the Plugin
 

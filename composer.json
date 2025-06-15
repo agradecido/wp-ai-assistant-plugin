@@ -5,7 +5,6 @@
         }
     },
     "require": {
-        "smalot/pdfparser": "^2.11",
         "erusev/parsedown": "^1.7"
     },
     "require-dev": {

@@ -16,7 +16,7 @@ class Logger {
 	public static function log( $message ) {
 
 		if ( defined( 'WP_CLI' ) && WP_CLI ) {
-			WP_CLI::log( '[WP AI Assistant]' . $message );
+			\WP_CLI::log( '[WP AI Assistant]' . $message );
 		}
 
 		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
@@ -31,7 +31,7 @@ class Logger {
 	 */
 	public static function success( $message ) {
 		if ( defined( 'WP_CLI' ) && WP_CLI ) {
-			WP_CLI::success( '[WP AI Assistant] ' . $message );
+			\WP_CLI::success( '[WP AI Assistant] ' . $message );
 		}
 
 		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
@@ -47,7 +47,7 @@ class Logger {
 	 */
 	public static function error( $message, $exit = false ) {
 		if ( defined( 'WP_CLI' ) && WP_CLI ) {
-			WP_CLI::error( '[WP AI Assistant] ' . $message, $exit );
+			\WP_CLI::error( '[WP AI Assistant] ' . $message, $exit );
 		}
 
 		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
