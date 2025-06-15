@@ -17,3 +17,4 @@ assets/dist
 create-plugin-package.sh
 *.bak
 watch.sh
+AGENTS.md
