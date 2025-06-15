@@ -1,6 +1,6 @@
 # .github/workflows/deploy.yml
 
-name: Deploy to Procuction Server
+name: Deploy to Production
 
 #  triggers
 # Se ejecuta en cada PR a la rama 'main'
