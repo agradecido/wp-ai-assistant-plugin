@@ -1,6 +1,6 @@
 # .github/workflows/deploy.yml
 
-name: Deploy to Server
+name: Deploy to Staging Server
 
 #  triggers
 # Se ejecuta en cada push a la rama 'main'
