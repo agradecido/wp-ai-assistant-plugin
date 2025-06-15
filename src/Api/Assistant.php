@@ -55,13 +55,17 @@ class Assistant {
 	 * Initialize the Assistant settings.
 	 */
 	public static function init() {
-		self::$api_key             = get_option( 'wp_ai_assistant_api_key' );
-		self::$api_url             = get_option( 'wp_ai_assistant_api_url' ) ?? 'https://api.openai.com/v1';
-		self::$assistant_id        = get_option( 'wp_ai_assistant_assistant_id' ) ?? '';
-		self::$sleep_time          = intval( get_option( 'wp_ai_assistant_assistant_waiting_time_in_seconds' ) ) ?? 5;
-		self::$system_instructions = get_option( 'wp_ai_assistant_system_instructions' ) ?? '';
-		Logger::log( 'Assistant initialized with Assistant ID: ' . self::$assistant_id );
-	}
+                self::$api_key             = get_option( 'wp_ai_assistant_api_key' );
+                self::$api_url             = get_option( 'wp_ai_assistant_api_url' ) ?? 'https://api.openai.com/v1';
+                self::$assistant_id        = get_option( 'wp_ai_assistant_assistant_id' ) ?? '';
+
+                // Default to 5 seconds if the option is not set or empty.
+                $sleep_time_option = get_option( 'wp_ai_assistant_assistant_waiting_time_in_seconds', 5 );
+                self::$sleep_time  = intval( $sleep_time_option );
+
+                self::$system_instructions = get_option( 'wp_ai_assistant_system_instructions' ) ?? '';
+                Logger::log( 'Assistant initialized with Assistant ID: ' . self::$assistant_id );
+        }
 
 	/**
 	 * Set the thread repository.
