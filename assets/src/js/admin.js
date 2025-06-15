@@ -46,15 +46,15 @@ jQuery(document).ready(function($) {
 					}
 				} else {
 					// console.error('Unknown response format:', response);
-					addAssistantMessage("<strong>Error:</strong> Formato de respuesta desconocido");
+					addAssistantMessage(wpAIAssistantAdminStrings.unknownResponseFormat);
 				}
 			} else {
 				// Handle error responses.
-				addAssistantMessage("<strong>Error:</strong> " + (response.data?.message || "No se pudo obtener respuesta"));
+				addAssistantMessage(wpAIAssistantAdminStrings.couldNotGetResponse + (response.data?.message ? ": " + response.data.message : ""));
 			}
 		}).fail(function() {
 			chatSpinner.style.display = "none";
-			addAssistantMessage("<strong>Error:</strong> No se pudo conectar con el servidor");
+			addAssistantMessage(wpAIAssistantAdminStrings.couldNotConnectToServer);
 		});
 	}
 

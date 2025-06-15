@@ -1,0 +1,63 @@
+# .github/workflows/deploy.yml
+
+name: Deploy to Server
+
+#  triggers
+# Se ejecuta en cada push a la rama 'main'
+# (una fusión de PR es un tipo de push)
+on:
+  push:
+    branches:
+      - main
+
+# jobs
+# Lista de trabajos a ejecutar
+jobs:
+  deploy:
+    name: Deploy Files
+    runs-on: ubuntu-latest # Usamos un corredor de Ubuntu
+
+    steps:
+      # 1. Checkout del código
+      # Descarga el código de tu repositorio al corredor
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mbstring, xml, ctype, json, tokenizer
+          tools: composer
+
+      # 3. Instalar dependencias de Composer
+      # Instala las dependencias de producción y optimiza el autoloader
+      - name: Install Composer dependencies
+        run: composer install --no-dev --optimize-autoloader
+
+      # (Opcional) Paso de construcción
+      # Si necesitas compilar, instalar dependencias, etc.
+      - name: Build project
+        run: |
+           npm install
+           npm run build
+
+      # 2. Despliegue con rsync
+      # Usa una acción de la comunidad para simplificar la conexión SSH y rsync
+      - name: Deploy with rsync
+        uses: easingthemes/ssh-deploy@v5.1.0
+        with:
+          # Clave privada SSH desde los Secrets
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          # Host del servidor desde los Secrets
+          REMOTE_HOST: ${{ secrets.SSH_HOST }}
+          # Usuario del servidor desde los Secrets
+          REMOTE_USER: ${{ secrets.SSH_USER }}
+          # Directorio de origen en el corredor. './dist/' si tienes build, './' para todo el repo.
+          SOURCE: "./"
+          # Directorio de destino en el servidor desde los Secrets
+          TARGET: ${{ secrets.REMOTE_PATH }}
+          # Argumentos para rsync. '--delete' elimina archivos en destino que ya no están en origen.
+          ARGS: "--recursive --delete"
+          # Excluir archivos o carpetas (muy útil)
+          EXCLUDE: "/.git/, /node_modules/, /.github/"

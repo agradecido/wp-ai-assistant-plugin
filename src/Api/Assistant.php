@@ -170,7 +170,7 @@ class Assistant {
 
 				// Save new thread in WordPress
 				if ( self::$thread_repository ) {
-					$title = 'Conversación iniciada con: ' . substr( $query, 0, 50 ) . ( strlen( $query ) > 50 ? '...' : '' );
+					$title = substr( $query, 0, 50 ) . ( strlen( $query ) > 50 ? '...' : '' );
 					self::$thread_repository->saveThread( $thread_id, $session_id, $user_id ? (string) $user_id : null, $title );
 					Logger::log( 'Thread saved to database with ID: ' . $thread_id );
 				}
