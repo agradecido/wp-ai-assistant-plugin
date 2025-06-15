@@ -41,6 +41,15 @@ jobs:
            npm install
            npm run build
 
+      - name: Create remote directory if it does not exist
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST_PRO }}
+          username: ${{ secrets.SSH_USER_PRO }}
+          key: ${{ secrets.SSH_PRIVATE_KEY_PRO }}
+          port: 22
+          script: mkdir -p ${{ secrets.REMOTE_PATH_PRO }}
+
       # 2. Despliegue con rsync
       # Usa una acción de la comunidad para simplificar la conexión SSH y rsync
       - name: Deploy with rsync
