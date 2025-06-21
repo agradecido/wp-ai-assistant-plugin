@@ -140,15 +140,24 @@ class ChatShortcode {
 
 		$assistant_id = self::get_assistant_id( $atts );
 
-		if ( empty( $assistant_id ) && $is_enabled ) {
+		if ( empty( $assistant_id ) ) {
 			Logger::log( 'Error: No assistant ID configured.' );
 			return '<p>' . __( 'Error: No assistant ID configured.', 'wp-ai-assistant' ) . '</p>';
+		}
+
+		if ( ! $is_enabled ) {
+			Logger::log( 'Chatbot is disabled.' );
+			$disabled_message = self::get_option_with_default(
+				'wp_ai_assistant_disabled_message',
+				__( 'Chat temporarily disabled, please try again later or contact us', 'wp-ai-assistant' )
+			);
+			return '<p>' . $disabled_message . '</p>';
 		}
 
 		$nonce            = wp_create_nonce( 'wp_ai_assistant_nonce' );
 		$disabled_message = self::get_option_with_default(
 			'wp_ai_assistant_disabled_message',
-			__( 'Chat temporarily disabled, please try again later or contact us', 'wp-ai-assistant' )
+			__( 'Chat temporarily disabled, please try again later or contact us', 'wp - ai - assistant' )
 		);
 
 		return self::get_html( $nonce, $is_enabled, $disabled_message );

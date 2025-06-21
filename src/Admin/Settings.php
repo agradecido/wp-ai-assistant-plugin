@@ -45,8 +45,8 @@ class Settings {
 				'wp-ai-assistant-admin-js',
 				'wpAIAssistantAdminStrings',
 				array(
-					'unknownResponseFormat' => __( '<strong>Error:</strong> Unknown response format', 'wp-ai-assistant' ),
-					'couldNotGetResponse'   => __( '<strong>Error:</strong> Could not get response', 'wp-ai-assistant' ),
+					'unknownResponseFormat'   => __( '<strong>Error:</strong> Unknown response format', 'wp-ai-assistant' ),
+					'couldNotGetResponse'     => __( '<strong>Error:</strong> Could not get response', 'wp-ai-assistant' ),
 					'couldNotConnectToServer' => __( '<strong>Error:</strong> Could not connect to the server', 'wp-ai-assistant' ),
 				)
 			);
@@ -85,15 +85,24 @@ class Settings {
 	 * Registers the settings fields.
 	 */
 	public static function register_settings() {
-		register_setting( 'wp_ai_assistant_settings_group', 'wp_ai_assistant_enable', array( 'default' => 0 ) );
 		register_setting(
 			'wp_ai_assistant_settings_group',
-			'wp_ai_assistant_disabled_message',
+			'wp_ai_assistant_enable',
 			array(
-				'default'           => __( 'Chat temporarily disabled, please try again later or contact us', 'wp-ai-assistant' ),
-				'sanitize_callback' => 'sanitize_text_field',
-			)
+				'default'           => 0,
+				'sanitize_callback' => function ( $value ) {
+					return $value ? 1 : 0;
+				},
+			),
 		);
+			register_setting(
+				'wp_ai_assistant_settings_group',
+				'wp_ai_assistant_disabled_message',
+				array(
+					'default'           => __( 'Chat temporarily disabled, please try again later or contact us', 'wp-ai-assistant' ),
+					'sanitize_callback' => 'sanitize_text_field',
+				)
+			);
 		register_setting( 'wp_ai_assistant_settings_group', 'wp_ai_assistant_api_url', array( 'default' => 'https://api.openai.com/v1' ) );
 		register_setting( 'wp_ai_assistant_settings_group', 'wp_ai_assistant_api_key' );
 		register_setting( 'wp_ai_assistant_settings_group', 'wp_ai_assistant_assistant_id' );

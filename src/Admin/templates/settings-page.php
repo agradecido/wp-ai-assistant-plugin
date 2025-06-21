@@ -19,7 +19,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<tr>
 				<th><label for="wp_ai_assistant_enable"><?php esc_html_e( 'Enable chat?', 'wp-ai-assistant' ); ?></label></th>
 				<td>
-					<input type="checkbox" id="wp_ai_assistant_enable" name="wp_ai_assistant_enable" value="1" <?php checked( get_option( 'wp_ai_assistant_enable' ), 1 ); ?> />
+					<input type="hidden" name="wp_ai_assistant_enable" value="0" />
+					<input type="checkbox" id="wp_ai_assistant_enable" name="wp_ai_assistant_enable" value="true" <?php checked( get_option( 'wp_ai_assistant_enable' ), true ); ?> />
 				</td>
 			</tr>
 			<tr>
