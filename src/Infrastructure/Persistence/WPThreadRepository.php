@@ -124,7 +124,7 @@ class WPThreadRepository implements ThreadRepository {
 	 *
 	 * @param string|null $user_id The WordPress user ID.
 	 * @param string|null $session_id The session ID.
-	 * @param int $limit Maximum number of threads to return.
+	 * @param int         $limit Maximum number of threads to return.
 	 * @return array List of threads.
 	 */
 	public function getThreadsByUserOrSession( ?string $user_id = null, ?string $session_id = null, int $limit = 10 ): array {
@@ -138,7 +138,7 @@ class WPThreadRepository implements ThreadRepository {
 		// If user ID is provided and valid
 		if ( $user_id && $user_id > 0 ) {
 			$args['author'] = $user_id;
-		} 
+		}
 		// Otherwise, look for session ID if provided
 		elseif ( $session_id ) {
 			$args['meta_query'] = array(
@@ -153,14 +153,16 @@ class WPThreadRepository implements ThreadRepository {
 		$threads = array();
 
 		foreach ( $posts as $post ) {
+			$summary   = has_excerpt( $post ) ? get_the_excerpt( $post ) : $this->getFirstUserMessage( $post->ID );
 			$threads[] = array(
-				'post_id'        => $post->ID,
-				'title'          => $post->post_title,
-				'date'           => get_the_date( 'Y-m-d H:i:s', $post->ID ),
-				'thread_id'      => get_post_meta( $post->ID, 'thread_external_id', true ),
-				'session_id'     => get_post_meta( $post->ID, 'session_id', true ),
-				'messages'       => get_post_meta( $post->ID, 'messages', true ) ?: array(),
-				'last_message'   => $this->getLastMessages( $post->ID ),
+				'post_id'      => $post->ID,
+				'title'        => $post->post_title,
+				'summary'      => $summary,
+				'date'         => get_the_date( 'Y-m-d H:i:s', $post->ID ),
+				'thread_id'    => get_post_meta( $post->ID, 'thread_external_id', true ),
+				'session_id'   => get_post_meta( $post->ID, 'session_id', true ),
+				'messages'     => get_post_meta( $post->ID, 'messages', true ) ?: array(),
+				'last_message' => $this->getLastMessages( $post->ID ),
 			);
 		}
 
@@ -174,8 +176,8 @@ class WPThreadRepository implements ThreadRepository {
 	 * @return array Last user question and assistant response.
 	 */
 	private function getLastMessages( int $post_id ): array {
-		$messages = get_post_meta( $post_id, 'messages', true ) ?: array();
-		$result   = array(
+			$messages = get_post_meta( $post_id, 'messages', true ) ?: array();
+		$result       = array(
 			'user_message'      => '',
 			'assistant_message' => '',
 		);
@@ -194,7 +196,25 @@ class WPThreadRepository implements ThreadRepository {
 			}
 		}
 
-		return $result;
+			return $result;
+	}
+
+	/**
+	 * Get the first user message from a thread.
+	 *
+	 * @param int $post_id The post ID.
+	 * @return string The first user message or empty string if none.
+	 */
+	private function getFirstUserMessage( int $post_id ): string {
+		$messages = get_post_meta( $post_id, 'messages', true ) ?: array();
+
+		foreach ( $messages as $message ) {
+			if ( isset( $message['role'] ) && 'user' === $message['role'] ) {
+				return $message['content'];
+			}
+		}
+
+		return '';
 	}
 
 	/**

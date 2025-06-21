@@ -25,10 +25,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<div class="wpai-history-threads">
 			<?php foreach ( $threads as $thread ) : ?>
 				<div class="wpai-thread" data-thread-id="<?php echo esc_attr( $thread['thread_id'] ); ?>">
-					<div class="wpai-thread-header">
-						<h3><?php echo esc_html( $thread['title'] ); ?></h3>
-						<span class="wpai-thread-date"><?php echo esc_html( $thread['date'] ); ?></span>
-					</div>
+										<div class="wpai-thread-header">
+												<h3><?php echo esc_html( $thread['summary'] ); ?></h3>
+												<span class="wpai-thread-date"><?php echo esc_html( $thread['date'] ); ?></span>
+										</div>
 
 					<div class="wpai-thread-preview">
 						<?php if ( ! empty( $thread['last_message']['user_message'] ) ) : ?>
