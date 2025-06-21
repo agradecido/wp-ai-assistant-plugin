@@ -38,7 +38,7 @@ class ChatThreadPostType {
 				'menu_icon'           => 'dashicons-format-chat',
 				'capability_type'     => 'post',
 				'has_archive'         => true,
-				'supports'            => array( 'title', 'author' ),
+				'supports'            => array( 'title', 'author', 'excerpt' ),
 				'rewrite'             => array( 'slug' => _x( 'ai-conversations', 'URL slug', 'wp-ai-assistant' ) ),
 				'show_in_rest'        => true,
 			)
