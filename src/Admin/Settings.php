@@ -104,10 +104,11 @@ class Settings {
 				)
 			);
 		register_setting( 'wp_ai_assistant_settings_group', 'wp_ai_assistant_api_url', array( 'default' => 'https://api.openai.com/v1' ) );
-		register_setting( 'wp_ai_assistant_settings_group', 'wp_ai_assistant_api_key' );
-		register_setting( 'wp_ai_assistant_settings_group', 'wp_ai_assistant_assistant_id' );
-		register_setting( 'wp_ai_assistant_settings_group', 'wp_ai_assistant_assistant_waiting_time_in_seconds' );
-		register_setting( 'wp_ai_assistant_settings_group', 'wp_ai_assistant_system_instructions' );
+                register_setting( 'wp_ai_assistant_settings_group', 'wp_ai_assistant_api_key' );
+                register_setting( 'wp_ai_assistant_settings_group', 'wp_ai_assistant_assistant_id' );
+                register_setting( 'wp_ai_assistant_settings_group', 'wp_ai_assistant_assistant_waiting_time_in_seconds' );
+                register_setting( 'wp_ai_assistant_settings_group', 'wp_ai_assistant_system_instructions' );
+                register_setting( 'wp_ai_assistant_settings_group', 'wp_ai_assistant_summary_model', array( 'default' => 'gpt-3.5-turbo' ) );
 		register_setting(
 			'wp_ai_assistant_settings_group',
 			'wp_ai_assistant_main_color',
