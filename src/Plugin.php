@@ -4,6 +4,7 @@ namespace WPAIS;
 
 use WPAIS\Admin\Settings;
 use WPAIS\Admin\ConversationMetaBox;
+use WPAIS\Admin\SummaryMetaBox;
 use WPAIS\Api\Assistant;
 use WPAIS\Frontend\ChatShortcode;
 use WPAIS\Frontend\HistoryShortcode;
@@ -48,18 +49,20 @@ class Plugin {
 
 		add_action( 'init', array( ChatThreadPostType::class, 'register' ) );
 
-		// Register conversation meta box.
-		ConversationMetaBox::register();
+                // Register conversation meta box.
+                ConversationMetaBox::register();
+                SummaryMetaBox::register();
 
 		// Initialize thread repository and connect with Assistant.
 		$thread_repository = new WPThreadRepository();
 		Assistant::set_thread_repository( $thread_repository );
 
 		// Hooks AJAX.
-		add_action( 'wp_ajax_wp_ai_assistant_request', array( $this, 'handle_chatbot_request' ) );
-		add_action( 'wp_ajax_nopriv_wp_ai_assistant_request', array( $this, 'handle_chatbot_request' ) );
-		add_action( 'wp_ajax_wp_ai_assistant_admin_test', array( $this, 'handle_admin_test_request' ) );
-	}
+                add_action( 'wp_ajax_wp_ai_assistant_request', array( $this, 'handle_chatbot_request' ) );
+                add_action( 'wp_ajax_nopriv_wp_ai_assistant_request', array( $this, 'handle_chatbot_request' ) );
+                add_action( 'wp_ajax_wp_ai_assistant_admin_test', array( $this, 'handle_admin_test_request' ) );
+                add_action( 'wp_ajax_wp_ai_assistant_generate_summary', array( $this, 'handle_generate_summary_request' ) );
+        }
 
 	/**
 	 * Register the plugin activation hook.
@@ -145,7 +148,7 @@ class Plugin {
 	/**
 	 * Handle admin test requests and forward to Assistant.
 	 */
-	public function handle_admin_test_request() {
+        public function handle_admin_test_request() {
 		$nonce = isset( $_POST['_ajax_nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['_ajax_nonce'] ) ) : '';
 
 		if ( empty( $nonce ) || ! wp_verify_nonce( $nonce, 'wp_ai_assistant_admin_test_nonce' ) ) {
@@ -200,6 +203,42 @@ class Plugin {
 			);
 		}
 
-		wp_die();
-	}
+                wp_die();
+        }
+
+        /**
+         * AJAX handler to manually generate a summary for a chat thread.
+         */
+        public function handle_generate_summary_request() {
+                $nonce   = isset( $_POST['_ajax_nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['_ajax_nonce'] ) ) : '';
+                $post_id = isset( $_POST['post_id'] ) ? (int) $_POST['post_id'] : 0;
+
+                if ( empty( $nonce ) || ! wp_verify_nonce( $nonce, 'wp_ai_assistant_generate_summary_nonce' ) ) {
+                        wp_send_json_error( array( 'message' => 'Security check failed' ), 403 );
+                        wp_die();
+                }
+
+                if ( ! current_user_can( 'edit_post', $post_id ) ) {
+                        wp_send_json_error( array( 'message' => 'Insufficient permissions' ), 403 );
+                        wp_die();
+                }
+
+                $messages = get_post_meta( $post_id, 'messages', true );
+                if ( empty( $messages ) || ! is_array( $messages ) ) {
+                        wp_send_json_error( array( 'message' => 'No messages found' ), 400 );
+                        wp_die();
+                }
+
+                $summary = \WPAIS\Api\Summarizer::generate_summary( $messages );
+
+                if ( empty( $summary ) ) {
+                        wp_send_json_error( array( 'message' => 'Could not generate summary' ), 500 );
+                        wp_die();
+                }
+
+                wp_update_post( array( 'ID' => $post_id, 'post_excerpt' => sanitize_text_field( $summary ) ) );
+
+                wp_send_json_success( array( 'summary' => $summary ) );
+                wp_die();
+        }
 }
