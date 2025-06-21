@@ -50,10 +50,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<th><label for="wp_ai_assistant_assistant_id"><?php esc_html_e( 'Assistant ID', 'wp-ai-assistant' ); ?></label></th>
 				<td><input type="text" id="wp_ai_assistant_assistant_id" name="wp_ai_assistant_assistant_id" value="<?php echo esc_attr( get_option( 'wp_ai_assistant_assistant_id' ) ); ?>" class="regular-text" /></td>
 			</tr>	
-			<tr>
-				<th><label for="wp_ai_assistant_assistant_waiting_time_in_seconds"><?php esc_html_e( 'Response waiting time in seconds', 'wp-ai-assistant' ); ?></label></th>
-				<td><input type="number" id="wp_ai_assistant_assistant_waiting_time_in_seconds" name="wp_ai_assistant_assistant_waiting_time_in_seconds" value="<?php echo esc_attr( get_option( 'wp_ai_assistant_assistant_waiting_time_in_seconds' ) ); ?>" class="regular-text" /></td>
-			</tr>
+                        <tr>
+                                <th><label for="wp_ai_assistant_assistant_waiting_time_in_seconds"><?php esc_html_e( 'Response waiting time in seconds', 'wp-ai-assistant' ); ?></label></th>
+                                <td><input type="number" id="wp_ai_assistant_assistant_waiting_time_in_seconds" name="wp_ai_assistant_assistant_waiting_time_in_seconds" value="<?php echo esc_attr( get_option( 'wp_ai_assistant_assistant_waiting_time_in_seconds' ) ); ?>" class="regular-text" /></td>
+                        </tr>
+                        <tr>
+                                <th><label for="wp_ai_assistant_summary_model"><?php esc_html_e( 'Model for summaries', 'wp-ai-assistant' ); ?></label></th>
+                                <td>
+                                        <select id="wp_ai_assistant_summary_model" name="wp_ai_assistant_summary_model">
+                                                <?php $model = get_option( 'wp_ai_assistant_summary_model', 'gpt-3.5-turbo' ); ?>
+                                                <option value="gpt-3.5-turbo" <?php selected( $model, 'gpt-3.5-turbo' ); ?>>gpt-3.5-turbo</option>
+                                                <option value="gpt-4o" <?php selected( $model, 'gpt-4o' ); ?>>gpt-4o</option>
+                                        </select>
+                                </td>
+                        </tr>
 			<tr>
 				<th><label for="wp_ai_assistant_daily_limit"><?php esc_html_e( 'Daily message limit per user', 'wp-ai-assistant' ); ?></label></th>
 				<td><input type="number" id="wp_ai_assistant_daily_limit" name="wp_ai_assistant_daily_limit" value="<?php echo esc_attr( get_option( 'wp_ai_assistant_daily_limit', 20 ) ); ?>" class="regular-text" /></td>
