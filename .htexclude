@@ -1,0 +1,8 @@
+.git
+.github
+.vscode
+node_modules
+.distignore
+.gitignore
+.htexclude
+fix-perm.sh

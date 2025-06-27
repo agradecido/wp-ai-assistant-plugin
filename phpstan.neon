@@ -1,0 +1,15 @@
+includes:
+    - vendor/phpstan/phpstan/conf/bleedingEdge.neon
+    - vendor/szepeviktor/phpstan-wordpress/extension.neon
+
+parameters:
+    level: 5
+
+    paths:
+        - .
+
+    excludePaths:
+        - vendor/*       
+
+    ignoreErrors:
+        - '#Call to undefined function .*#' # Ignora funciones no definidas (útil en WordPress)
