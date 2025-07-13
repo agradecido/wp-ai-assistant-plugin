@@ -35,7 +35,7 @@ class QuotaManager {
 		if ( $used >= $this->dailyLimit ) {
 			$message = get_option( 
 				'wp_ai_assistant_quota_exceeded_message', 
-				'Cuota diaria excedida. Vuelve mañana 🤖'
+				'Daily quota exceeded. Please come back tomorrow 🤖'
 			);
 			throw new RuntimeException( $message );
 		}

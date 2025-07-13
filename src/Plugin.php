@@ -32,6 +32,12 @@ class Plugin {
 	 * Default daily limit queries per user.
 	 */
 	private const DEFAULT_DAILY_LIMIT = 2;
+	
+	/**
+	 * Default multiplier for registered users.
+	 * This is used to increase the daily limit for registered users.
+	 */
+	private const DEFAULT_RESGISTERED_MULTIPLIER = 5;
 
 	/**
 	 * Initialize the plugin.
@@ -45,7 +51,14 @@ class Plugin {
 		// Instance the repository and inject the manager.
 		global $wpdb;
 		$repo               = new WPDBQuotaRepository( $wpdb );
-		$dailyLimit         = (int) get_option( 'wp_ai_assistant_daily_limit', self::DEFAULT_DAILY_LIMIT );
+		// If logged in, increase the daily limit.
+		if ( is_user_logged_in() ) {
+			$dailyLimit = (int) get_option( 'wp_ai_assistant_daily_limit', self::DEFAULT_DAILY_LIMIT ) * self::DEFAULT_RESGISTERED_MULTIPLIER;
+		} else {
+			// If not logged in, use the default daily limit.
+			$dailyLimit = (int) get_option( 'wp_ai_assistant_daily_limit', self::DEFAULT_DAILY_LIMIT );
+		}
+
 		$this->quotaManager = new QuotaManager( $repo, $dailyLimit );
 
 		add_action( 'init', array( ChatThreadPostType::class, 'register' ) );

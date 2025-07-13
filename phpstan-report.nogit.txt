@@ -1,0 +1,88 @@
+ ------ --------------------------------------------------------------------------------------- 
+  Line   src/Infrastructure/Migration/CreateQuotaTable.php                                      
+ ------ --------------------------------------------------------------------------------------- 
+  29     Path in require_once() "./wp-admin/includes/upgrade.php" is not a file or it does not  
+         exist.                                                                                 
+         🪪 requireOnce.fileNotFound                                                             
+ ------ --------------------------------------------------------------------------------------- 
+
+ ------ ------------------------------------------------------------------------------------- 
+  Line   src/Infrastructure/Persistence/WPThreadRepository.php                                
+ ------ ------------------------------------------------------------------------------------- 
+  40     Call to function is_int() with int<0, max> will always evaluate to true.             
+         🪪 function.alreadyNarrowedType                                                       
+         💡 Because the type is coming from a PHPDoc, you can turn off this check by setting   
+            treatPhpDocTypesAsCertain: false in your phpstan.neon.                            
+  40     Call to function is_wp_error() with *NEVER* will always evaluate to true.            
+         🪪 function.alreadyNarrowedType                                                       
+         💡 Because the type is coming from a PHPDoc, you can turn off this check by setting   
+            treatPhpDocTypesAsCertain: false in your phpstan.neon.                            
+  40     Result of && is always false.                                                        
+         🪪 booleanAnd.alwaysFalse                                                             
+         💡 Because the type is coming from a PHPDoc, you can turn off this check by setting   
+            treatPhpDocTypesAsCertain: false in your phpstan.neon.                            
+ ------ ------------------------------------------------------------------------------------- 
+
+ ------ ---------------------------------------------------------------------- 
+  Line   src/Plugin.php                                                        
+ ------ ---------------------------------------------------------------------- 
+  85     Unreachable statement - code above always terminates.                 
+         🪪 deadCode.unreachable                                                
+  101    Unreachable statement - code above always terminates.                 
+         🪪 deadCode.unreachable                                                
+  117    Unreachable statement - code above always terminates.                 
+         🪪 deadCode.unreachable                                                
+  129    Call to function is_array() with array will always evaluate to true.  
+         🪪 function.alreadyNarrowedType                                        
+  145    Unreachable statement - code above always terminates.                 
+         🪪 deadCode.unreachable                                                
+  159    Unreachable statement - code above always terminates.                 
+         🪪 deadCode.unreachable                                                
+  167    Unreachable statement - code above always terminates.                 
+         🪪 deadCode.unreachable                                                
+  178    Unreachable statement - code above always terminates.                 
+         🪪 deadCode.unreachable                                                
+  206    Unreachable statement - code above always terminates.                 
+         🪪 deadCode.unreachable                                                
+  218    Unreachable statement - code above always terminates.                 
+         🪪 deadCode.unreachable                                                
+  223    Unreachable statement - code above always terminates.                 
+         🪪 deadCode.unreachable                                                
+  229    Unreachable statement - code above always terminates.                 
+         🪪 deadCode.unreachable                                                
+  236    Unreachable statement - code above always terminates.                 
+         🪪 deadCode.unreachable                                                
+  242    Unreachable statement - code above always terminates.                 
+         🪪 deadCode.unreachable                                                
+ ------ ---------------------------------------------------------------------- 
+
+ ------ --------------------------------------------------------------------- 
+  Line   src/Utils/Logger.php                                                 
+ ------ --------------------------------------------------------------------- 
+  19     Call to static method log() on an unknown class WP_CLI.              
+         🪪 class.notFound                                                     
+         💡 Learn more at https://phpstan.org/user-guide/discovering-symbols   
+  34     Call to static method success() on an unknown class WP_CLI.          
+         🪪 class.notFound                                                     
+         💡 Learn more at https://phpstan.org/user-guide/discovering-symbols   
+  50     Call to static method error() on an unknown class WP_CLI.            
+         🪪 class.notFound                                                     
+         💡 Learn more at https://phpstan.org/user-guide/discovering-symbols   
+ ------ --------------------------------------------------------------------- 
+
+ ------ --------------------------------------------------------------------- 
+  Line   src/Utils/Session.php                                                
+ ------ --------------------------------------------------------------------- 
+  21     Constant COOKIEPATH not found.                                       
+         🪪 constant.notFound                                                  
+         💡 Learn more at https://phpstan.org/user-guide/discovering-symbols   
+ ------ --------------------------------------------------------------------- 
+
+ -- ------------------------------------------------------------------------------------------- 
+     Error                                                                                      
+ -- ------------------------------------------------------------------------------------------- 
+     Ignored error pattern #Call to undefined function .*# was not matched in reported errors.  
+ -- ------------------------------------------------------------------------------------------- 
+
+ [ERROR] Found 23 errors                                                                           
+
