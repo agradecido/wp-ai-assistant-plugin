@@ -287,3 +287,31 @@
         text-decoration: underline;
     }
 }
+
+@media (max-width: 768px) {
+    #chatbot-container .chat-input-container {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    #chatbot-container #chat-input {
+        margin-bottom: 12px;
+    }
+
+    #chatbot-container #chat-submit {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    #chatbot-container .history-link-mobile {
+        display: block;
+        margin-top: 1rem;
+        text-align: right;
+    }
+}
+
+@media (min-width: 769px) {
+    #chatbot-container .history-link-mobile {
+        display: none;
+    }
+}

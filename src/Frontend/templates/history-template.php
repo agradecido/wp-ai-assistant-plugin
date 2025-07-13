@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 
-<div class="wpai-history-container">
+<div id="wpai-history" class="wpai-history-container">
 	<h2><?php echo esc_html( $title ); ?></h2>
 
 	<?php if ( empty( $threads ) ) : ?>
