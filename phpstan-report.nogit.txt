@@ -1,0 +1,81 @@
+ ------ ---------------------------------------------------------------------------------------------- 
+  Line   src/Infrastructure/Migration/CreateQuotaTable.php                                             
+ ------ ---------------------------------------------------------------------------------------------- 
+  :29    Path in require_once() "./wp-admin/includes/upgrade.php" is not a file or it does not exist.  
+         🪪 requireOnce.fileNotFound                                                                    
+ ------ ---------------------------------------------------------------------------------------------- 
+
+ ------ -------------------------------------------------------------------------------------------------------------------------------------------- 
+  Line   src/Infrastructure/Persistence/WPThreadRepository.php                                                                                       
+ ------ -------------------------------------------------------------------------------------------------------------------------------------------- 
+  :40    Call to function is_wp_error() with int<0, max> will always evaluate to false.                                                              
+         🪪 function.impossibleType                                                                                                                   
+         💡 Because the type is coming from a PHPDoc, you can turn off this check by setting treatPhpDocTypesAºsCertain: false in your phpstan.neon.   
+ ------ -------------------------------------------------------------------------------------------------------------------------------------------- 
+
+ ------ ---------------------------------------------------------------------- 
+  Line   src/Plugin.php                                                        
+ ------ ---------------------------------------------------------------------- 
+  :98    Unreachable statement - code above always terminates.                 
+         🪪 deadCode.unreachable                                                
+  :114   Unreachable statement - code above always terminates.                 
+         🪪 deadCode.unreachable                                                
+  :130   Unreachable statement - code above always terminates.                 
+         🪪 deadCode.unreachable                                                
+  :142   Call to function is_array() with array will always evaluate to true.  
+         🪪 function.alreadyNarrowedType                                        
+  :158   Unreachable statement - code above always terminates.                 
+         🪪 deadCode.unreachable                                                
+  :172   Unreachable statement - code above always terminates.                 
+         🪪 deadCode.unreachable                                                
+  :180   Unreachable statement - code above always terminates.                 
+         🪪 deadCode.unreachable                                                
+  :191   Unreachable statement - code above always terminates.                 
+         🪪 deadCode.unreachable                                                
+  :219   Unreachable statement - code above always terminates.                 
+         🪪 deadCode.unreachable                                                
+  :231   Unreachable statement - code above always terminates.                 
+         🪪 deadCode.unreachable                                                
+  :236   Unreachable statement - code above always terminates.                 
+         🪪 deadCode.unreachable                                                
+  :242   Unreachable statement - code above always terminates.                 
+         🪪 deadCode.unreachable                                                
+  :249   Unreachable statement - code above always terminates.                 
+         🪪 deadCode.unreachable                                                
+  :255   Unreachable statement - code above always terminates.                 
+         🪪 deadCode.unreachable                                                
+ ------ ---------------------------------------------------------------------- 
+
+ ------ --------------------------------------------------------------------- 
+  Line   src/Utils/Logger.php                                                 
+ ------ --------------------------------------------------------------------- 
+  :19    Call to static method log() on an unknown class WP_CLI.              
+         🪪 class.notFound                                                     
+         💡 Learn more at https://phpstan.org/user-guide/discovering-symbols   
+  :34    Call to static method success() on an unknown class WP_CLI.          
+         🪪 class.notFound                                                     
+         💡 Learn more at https://phpstan.org/user-guide/discovering-symbols   
+  :50    Call to static method error() on an unknown class WP_CLI.            
+         🪪 class.notFound                                                     
+         💡 Learn more at https://phpstan.org/user-guide/discovering-symbols   
+ ------ --------------------------------------------------------------------- 
+
+ ------ --------------------------------------------------------------------------------- 
+  Line   src/Utils/Session.php                                                            
+ ------ --------------------------------------------------------------------------------- 
+  :173   Expression on left side of ?? is not nullable.                                   
+         🪪 nullCoalesce.expr                                                              
+  :173   Offset 'wp_ai_sid' does not exist on array<mixed, mixed>.                        
+         🪪 offsetAccess.notFound                                                          
+  :216   Strict comparison using === between int and null will always evaluate to false.  
+         🪪 identical.alwaysFalse                                                          
+ ------ --------------------------------------------------------------------------------- 
+
+ -- ------------------------------------------------------------------------------------------- 
+     Error                                                                                      
+ -- ------------------------------------------------------------------------------------------- 
+     Ignored error pattern #Call to undefined function .*# was not matched in reported errors.  
+ -- ------------------------------------------------------------------------------------------- 
+
+ [ERROR] Found 23 errors                                                                                                
+

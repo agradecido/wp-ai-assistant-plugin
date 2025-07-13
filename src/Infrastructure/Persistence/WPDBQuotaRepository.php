@@ -40,7 +40,10 @@ final class WPDBQuotaRepository implements QuotaRepository {
 	public function getTodayUsage( string $sessionId ): int {
 		$today = gmdate( 'Y-m-d' );
 
-		return (int) $this->db->get_var(
+		// Debug logging
+		error_log( "QuotaRepository Debug: sessionId={$sessionId}, today={$today}, table={$this->table}" );
+
+		$result = $this->db->get_var(
 			$this->db->prepare(
 				"SELECT used_messages
                  FROM {$this->table}
@@ -48,7 +51,11 @@ final class WPDBQuotaRepository implements QuotaRepository {
 				$sessionId,
 				$today
 			)
-		) ?: 0;
+		);
+
+		error_log( "QuotaRepository Debug: SQL result=" . var_export( $result, true ) );
+
+		return (int) $result ?: 0;
 	}
 
 	/**

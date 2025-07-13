@@ -5,6 +5,7 @@ namespace WPAIS\Infrastructure\Persistence;
 
 use WPAIS\Domain\Thread\ThreadRepository;
 use WPAIS\Utils\Logger;
+use WPAIS\Api\Summarizer;
 
 /**
  * WordPress implementation of the ThreadRepository interface.
@@ -32,7 +33,7 @@ class WPThreadRepository implements ThreadRepository {
 				'post_title'  => sanitize_text_field( $title ),
 				'post_status' => 'publish',
 				'post_type'   => 'ai_chat_thread',
-				'post_author' => $user_id ? (int) $user_id : 1, // Default to admin if no user
+				'post_author' => $user_id ? (int) $user_id : 1, // Default to admin if no user.
 			)
 		);
 
@@ -80,10 +81,30 @@ class WPThreadRepository implements ThreadRepository {
 			)
 		);
 
-		// Save updated messages.
-		update_post_meta( $post_id, 'messages', $messages );
+				// Save updated messages.
+				update_post_meta( $post_id, 'messages', $messages );
 
-		return true;
+		if ( 'assistant' === $role ) {
+				$assistant_count = 0;
+			foreach ( $messages as $msg ) {
+				if ( 'assistant' === $msg['role'] ) {
+					++$assistant_count;
+				}
+			}
+			if ( $assistant_count >= 3 && ! has_excerpt( $post_id ) ) {
+							$summary = Summarizer::generate_summary( $messages );
+				if ( $summary ) {
+						wp_update_post(
+							array(
+								'ID'           => $post_id,
+								'post_excerpt' => sanitize_text_field( $summary ),
+							)
+						);
+				}
+			}
+		}
+
+				return true;
 	}
 
 	/**

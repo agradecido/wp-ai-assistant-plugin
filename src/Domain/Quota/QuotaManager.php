@@ -30,12 +30,16 @@ class QuotaManager {
 	 * @throws RuntimeException When the quota is exhausted.
 	 */
 	public function checkAndIncrement( string $sessionId ): void {
+		error_log( "QuotaManager Debug: Checking quota for sessionId={$sessionId}, dailyLimit={$this->dailyLimit}" );
+
 		$used = $this->repo->getTodayUsage( $sessionId );
+
+		error_log( "QuotaManager Debug: Used messages today: {$used}" );
 
 		if ( $used >= $this->dailyLimit ) {
 			$message = get_option( 
 				'wp_ai_assistant_quota_exceeded_message', 
-				'Cuota diaria excedida. Vuelve mañana 🤖'
+				'Daily quota exceeded. Please come back tomorrow 🤖 HC'
 			);
 			throw new RuntimeException( $message );
 		}

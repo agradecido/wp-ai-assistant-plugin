@@ -44,7 +44,7 @@ class ChatThreadPostType {
 			)
 		);
 
-		// Register custom meta fields for REST API
+		// Register custom meta fields for REST API.
 		register_meta(
 			'post',
 			'thread_external_id',

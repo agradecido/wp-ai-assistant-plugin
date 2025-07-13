@@ -18,9 +18,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div id="chatbot-container" data-nonce="<?php echo esc_attr( $nonce ); ?>" data-enabled="<?php echo $is_enabled ? '1' : '0'; ?>" data-disabled-message="<?php echo esc_attr( $disabled_message ); ?>">
 	<div class="chatgpt-style-container">
 		<div id="chat-header">
-			<div class="chat-title"><?php echo esc_html__( 'T16 Assistant', 'wp-ai-assistant' ); ?></div>
+				<div class="chat-title"><?php echo esc_html__( 'T16 Assistant', 'wp-ai-assistant' ); ?></div>
 		</div>
-		
 		<div id="chat-messages-container">
 			<div id="chat-output"></div>
 			<div id="chat-spinner">
