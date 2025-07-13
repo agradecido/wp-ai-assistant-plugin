@@ -122,7 +122,7 @@ class Plugin {
 			Logger::error( 'Quota exceeded: ' . $e->getMessage() );
 			wp_send_json_error(
 				array(
-					'message' => $e->getMessage(),
+					'message' => $e->getMessage() . ' <a href="/contact-us">Contact us</a>',
 					'code'    => 'quota_exceeded',
 				),
 				429

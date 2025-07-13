@@ -45,6 +45,7 @@ class Session
     {
         // Return cached session ID if available (for performance)
         if ( self::$cached_session_id !== null ) {
+            error_log( "Session Debug: Using cached sessionId=" . self::$cached_session_id );
             return self::$cached_session_id;
         }
 
@@ -54,17 +55,30 @@ class Session
         // Return user-based session ID for logged-in users
         if ( is_user_logged_in() ) {
             self::$cached_session_id = self::USER_PREFIX . get_current_user_id();
+            error_log( "Session Debug: User logged in, sessionId=" . self::$cached_session_id );
             return self::$cached_session_id;
+        }
+
+        // Debug cookie information
+        error_log( "Session Debug: Cookie name=" . self::COOKIE_NAME );
+        error_log( "Session Debug: Cookie exists=" . (isset($_COOKIE[self::COOKIE_NAME]) ? 'YES' : 'NO') );
+        
+        if ( isset($_COOKIE[self::COOKIE_NAME]) ) {
+            error_log( "Session Debug: Cookie value=" . $_COOKIE[self::COOKIE_NAME] );
+            error_log( "Session Debug: Cookie valid=" . (preg_match(self::UUID_PATTERN, $_COOKIE[self::COOKIE_NAME]) ? 'YES' : 'NO') );
         }
 
         // Check for existing valid cookie.
         if ( isset($_COOKIE[self::COOKIE_NAME]) && preg_match(self::UUID_PATTERN, $_COOKIE[self::COOKIE_NAME]) ) {
             self::$cached_session_id = $_COOKIE[self::COOKIE_NAME];
+            error_log( "Session Debug: Using existing cookie sessionId=" . self::$cached_session_id );
             return self::$cached_session_id;
         }
 
         // Generate new session ID and set cookie.
+        error_log( "Session Debug: Creating new session" );
         self::$cached_session_id = self::create_anonymous_session();
+        error_log( "Session Debug: New sessionId=" . self::$cached_session_id );
         return self::$cached_session_id;
     }
 
@@ -107,7 +121,12 @@ class Session
     {
         $sid = wp_generate_uuid4();
         
-        setcookie( self::COOKIE_NAME, $sid, self::get_cookie_config( self::COOKIE_EXPIRES ) );
+        $cookie_config = self::get_cookie_config( time() + self::COOKIE_EXPIRES );
+        error_log( "Session Debug: Cookie config=" . json_encode($cookie_config) );
+        
+        setcookie( self::COOKIE_NAME, $sid, $cookie_config );
+        
+        error_log( "Session Debug: Cookie set with name=" . self::COOKIE_NAME . ", value=" . $sid );
 
         return $sid;
     }
@@ -213,10 +232,6 @@ class Session
      */
     private static function get_cookie_config( int $expires ): array
     {
-        if ( $expires === null ) {
-            $expires = time() + self::COOKIE_EXPIRES;
-        }
-
         return [
             'expires'  => $expires,
             'path'     => defined( 'COOKIEPATH' ) ? ( COOKIEPATH ?: '/' ) : '/',
