@@ -124,7 +124,7 @@ class Session
         // Only set cookie if headers haven't been sent yet
         if (!headers_sent()) {
             $cookie_config = self::get_cookie_config(time() + self::COOKIE_EXPIRES);
-            error_log("Session Debug: Cookie config=" . json_encode($cookie_config));
+            error_log( "Session Debug: Cookie config=" . json_encode( $cookie_config ) );
             
             setcookie(self::COOKIE_NAME, $sid, $cookie_config);
             
