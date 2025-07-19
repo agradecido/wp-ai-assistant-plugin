@@ -55,3 +55,22 @@ function wp_ai_assistant_init() {
 	}
 }
 add_action( 'plugins_loaded', 'wp_ai_assistant_init' );
+
+/**
+ * Initialize session early to set cookies before headers are sent.
+ */
+function wp_ai_assistant_init_session() {
+	if ( class_exists( '\\WPAIS\\Utils\\Session' ) ) {
+		// Only on frontend or AJAX requests
+		if ( ! is_admin() || wp_doing_ajax() ) {
+			try {
+				\WPAIS\Utils\Session::get_session_id();
+			} catch ( Exception $e ) {
+				if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+					error_log( 'WP AI Assistant Session Error: ' . $e->getMessage() );
+				}
+			}
+		}
+	}
+}
+add_action( 'init', 'wp_ai_assistant_init_session', 1 );
