@@ -122,7 +122,7 @@ class Session
         $sid = wp_generate_uuid4();
         
         // Only set cookie if headers haven't been sent yet
-        if (!headers_sent()) {
+        if ( ! headers_sent() ) {
             $cookie_config = self::get_cookie_config(time() + self::COOKIE_EXPIRES);
             error_log( "Session Debug: Cookie config=" . json_encode( $cookie_config ) );
             
