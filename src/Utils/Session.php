@@ -189,7 +189,7 @@ class Session
         }
 
         // Only clear cookie if headers haven't been sent yet
-        if ( !headers_sent() ) {
+        if ( ! headers_sent() ) {
             // Clear the cookie by setting it to expire in the past.
             setcookie( self::COOKIE_NAME, '', self::get_cookie_config( time() - 3600 ) );
         }
