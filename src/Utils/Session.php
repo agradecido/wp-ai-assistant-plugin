@@ -121,12 +121,17 @@ class Session
     {
         $sid = wp_generate_uuid4();
         
-        $cookie_config = self::get_cookie_config( time() + self::COOKIE_EXPIRES );
-        error_log( "Session Debug: Cookie config=" . json_encode($cookie_config) );
-        
-        setcookie( self::COOKIE_NAME, $sid, $cookie_config );
-        
-        error_log( "Session Debug: Cookie set with name=" . self::COOKIE_NAME . ", value=" . $sid );
+        // Only set cookie if headers haven't been sent yet
+        if (!headers_sent()) {
+            $cookie_config = self::get_cookie_config(time() + self::COOKIE_EXPIRES);
+            error_log("Session Debug: Cookie config=" . json_encode($cookie_config));
+            
+            setcookie(self::COOKIE_NAME, $sid, $cookie_config);
+            
+            error_log("Session Debug: Cookie set with name=" . self::COOKIE_NAME);
+        } else {
+            error_log("Session Debug: Headers already sent, cannot set cookie");
+        }
 
         return $sid;
     }
@@ -179,17 +184,22 @@ class Session
      */
     public static function clear_anonymous_session(): bool
     {
-        if ( ! isset( $_COOKIE[self::COOKIE_NAME] ) ) {
+        if ( !isset($_COOKIE[self::COOKIE_NAME] ) ) {
             return false;
         }
 
-        // Clear the cookie by setting it to expire in the past.
-        setcookie( self::COOKIE_NAME, '', self::get_cookie_config( time() - 3600 ) );
+        // Only clear cookie if headers haven't been sent yet
+        if ( !headers_sent() ) {
+            // Clear the cookie by setting it to expire in the past.
+            setcookie( self::COOKIE_NAME, '', self::get_cookie_config( time() - 3600 ) );
+        }
 
         unset( $_COOKIE[self::COOKIE_NAME] );
         
         // Clear cache if this was the cached session.
-        if ( isset($_COOKIE[self::COOKIE_NAME]) && self::$cached_session_id === $_COOKIE[self::COOKIE_NAME] ) {
+        if ( isset( $_COOKIE[self::COOKIE_NAME] ) 
+            && self::$cached_session_id === $_COOKIE[self::COOKIE_NAME]
+        ) {
             self::$cached_session_id = null;
         }
  
