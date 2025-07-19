@@ -130,7 +130,7 @@ class Session
             
             error_log("Session Debug: Cookie set with name=" . self::COOKIE_NAME);
         } else {
-            error_log("Session Debug: Headers already sent, cannot set cookie");
+            error_log( "Session Debug: Headers already sent, cannot set cookie" );
         }
 
         return $sid;
