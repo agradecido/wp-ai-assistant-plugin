@@ -128,14 +128,23 @@ class Settings {
 			)
 		);
 		register_setting( 'wp_ai_assistant_settings_group', 'wp_ai_assistant_daily_limit', array( 'default' => 20 ) );
-		register_setting(
-			'wp_ai_assistant_settings_group',
-			'wp_ai_assistant_quota_exceeded_message',
-			array(
-				'default'           => __( 'Daily quota exceeded. Please try again tomorrow 🤖', 'wp-ai-assistant' ),
-				'sanitize_callback' => 'sanitize_text_field',
-			)
-		);
+                register_setting(
+                        'wp_ai_assistant_settings_group',
+                        'wp_ai_assistant_quota_exceeded_message',
+                        array(
+                                'default'           => __( 'Daily quota exceeded. Please try again tomorrow 🤖', 'wp-ai-assistant' ),
+                                'sanitize_callback' => 'wp_kses_post',
+                        )
+                );
+
+                register_setting(
+                        'wp_ai_assistant_settings_group',
+                        'wp_ai_assistant_quota_exceeded_message_es',
+                        array(
+                                'default'           => __( 'Has excedido tu cuota diaria de consultas. Por favor vuelve mañana 🤖', 'wp-ai-assistant' ),
+                                'sanitize_callback' => 'wp_kses_post',
+                        )
+                );
 	}
 
 	/**
