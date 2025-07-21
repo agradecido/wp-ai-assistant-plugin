@@ -44,6 +44,7 @@ class Plugin {
 	 */
 	public function init() {
 		Logger::log( 'Initializing WP AI Assistant plugin' );
+		
 		Settings::register();
 		ChatShortcode::register();
 		HistoryShortcode::register();
@@ -254,4 +255,5 @@ class Plugin {
 		wp_send_json_success( array( 'summary' => $summary ) );
 		wp_die();
 	}
+
 }
