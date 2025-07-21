@@ -157,7 +157,7 @@ class ChatShortcode {
 		$nonce            = wp_create_nonce( 'wp_ai_assistant_nonce' );
 		$disabled_message = self::get_option_with_default(
 			'wp_ai_assistant_disabled_message',
-			__( 'Chat temporarily disabled, please try again later or contact us', 'wp - ai - assistant' )
+			__( 'Chat temporarily disabled, please try again later or contact us', 'wp-ai-assistant' )
 		);
 
 		return self::get_html( $nonce, $is_enabled, $disabled_message );
