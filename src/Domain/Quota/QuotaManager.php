@@ -36,19 +36,19 @@ class QuotaManager {
 
 		error_log( "QuotaManager Debug: Used messages today: {$used}" );
 
-                if ( $used >= $this->dailyLimit ) {
-                        $option  = 'wp_ai_assistant_quota_exceeded_message';
-                        $default = __( 'Daily quota exceeded. Please try again tomorrow 🤖', 'wp-ai-assistant' );
+		if ( $used >= $this->dailyLimit ) {
+				$option  = 'wp_ai_assistant_quota_exceeded_message';
+				$default = __( 'Daily quota exceeded. Please try again tomorrow 🤖', 'wp-ai-assistant' );
 
-                        if ( function_exists( 'pll_current_language' ) && 'es' === pll_current_language() ) {
-                                $option  = 'wp_ai_assistant_quota_exceeded_message_es';
-                                $default = __( 'Has excedido tu cuota diaria de consultas. Por favor vuelve mañana 🤖', 'wp-ai-assistant' );
-                        }
+			if ( function_exists( 'pll_current_language' ) && 'es' === pll_current_language() ) {
+						$option  = 'wp_ai_assistant_quota_exceeded_message_es';
+						$default = __( 'Has excedido tu cuota diaria de consultas. Por favor vuelve mañana 🤖', 'wp-ai-assistant' );
+			}
 
-                        $message = get_option( $option, $default );
+				$message = get_option( $option, $default );
 
-                        throw new RuntimeException( $message );
-                }
+				throw new RuntimeException( $message );
+		}
 
 		$this->repo->increment( $sessionId );
 	}
