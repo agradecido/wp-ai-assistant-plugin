@@ -31,7 +31,7 @@ class Plugin {
 	/**
 	 * Default daily limit queries per user.
 	 */
-	private const DEFAULT_DAILY_LIMIT = 2;
+	private const DEFAULT_DAILY_LIMIT = 3;
 	
 	/**
 	 * Default multiplier for registered users.
@@ -63,9 +63,10 @@ class Plugin {
 		$this->quotaManager = new QuotaManager( $repo, $dailyLimit );
 
 		add_action( 'init', array( ChatThreadPostType::class, 'register' ) );
-                // Register conversation meta box.
-                ConversationMetaBox::register();
-                SummaryMetaBox::register();
+		
+		// Register conversation meta box.
+		ConversationMetaBox::register();
+		SummaryMetaBox::register();
 
 		// Initialize thread repository and connect with Assistant.
 		$thread_repository = new WPThreadRepository();
@@ -123,7 +124,7 @@ class Plugin {
 			Logger::error( 'Quota exceeded: ' . $e->getMessage() );
 			wp_send_json_error(
 				array(
-					'message' => $e->getMessage() . ' <a href="/contact-us">Contact us</a>',
+					'message' => $e->getMessage(),
 					'code'    => 'quota_exceeded',
 				),
 				429
@@ -162,7 +163,7 @@ class Plugin {
 	/**
 	 * Handle admin test requests and forward to Assistant.
 	 */
-    public function handle_admin_test_request() {
+        public function handle_admin_test_request() {
 		$nonce = isset( $_POST['_ajax_nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['_ajax_nonce'] ) ) : '';
 
 		if ( empty( $nonce ) || ! wp_verify_nonce( $nonce, 'wp_ai_assistant_admin_test_nonce' ) ) {
@@ -217,43 +218,42 @@ class Plugin {
 			);
 		}
 
-		wp_die();
-    }
+                wp_die();
+        }
 
-	/**
-	 * AJAX handler to manually generate a summary for a chat thread.
-	 */
-	public function handle_generate_summary_request() {
-		$nonce   = isset( $_POST['_ajax_nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['_ajax_nonce'] ) ) : '';
-		$post_id = isset( $_POST['post_id'] ) ? (int) $_POST['post_id'] : 0;
+        /**
+         * AJAX handler to manually generate a summary for a chat thread.
+         */
+        public function handle_generate_summary_request() {
+                $nonce   = isset( $_POST['_ajax_nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['_ajax_nonce'] ) ) : '';
+                $post_id = isset( $_POST['post_id'] ) ? (int) $_POST['post_id'] : 0;
 
-		if ( empty( $nonce ) || ! wp_verify_nonce( $nonce, 'wp_ai_assistant_generate_summary_nonce' ) ) {
-				wp_send_json_error( array( 'message' => 'Security check failed' ), 403 );
-				wp_die();
-		}
+                if ( empty( $nonce ) || ! wp_verify_nonce( $nonce, 'wp_ai_assistant_generate_summary_nonce' ) ) {
+                        wp_send_json_error( array( 'message' => 'Security check failed' ), 403 );
+                        wp_die();
+                }
 
-		if ( ! current_user_can( 'edit_post', $post_id ) ) {
-				wp_send_json_error( array( 'message' => 'Insufficient permissions' ), 403 );
-				wp_die();
-		}
+                if ( ! current_user_can( 'edit_post', $post_id ) ) {
+                        wp_send_json_error( array( 'message' => 'Insufficient permissions' ), 403 );
+                        wp_die();
+                }
 
-		$messages = get_post_meta( $post_id, 'messages', true );
-		if ( empty( $messages ) || ! is_array( $messages ) ) {
-				wp_send_json_error( array( 'message' => 'No messages found' ), 400 );
-				wp_die();
-		}
+                $messages = get_post_meta( $post_id, 'messages', true );
+                if ( empty( $messages ) || ! is_array( $messages ) ) {
+                        wp_send_json_error( array( 'message' => 'No messages found' ), 400 );
+                        wp_die();
+                }
 
-		$summary = \WPAIS\Api\Summarizer::generate_summary( $messages );
+                $summary = \WPAIS\Api\Summarizer::generate_summary( $messages );
 
-		if ( empty( $summary ) ) {
-				wp_send_json_error( array( 'message' => 'Could not generate summary' ), 500 );
-				wp_die();
-		}
+                if ( empty( $summary ) ) {
+                        wp_send_json_error( array( 'message' => 'Could not generate summary' ), 500 );
+                        wp_die();
+                }
 
-		wp_update_post( array( 'ID' => $post_id, 'post_excerpt' => sanitize_text_field( $summary ) ) );
+                wp_update_post( array( 'ID' => $post_id, 'post_excerpt' => sanitize_text_field( $summary ) ) );
 
-		wp_send_json_success( array( 'summary' => $summary ) );
-		wp_die();
-	}
-
+                wp_send_json_success( array( 'summary' => $summary ) );
+                wp_die();
+        }
 }
