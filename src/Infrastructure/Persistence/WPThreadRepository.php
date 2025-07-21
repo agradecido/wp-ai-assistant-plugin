@@ -81,31 +81,26 @@ class WPThreadRepository implements ThreadRepository {
 			)
 		);
 
-				// Save updated messages.
-				update_post_meta( $post_id, 'messages', $messages );
+                // Save updated messages.
+                update_post_meta( $post_id, 'messages', $messages );
 
-		if ( 'assistant' === $role ) {
-				$assistant_count = 0;
-			foreach ( $messages as $msg ) {
-				if ( 'assistant' === $msg['role'] ) {
-					++$assistant_count;
-				}
-			}
-			if ( $assistant_count >= 3 && ! has_excerpt( $post_id ) ) {
-							$summary = Summarizer::generate_summary( $messages );
-				if ( $summary ) {
-						wp_update_post(
-							array(
-								'ID'           => $post_id,
-								'post_excerpt' => sanitize_text_field( $summary ),
-							)
-						);
-				}
-			}
-		}
+                if ( 'assistant' === $role ) {
+                        $assistant_count = 0;
+                        foreach ( $messages as $msg ) {
+                                if ( 'assistant' === $msg['role'] ) {
+                                        $assistant_count++;
+                                }
+                        }
+                        if ( $assistant_count >= 3 && ! has_excerpt( $post_id ) ) {
+                                $summary = Summarizer::generate_summary( $messages );
+                                if ( $summary ) {
+                                        wp_update_post( array( 'ID' => $post_id, 'post_excerpt' => sanitize_text_field( $summary ) ) );
+                                }
+                        }
+                }
 
-				return true;
-	}
+                return true;
+        }
 
 	/**
 	 * {@inheritdoc}
