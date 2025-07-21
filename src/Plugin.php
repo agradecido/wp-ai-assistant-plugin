@@ -31,7 +31,7 @@ class Plugin {
 	/**
 	 * Default daily limit queries per user.
 	 */
-	private const DEFAULT_DAILY_LIMIT = 2;
+	private const DEFAULT_DAILY_LIMIT = 3;
 	
 	/**
 	 * Default multiplier for registered users.
@@ -123,7 +123,7 @@ class Plugin {
 			Logger::error( 'Quota exceeded: ' . $e->getMessage() );
 			wp_send_json_error(
 				array(
-					'message' => $e->getMessage() . ' <a href="/contact-us">Contact us</a>',
+					'message' => $e->getMessage(),
 					'code'    => 'quota_exceeded',
 				),
 				429
