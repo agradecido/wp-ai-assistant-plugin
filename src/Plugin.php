@@ -44,6 +44,10 @@ class Plugin {
 	 */
 	public function init() {
 		Logger::log( 'Initializing WP AI Assistant plugin' );
+
+        if ( ! current_user_can( 'manage_options' ) ) {
+            add_filter( 'show_admin_bar', '__return_false' );
+        }		
 		
 		Settings::register();
 		ChatShortcode::register();
