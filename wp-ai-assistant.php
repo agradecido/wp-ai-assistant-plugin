@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Plugin Name: WP AI Assistant
  * Description: Plugin for chat with an OpenAI Assistant.
@@ -61,7 +60,7 @@ add_action( 'plugins_loaded', 'wp_ai_assistant_init' );
  */
 function wp_ai_assistant_init_session() {
 	if ( class_exists( '\\WPAIS\\Utils\\Session' ) ) {
-		// Only on frontend or AJAX requests
+		// Only on frontend or AJAX requests.
 		if ( ! is_admin() || wp_doing_ajax() ) {
 			try {
 				\WPAIS\Utils\Session::get_session_id();

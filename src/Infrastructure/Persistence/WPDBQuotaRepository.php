@@ -53,7 +53,7 @@ final class WPDBQuotaRepository implements QuotaRepository {
 			)
 		);
 
-		error_log( "QuotaRepository Debug: SQL result=" . var_export( $result, true ) );
+		error_log( 'QuotaRepository Debug: SQL result=' . var_export( $result, true ) );
 
 		return (int) $result ?: 0;
 	}
