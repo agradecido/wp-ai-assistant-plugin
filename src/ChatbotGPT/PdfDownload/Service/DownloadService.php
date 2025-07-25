@@ -21,7 +21,7 @@ class DownloadService {
         }
 
         $user_id = get_current_user_id();
-        $ip = $_SERVER['REMOTE_ADDR'] ?? '';
+        $ip = $this->get_client_ip();
         $this->repository->record($user_id, basename($file), $ip);
 
         @ob_end_clean();
