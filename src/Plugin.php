@@ -9,6 +9,8 @@ use WPAIS\Api\Assistant;
 use WPAIS\Frontend\ChatShortcode;
 use WPAIS\Frontend\HistoryShortcode;
 use WPAIS\Infrastructure\Migration\CreateQuotaTable;
+use ChatbotGPT\PdfDownload\Activator as PdfActivator;
+use ChatbotGPT\PdfDownload\ServiceProvider as PdfServiceProvider;
 use WPAIS\Utils\Session;
 use WPAIS\Infrastructure\Persistence\WPDBQuotaRepository;
 use WPAIS\Infrastructure\Persistence\WPThreadRepository;
@@ -73,8 +75,11 @@ class Plugin {
 		SummaryMetaBox::register();
 
 		// Initialize thread repository and connect with Assistant.
-		$thread_repository = new WPThreadRepository();
-		Assistant::set_thread_repository( $thread_repository );
+                $thread_repository = new WPThreadRepository();
+                Assistant::set_thread_repository( $thread_repository );
+
+                // Initialize PDF download services.
+                ( new PdfServiceProvider() )->register();
 
 		// Hooks AJAX.
 		add_action( 'wp_ajax_wp_ai_assistant_request', array( $this, 'handle_chatbot_request' ) );
@@ -89,7 +94,8 @@ class Plugin {
 	 * @return void
 	 */
 	public static function activate(): void {
-		CreateQuotaTable::up();
+                CreateQuotaTable::up();
+                PdfActivator::activate();
 	}
 
 	/**
