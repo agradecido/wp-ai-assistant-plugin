@@ -1,7 +1,8 @@
 {
     "autoload": {
         "psr-4": {
-            "WPAIS\\": "src/"
+            "WPAIS\\": "src/",
+            "ChatbotGPT\\": "src/ChatbotGPT/"
         }
     },
     "require": {
@@ -12,11 +13,14 @@
         "wp-coding-standards/wpcs": "^3.1",
         "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
         "phpstan/phpstan": "^2.1",
-        "szepeviktor/phpstan-wordpress": "^2.0"
+        "szepeviktor/phpstan-wordpress": "^2.0",
+        "phpunit/phpunit": "^9.6",
+        "10up/wp_mock": "^0.5"
     },
     "scripts": {
         "lint": "./vendor/bin/phpcs --standard=WordPress src/",
-        "lint:fix": "./vendor/bin/phpcbf --standard=WordPress src/"
+        "lint:fix": "./vendor/bin/phpcbf --standard=WordPress src/",
+        "test": "./vendor/bin/phpunit"
     },
     "config": {
         "allow-plugins": {
