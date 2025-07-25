@@ -15,8 +15,8 @@ class DownloadService {
     public function download(string $slug): void {
         $slug = sanitize_title_with_dashes($slug);
         $file = WP_CONTENT_DIR . '/private-pdfs/' . $slug . '.pdf';
-        $path = realpath($file);
-        if (! $path || ! is_file($path)) {
+        if (validate_file($file) !== 0 || ! is_file($file) || strpos($file, WP_CONTENT_DIR . '/private-pdfs/') !== 0) {
+            wp_die(__('File not found or invalid path', 'wp-ai-assistant'), 404);
             wp_die(__('File not found', 'wp-ai-assistant'), 404);
         }
 
