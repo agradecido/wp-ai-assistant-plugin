@@ -36,7 +36,11 @@ class DownloadRepository {
      */
     public function find_by_user(int $user_id): array {
         $sql = $this->db->prepare(
-            "SELECT * FROM {$this->table} WHERE user_id = %d ORDER BY downloaded_at DESC",
+            $this->db->prepare(
+                "SELECT * FROM %s WHERE user_id = %d ORDER BY downloaded_at DESC",
+                $this->table,
+                $user_id
+            ),
             $user_id
         );
         return $this->db->get_results($sql, ARRAY_A) ?: [];
