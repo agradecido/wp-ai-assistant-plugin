@@ -6,9 +6,13 @@ use WPAIS\Admin\Settings;
 use WPAIS\Admin\ConversationMetaBox;
 use WPAIS\Admin\SummaryMetaBox;
 use WPAIS\Api\Assistant;
+use WPAIS\Downloads\DownloadController;
 use WPAIS\Frontend\ChatShortcode;
+use WPAIS\Frontend\DownloadShortcode;
 use WPAIS\Frontend\HistoryShortcode;
+use WPAIS\Infrastructure\Migration\CreateDownloadsTable;
 use WPAIS\Infrastructure\Migration\CreateQuotaTable;
+use WPAIS\Infrastructure\Persistence\WPDBDownloadRepository;
 use WPAIS\Utils\Session;
 use WPAIS\Infrastructure\Persistence\WPDBQuotaRepository;
 use WPAIS\Infrastructure\Persistence\WPThreadRepository;
@@ -52,6 +56,7 @@ class Plugin {
 		Settings::register();
 		ChatShortcode::register();
 		HistoryShortcode::register();
+		DownloadShortcode::register();
 
 		// Instance the repository and inject the manager.
 		global $wpdb;
@@ -81,6 +86,7 @@ class Plugin {
 		add_action( 'wp_ajax_nopriv_wp_ai_assistant_request', array( $this, 'handle_chatbot_request' ) );
 		add_action( 'wp_ajax_wp_ai_assistant_admin_test', array( $this, 'handle_admin_test_request' ) );
 		add_action( 'wp_ajax_wp_ai_assistant_generate_summary', array( $this, 'handle_generate_summary_request' ) );
+		add_action( 'wp_ajax_wp_ai_assistant_download', array( $this, 'handle_download_request' ) );
 	}
 
 	/**
@@ -90,6 +96,7 @@ class Plugin {
 	 */
 	public static function activate(): void {
 		CreateQuotaTable::up();
+		CreateDownloadsTable::up();
 	}
 
 	/**
@@ -260,4 +267,25 @@ class Plugin {
                 wp_send_json_success( array( 'summary' => $summary ) );
                 wp_die();
         }
+
+	/**
+	 * Handle the download request and forward it to DownloadController.
+	 */
+	public function handle_download_request() {
+		$nonce = isset( $_REQUEST['_wpnonce'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['_wpnonce'] ) ) : '';
+		$file_path = isset( $_REQUEST['file'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['file'] ) ) : '';
+
+		if ( empty( $nonce ) || ! wp_verify_nonce( $nonce, 'wp_ai_assistant_download_nonce' ) ) {
+			wp_die( esc_html__( 'Security check failed', 'wp-ai-assistant' ), 403 );
+		}
+
+		if ( empty( $file_path ) ) {
+			wp_die( esc_html__( 'File not specified.', 'wp-ai-assistant' ), 400 );
+		}
+
+		global $wpdb;
+		$download_repository = new WPDBDownloadRepository( $wpdb );
+		$download_controller = new DownloadController( $download_repository );
+		$download_controller->handle_download( $file_path );
+	}
 }
