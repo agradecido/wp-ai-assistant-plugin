@@ -31,7 +31,7 @@ class Summarizer {
 						'content' => $conversation,
 					),
 				),
-				'max_tokens' => 50,
+				'max_tokens' => 150,
 			);
 
 			$response = wp_remote_post(

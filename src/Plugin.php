@@ -39,6 +39,8 @@ class Plugin {
 	 */
 	private const DEFAULT_RESGISTERED_MULTIPLIER = 5;
 
+	private const EXCERPT_LENGTH_IN_WORDS = 50;
+
 	/**
 	 * Initialize the plugin.
 	 */
@@ -72,6 +74,8 @@ class Plugin {
 		ConversationMetaBox::register();
 		SummaryMetaBox::register();
 
+    	add_filter( 'excerpt_length', array( $this, 'custom_excerpt_length' ) );
+
 		// Initialize thread repository and connect with Assistant.
 		$thread_repository = new WPThreadRepository();
 		Assistant::set_thread_repository( $thread_repository );
@@ -83,6 +87,15 @@ class Plugin {
 		add_action( 'wp_ajax_wp_ai_assistant_generate_summary', array( $this, 'handle_generate_summary_request' ) );
 	}
 
+	/**
+	 * Custom excerpt length for AI chat threads.
+	 *
+	 * @param int $length The default excerpt length.
+	 * @return int
+	 */
+	public function custom_excerpt_length( $length ) {
+		return self::EXCERPT_LENGTH_IN_WORDS;
+	}
 	/**
 	 * Register the plugin activation hook.
 	 *
