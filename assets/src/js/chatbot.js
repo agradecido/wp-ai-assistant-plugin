@@ -1,4 +1,3 @@
-const { Logger } = require("sass");
 
 document.addEventListener("DOMContentLoaded", function () {
     let threadId = null;
