@@ -55,6 +55,13 @@ class Plugin {
 		ChatShortcode::register();
 		HistoryShortcode::register();
 
+		// Unqueue and deregister jQuery to improve performance.
+		add_action( 'wp_enqueue_scripts', function() {
+			wp_dequeue_script( 'jquery' );
+			wp_deregister_script( 'jquery' );
+		}, 100 );
+
+
 		// Instance the repository and inject the manager.
 		global $wpdb;
 		$repo               = new WPDBQuotaRepository( $wpdb );
