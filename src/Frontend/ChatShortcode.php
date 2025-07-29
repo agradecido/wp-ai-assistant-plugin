@@ -70,9 +70,9 @@ class ChatShortcode {
 		// }
 
 		// If history CSS exists, enqueue it too.
-		if ( file_exists( plugin_dir_path( dirname( __DIR__ ) ) . 'assets/dist/css/history.css' ) ) {
-			wp_enqueue_style( 'wp-ai-assistant-history-style', $plugin_url . 'assets/dist/css/history.css', array( 'wp-ai-assistant-style' ), $version );
-		}
+		// if ( file_exists( plugin_dir_path( dirname( __DIR__ ) ) . 'assets/dist/css/history.css' ) ) {
+		// 	wp_enqueue_style( 'wp-ai-assistant-history-style', $plugin_url . 'assets/dist/css/history.css', array( 'wp-ai-assistant-style' ), $version );
+		// }
 
 		// Pass data to scripts.
 		wp_localize_script(
