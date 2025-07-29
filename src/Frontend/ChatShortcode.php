@@ -7,9 +7,11 @@ use WPAIS\Utils\Logger;
  * Shortcode for the assistant.
  *
  * @package WPAIS
- * @since 1.0
+ * @since   1.0
  */
 class ChatShortcode {
+
+
 
 	/**
 	 * Registers the shortcode.
@@ -31,8 +33,8 @@ class ChatShortcode {
 	/**
 	 * Retrieves an option with a default value.
 	 *
-	 * @param string $option_name Option key.
-	 * @param mixed  $default_value Default value if the option is not set.
+	 * @param  string $option_name   Option key.
+	 * @param  mixed  $default_value Default value if the option is not set.
 	 * @return mixed
 	 */
 	private static function get_option_with_default( string $option_name, $default_value ) {
@@ -43,7 +45,7 @@ class ChatShortcode {
 	/**
 	 * Gets the assistant ID from the shortcode or settings.
 	 *
-	 * @param array $atts Shortcode attributes.
+	 * @param  array $atts Shortcode attributes.
 	 * @return string|null
 	 */
 	private static function get_assistant_id( array $atts ): ?string {
@@ -63,9 +65,9 @@ class ChatShortcode {
 		wp_enqueue_script( 'wp-ai-assistant-script', $plugin_url . 'assets/dist/js/chatbot.js', array( 'jquery' ), $version, true );
 
 		// Also enqueue history-related assets if they exist.
-		if ( file_exists( plugin_dir_path( dirname( __DIR__ ) ) . 'assets/dist/js/history.js' ) ) {
-			wp_enqueue_script( 'wp-ai-assistant-history-script', $plugin_url . 'assets/dist/js/history.js', array( 'jquery', 'wp-ai-assistant-script' ), $version, true );
-		}
+		// if ( file_exists( plugin_dir_path( dirname( __DIR__ ) ) . 'assets/dist/js/history.js' ) ) {
+		// wp_enqueue_script( 'wp-ai-assistant-history-script', $plugin_url . 'assets/dist/js/history.js', array( 'jquery', 'wp-ai-assistant-script' ), $version, true );
+		// }
 
 		// If history CSS exists, enqueue it too.
 		if ( file_exists( plugin_dir_path( dirname( __DIR__ ) ) . 'assets/dist/css/history.css' ) ) {
@@ -112,9 +114,9 @@ class ChatShortcode {
 	/**
 	 * Loads the chatbot HTML template.
 	 *
-	 * @param string $nonce Security nonce.
-	 * @param bool   $is_enabled Whether the chatbot is enabled.
-	 * @param string $disabled_message Message to show when chatbot is disabled.
+	 * @param  string $nonce            Security nonce.
+	 * @param  bool   $is_enabled       Whether the chatbot is enabled.
+	 * @param  string $disabled_message Message to show when chatbot is disabled.
 	 * @return string
 	 */
 	private static function get_html( string $nonce, bool $is_enabled, string $disabled_message ): string {
@@ -132,7 +134,7 @@ class ChatShortcode {
 	/**
 	 * Render the shortcode.
 	 *
-	 * @param array $atts Shortcode attributes.
+	 * @param  array $atts Shortcode attributes.
 	 * @return string
 	 */
 	public static function render( $atts ): string {
