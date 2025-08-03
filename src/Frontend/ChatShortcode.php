@@ -60,9 +60,29 @@ class ChatShortcode {
 		$plugin_url = plugin_dir_url( dirname( __DIR__ ) );
 		$version    = defined( 'WP_DEBUG' ) && WP_DEBUG ? time() : '1.0.1';
 
+		$manifest_path = plugin_dir_path(__FILE__) . 'assets/dist/manifest.json';
+    	$manifest      = file_exists($manifest_path) ? json_decode(file_get_contents($manifest_path), true) : [];
+		
+		$js_file  = $manifest['js/chatbot.js'] ?? 'js/chatbot.js';
+    	$css_file = $manifest['css/chatbot.css'] ?? 'css/chatbot.css';
+
+
+
 		// Enqueue main chatbot styles and scripts.
-		wp_enqueue_style( 'wp-ai-assistant-style', $plugin_url . 'assets/dist/css/chatbot.css', array(), $version );
-		wp_enqueue_script( 'wp-ai-assistant-script', $plugin_url . 'assets/dist/js/chatbot.js', array( 'jquery' ), $version, true );
+		wp_enqueue_script(
+			'chatbot-script',
+			plugin_dir_url(__FILE__) . 'assets/dist/' . $js_file,
+			[],
+			null,
+			true
+		);
+
+		wp_enqueue_style(
+			'chatbot-style',
+			plugin_dir_url(__FILE__) . 'assets/dist/' . $css_file,
+			[],
+			null
+		);
 
 		// Also enqueue history-related assets if they exist.
 		// if ( file_exists( plugin_dir_path( dirname( __DIR__ ) ) . 'assets/dist/js/history.js' ) ) {
