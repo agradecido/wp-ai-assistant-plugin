@@ -143,16 +143,16 @@
 }
 
 .wpai-continue-chat {
-    background-color: #10a37f;
+    background-color: #374151;
     color: white;
-    border: 1px solid #10a37f;
+    border: 1px solid #374151;
 
     &:hover {
-        background-color: #0e8c6d;
+        background-color: #1f2937;
     }
     
     &:active {
-        background-color: #0c7d60;
+        background-color: #1f2937;
     }
 }
 
@@ -287,7 +287,7 @@
 /* Responsive styles */
 @media (max-width: 768px) {
     .wpai-history-container {
-        padding: 16px;
+        padding: 16px 0;
     }
     
     .wpai-thread-header {

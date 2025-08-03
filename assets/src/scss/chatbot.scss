@@ -4,7 +4,7 @@
 #chatbot-container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 20px;
+    padding: 20px 0;
     font-family: 'Söhne', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Ubuntu, Cantarell, 'Noto Sans', sans-serif, 'Helvetica Neue', Arial;
 
     /* Variables CSS específicas del chatbot - estilo ChatGPT */
@@ -114,7 +114,7 @@
         height: 36px;
         border: none;
         border-radius: 8px;
-        background-color: #10a37f;
+        background-color: #343541;
         color: white;
         display: flex;
         align-items: center;
@@ -125,12 +125,12 @@
     }
 
     #chat-submit:hover {
-        background-color: #0e8c6d;
+        background-color: #343541;
         transform: translateY(-1px);
     }
 
     #chat-submit:active {
-        background-color: #0c7d60;
+        background-color: #343541;
         transform: translateY(0);
     }
     
