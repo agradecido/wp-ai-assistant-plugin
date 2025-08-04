@@ -51,6 +51,7 @@ class Settings {
 				)
 			);
 
+
 			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 				error_log( 'WPAIS admin asset path: ' . $plugin_url . 'assets/dist/css/admin.css' );
 			}

@@ -8,9 +8,10 @@ module.exports = {
 
   entry: {
     'chatbot': './assets/src/js/index.js',
-    'admin': './assets/src/js/admin.index.js',
-    'history': './assets/src/js/history.index.js', // Add this new entry point
-    'summary': './assets/src/js/summary.js'
+    'admin': './assets/src/js/admin.js',
+    'history': './assets/src/js/history.js',
+    'summary': './assets/src/js/summary.js',
+    'tailwind': './assets/src/scss/tailwind.scss' // Add Tailwind CSS entry
   },
 
   output: {
