@@ -1,4 +1,7 @@
-jQuery(document).ready(function($) {
+// Import admin styles
+import '../scss/admin.scss';
+
+jQuery(document).ready(function ($) {
 	let threadId = null;
 	const chatInput = document.getElementById("chat-input");
 	const chatSubmit = document.getElementById("chat-submit");
@@ -27,9 +30,9 @@ jQuery(document).ready(function($) {
 		chatInput.value = "";
 
 		// Usar el objeto global correcto
-		$.post(wpAIAssistant.ajaxurl, data, function(response) {
+		$.post(wpAIAssistant.ajaxurl, data, function (response) {
 			chatSpinner.style.display = "none";
-			
+
 			if (response.success && response.data) {
 				// Handle standard success response with data
 				if (response.data.message) {
@@ -52,7 +55,7 @@ jQuery(document).ready(function($) {
 				// Handle error responses.
 				addAssistantMessage(wpAIAssistantAdminStrings.couldNotGetResponse + (response.data?.message ? ": " + response.data.message : ""));
 			}
-		}).fail(function() {
+		}).fail(function () {
 			chatSpinner.style.display = "none";
 			addAssistantMessage(wpAIAssistantAdminStrings.couldNotConnectToServer);
 		});
@@ -75,7 +78,7 @@ jQuery(document).ready(function($) {
 	}
 
 	chatSubmit.addEventListener("click", sendChat);
-	chatInput.addEventListener("keydown", function(e) {
+	chatInput.addEventListener("keydown", function (e) {
 		if (e.key === "Enter" && e.ctrlKey) {
 			e.preventDefault();
 			sendChat();

@@ -6,70 +6,71 @@ msgstr ""
 "Project-Id-Version: WP AI Assistant 1.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-ai-assistant\n"
 "Last-Translator: Javier Sierra <agradecido@manerasdevivir.com>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language-Team: Polish\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2025-08-04T15:12:54+00:00\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2025-08-04 18:45+0200\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: wp-ai-assistant\n"
+"Language: pl_PL\n"
 
 #. Plugin Name of the plugin
 #: wp-ai-assistant.php
 #: src/Admin/Settings.php:67
 msgid "WP AI Assistant"
-msgstr ""
+msgstr "WP Asystent AI"
 
 #. Description of the plugin
 #: wp-ai-assistant.php
 msgid "Plugin for chat with an OpenAI Assistant."
-msgstr ""
+msgstr "Wtyczka do czatu z Asystentem OpenAI."
 
 #. Author of the plugin
 #: wp-ai-assistant.php
 msgid "Javier Sierra"
-msgstr ""
+msgstr "Javier Sierra"
 
 #: src/Admin/ConversationMetaBox.php:24
 #: src/Frontend/HistoryShortcode.php:87
 msgid "Conversation History"
-msgstr ""
+msgstr "Historia rozmów"
 
 #: src/Admin/ConversationMetaBox.php:42
 msgid "There are no messages in this conversation."
-msgstr ""
+msgstr "Nie ma wiadomości w tej rozmowie."
 
 #: src/Admin/ConversationMetaBox.php:54
 msgid "User"
-msgstr ""
+msgstr "Użytkownik"
 
 #: src/Admin/ConversationMetaBox.php:54
 #: src/Frontend/templates/history-template.php:71
 msgid "Assistant"
-msgstr ""
+msgstr "Asystent"
 
 #: src/Admin/Settings.php:48
 msgid "<strong>Error:</strong> Unknown response format"
-msgstr ""
+msgstr "<strong>Błąd:</strong> Nieznany format odpowiedzi"
 
 #: src/Admin/Settings.php:49
 msgid "<strong>Error:</strong> Could not get response"
-msgstr ""
+msgstr "<strong>Błąd:</strong> Nie można uzyskać odpowiedzi"
 
 #: src/Admin/Settings.php:50
 msgid "<strong>Error:</strong> Could not connect to the server"
-msgstr ""
+msgstr "<strong>Błąd:</strong> Nie można połączyć się z serwerem"
 
 #: src/Admin/Settings.php:66
 #: src/Admin/templates/settings-page.php:14
 msgid "WP AI Assistant Settings"
-msgstr ""
+msgstr "Ustawienia WP Asystent AI"
 
 #: src/Admin/Settings.php:77
 #: src/Admin/Settings.php:78
 msgid "Test Assistant"
-msgstr ""
+msgstr "Testuj Asystenta"
 
 #: src/Admin/Settings.php:103
 #: src/Admin/templates/settings-page.php:30
@@ -77,292 +78,292 @@ msgstr ""
 #: src/Frontend/ChatShortcode.php:185
 #: src/Frontend/ChatShortcode.php:193
 msgid "Chat temporarily disabled, please try again later or contact us"
-msgstr ""
+msgstr "Chat tymczasowo wyłączony, spróbuj ponownie później lub skontaktuj się z nami"
 
 #: src/Admin/Settings.php:136
 #: src/Admin/templates/settings-page.php:74
 #: src/Domain/Quota/QuotaManager.php:41
 msgid "Daily quota exceeded. Please try again tomorrow 🤖"
-msgstr ""
+msgstr "Dzienny limit przekroczony. Spróbuj ponownie jutro 🤖"
 
 #: src/Admin/Settings.php:145
 #: src/Admin/templates/settings-page.php:81
 #: src/Domain/Quota/QuotaManager.php:45
 msgid "Has excedido tu cuota diaria de consultas. Por favor vuelve mañana 🤖"
-msgstr ""
+msgstr "Przekroczyłeś dzienny limit zapytań. Wróć jutro 🤖"
 
 #: src/Admin/SummaryMetaBox.php:18
 msgid "Chat Summary"
-msgstr ""
+msgstr "Podsumowanie czatu"
 
 #: src/Admin/SummaryMetaBox.php:44
 msgid "Generating..."
-msgstr ""
+msgstr "Generowanie..."
 
 #: src/Admin/SummaryMetaBox.php:45
 #: src/Admin/SummaryMetaBox.php:56
 msgid "Generate summary"
-msgstr ""
+msgstr "Generuj podsumowanie"
 
 #: src/Admin/SummaryMetaBox.php:46
 msgid "Regenerate summary"
-msgstr ""
+msgstr "Regeneruj podsumowanie"
 
 #: src/Admin/SummaryMetaBox.php:47
 msgid "Error generating summary"
-msgstr ""
+msgstr "Błąd podczas generowania podsumowania"
 
 #: src/Admin/SummaryMetaBox.php:55
 msgid "No summary yet."
-msgstr ""
+msgstr "Brak podsumowania."
 
 #: src/Admin/templates/settings-page.php:20
 msgid "Enable chat?"
-msgstr ""
+msgstr "Włączyć czat?"
 
 #: src/Admin/templates/settings-page.php:27
 msgid "Message when chat is disabled"
-msgstr ""
+msgstr "Wiadomość gdy czat jest wyłączony"
 
 #: src/Admin/templates/settings-page.php:31
 msgid "This message is displayed when chat is disabled but the shortcode is still present on the page."
-msgstr ""
+msgstr "Ta wiadomość jest wyświetlana, gdy czat jest wyłączony, ale shortcode jest nadal obecny na stronie."
 
 #: src/Admin/templates/settings-page.php:35
 msgid "System Instructions"
-msgstr ""
+msgstr "Instrukcje systemowe"
 
 #: src/Admin/templates/settings-page.php:38
 msgid "Define the system instructions for the assistant. These instructions control the behavior of the chatbot."
-msgstr ""
+msgstr "Zdefiniuj instrukcje systemowe dla asystenta. Te instrukcje kontrolują zachowanie chatbota."
 
 #: src/Admin/templates/settings-page.php:42
 msgid "OpenAI API URL"
-msgstr ""
+msgstr "URL API OpenAI"
 
 #: src/Admin/templates/settings-page.php:46
 msgid "OpenAI API Key"
-msgstr ""
+msgstr "Klucz API OpenAI"
 
 #: src/Admin/templates/settings-page.php:50
 msgid "Assistant ID"
-msgstr ""
+msgstr "ID Asystenta"
 
 #: src/Admin/templates/settings-page.php:54
 msgid "Response waiting time in seconds"
-msgstr ""
+msgstr "Czas oczekiwania na odpowiedź w sekundach"
 
 #: src/Admin/templates/settings-page.php:58
 msgid "Model for summaries"
-msgstr ""
+msgstr "Model do podsumowań"
 
 #: src/Admin/templates/settings-page.php:68
 msgid "Daily message limit per user"
-msgstr ""
+msgstr "Dzienny limit wiadomości na użytkownika"
 
 #: src/Admin/templates/settings-page.php:72
 msgid "Quota exceeded message (English)"
-msgstr ""
+msgstr "Wiadomość o przekroczeniu limitu (Angielski)"
 
 #: src/Admin/templates/settings-page.php:75
 msgid "Message to display when the user exceeds their daily message quota."
-msgstr ""
+msgstr "Wiadomość do wyświetlenia, gdy użytkownik przekroczy dzienny limit wiadomości."
 
 #: src/Admin/templates/settings-page.php:79
 msgid "Quota exceeded message (Spanish)"
-msgstr ""
+msgstr "Wiadomość o przekroczeniu limitu (Hiszpański)"
 
 #: src/Admin/templates/settings-page.php:82
 msgid "Mensaje que se muestra cuando el usuario supera su cuota diaria de mensajes."
-msgstr ""
+msgstr "Wiadomość do wyświetlenia, gdy użytkownik przekroczy dzienny limit wiadomości."
 
 #: src/Admin/templates/settings-page.php:86
 msgid "Main Color"
-msgstr ""
+msgstr "Kolor główny"
 
 #: src/Admin/templates/settings-page.php:90
 msgid "Secondary Color"
-msgstr ""
+msgstr "Kolor pomocniczy"
 
 #: src/Admin/templates/test-page.php:15
 msgid "AI Assistant Test"
-msgstr ""
+msgstr "Test Asystenta AI"
 
 #: src/Admin/templates/test-page.php:16
 msgid "Use this section to test queries with the configured assistant."
-msgstr ""
+msgstr "Użyj tej sekcji do testowania zapytań ze skonfigurowanym asystentem."
 
 #: src/Admin/templates/test-page.php:20
 msgid "Assistant Information"
-msgstr ""
+msgstr "Informacje o Asyście"
 
 #: src/Admin/templates/test-page.php:24
 msgid "Name"
-msgstr ""
+msgstr "Nazwa"
 
 #: src/Admin/templates/test-page.php:28
 msgid "Model"
-msgstr ""
+msgstr "Model"
 
 #: src/Admin/templates/test-page.php:33
 msgid "Description"
-msgstr ""
+msgstr "Opis"
 
 #: src/Admin/templates/test-page.php:38
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #: src/Admin/templates/test-page.php:43
 msgid "Created"
-msgstr ""
+msgstr "Utworzono"
 
 #: src/Admin/templates/test-page.php:65
 #: src/Frontend/templates/chatbot-template.php:35
 msgid "Type your query to the assistant here"
-msgstr ""
+msgstr "Wpisz tutaj swoje pytanie do asystenta"
 
 #: src/Admin/templates/test-page.php:66
 msgid "Send Query"
-msgstr ""
+msgstr "Wyślij zapytanie"
 
 #: src/Api/Summarizer.php:27
 msgid "Resume brevemente el siguiente chat."
-msgstr ""
+msgstr "Krótko podsumuj następujący czat."
 
 #: src/Domain/Thread/ChatThreadPostType.php:19
 #: src/Domain/Thread/ChatThreadPostType.php:21
 msgid "AI Conversations"
-msgstr ""
+msgstr "Rozmowy AI"
 
 #: src/Domain/Thread/ChatThreadPostType.php:20
 #: src/Domain/Thread/ChatThreadPostType.php:22
 msgid "AI Conversation"
-msgstr ""
+msgstr "Rozmowa AI"
 
 #: src/Domain/Thread/ChatThreadPostType.php:23
 msgid "Add New"
-msgstr ""
+msgstr "Dodaj nową"
 
 #: src/Domain/Thread/ChatThreadPostType.php:24
 msgid "Add New Conversation"
-msgstr ""
+msgstr "Dodaj nową rozmowę"
 
 #: src/Domain/Thread/ChatThreadPostType.php:25
 msgid "New Conversation"
-msgstr ""
+msgstr "Nowa rozmowa"
 
 #: src/Domain/Thread/ChatThreadPostType.php:26
 msgid "Edit Conversation"
-msgstr ""
+msgstr "Edytuj rozmowę"
 
 #: src/Domain/Thread/ChatThreadPostType.php:27
 msgid "View Conversation"
-msgstr ""
+msgstr "Zobacz rozmowę"
 
 #: src/Domain/Thread/ChatThreadPostType.php:28
 msgid "All Conversations"
-msgstr ""
+msgstr "Wszystkie rozmowy"
 
 #: src/Domain/Thread/ChatThreadPostType.php:29
 msgid "Search Conversations"
-msgstr ""
+msgstr "Szukaj rozmów"
 
 #: src/Domain/Thread/ChatThreadPostType.php:30
 msgid "No conversations found."
-msgstr ""
+msgstr "Nie znaleziono rozmów."
 
 #: src/Domain/Thread/ChatThreadPostType.php:31
 msgid "No conversations found in Trash."
-msgstr ""
+msgstr "Nie znaleziono rozmów w koszu."
 
 #: src/Domain/Thread/ChatThreadPostType.php:42
 msgctxt "URL slug"
 msgid "ai-conversations"
-msgstr ""
+msgstr "rozmowy-ai"
 
 #: src/Frontend/ChatShortcode.php:98
 #: src/Frontend/ChatShortcode.php:119
 msgid "Continue conversation..."
-msgstr ""
+msgstr "Kontynuuj rozmowę..."
 
 #: src/Frontend/ChatShortcode.php:100
 #: src/Frontend/ChatShortcode.php:118
 msgid "<p>Continuing previous conversation... How can I help you further?</p>"
-msgstr ""
+msgstr "<p>Kontynuując poprzednią rozmowę... Jak mogę Ci dalej pomóc?</p>"
 
 #: src/Frontend/ChatShortcode.php:101
 msgid "<p>Hello! How can I help you?</p>"
-msgstr ""
+msgstr "<p>Cześć! Jak mogę Ci pomóc?</p>"
 
 #: src/Frontend/ChatShortcode.php:102
 msgid "Unknown error in chatbot response."
-msgstr ""
+msgstr "Nieznany błąd w odpowiedzi chatbota."
 
 #: src/Frontend/ChatShortcode.php:103
 msgid "<strong>Error:</strong> Could not get response."
-msgstr ""
+msgstr "<strong>Błąd:</strong> Nie można uzyskać odpowiedzi."
 
 #: src/Frontend/ChatShortcode.php:116
 msgid "View full conversation"
-msgstr ""
+msgstr "Zobacz pełną rozmowę"
 
 #: src/Frontend/ChatShortcode.php:117
 msgid "Hide conversation"
-msgstr ""
+msgstr "Ukryj rozmowę"
 
 #: src/Frontend/ChatShortcode.php:120
 msgid "The chatbot is not available on this page. Please go to a page with the chatbot to continue the conversation."
-msgstr ""
+msgstr "Chatbot nie jest dostępny na tej stronie. Przejdź na stronę z chatbotem, aby kontynuować rozmowę."
 
 #: src/Frontend/ChatShortcode.php:121
 msgid "Session storage not available"
-msgstr ""
+msgstr "Magazyn sesji niedostępny"
 
 #: src/Frontend/ChatShortcode.php:178
 msgid "Error: No assistant ID configured."
-msgstr ""
+msgstr "Błąd: Nie skonfigurowano ID asystenta."
 
 #: src/Frontend/templates/chatbot-template.php:21
 msgid "T16 Assistant"
-msgstr ""
+msgstr "Asystent T16"
 
 #: src/Frontend/templates/history-template.php:23
 msgid "You have no saved conversations yet."
-msgstr ""
+msgstr "Nie masz jeszcze zapisanych rozmów."
 
 #: src/Frontend/templates/history-template.php:36
 msgid "You:"
-msgstr ""
+msgstr "Ty:"
 
 #: src/Frontend/templates/history-template.php:42
 msgid "Assistant:"
-msgstr ""
+msgstr "Asystent:"
 
 #: src/Frontend/templates/history-template.php:53
 msgid "View conversation"
-msgstr ""
+msgstr "Zobacz rozmowę"
 
 #: src/Frontend/templates/history-template.php:63
 msgid "Continue chat"
-msgstr ""
+msgstr "Kontynuuj czat"
 
 #: src/Frontend/templates/history-template.php:71
 msgid "You"
-msgstr ""
+msgstr "Ty"
 
 #: wp-ai-assistant.php:28
 msgid "WP AI Assistant Activation Error: No WPAIS\\Plugin classes found"
-msgstr ""
+msgstr "Błąd aktywacji WP Asystent AI: Nie znaleziono klas WPAIS\\Plugin"
 
 #: wp-ai-assistant.php:30
 #: wp-ai-assistant.php:34
 msgid "Plugin could not be activated: Missing required class files. Please contact the plugin developer for support."
-msgstr ""
+msgstr "Wtyczka nie może zostać aktywowana: Brakuje wymaganych plików klas. Skontaktuj się z deweloperem wtyczki w celu uzyskania pomocy."
 
 #: wp-ai-assistant.php:49
 msgid "WP AI Assistant Initialization Error: No WPAIS\\Plugin classes found"
-msgstr ""
+msgstr "Błąd inicjalizacji WP Asystent AI: Nie znaleziono klas WPAIS\\Plugin"
 
 #: wp-ai-assistant.php:52
 msgid "Plugin could not be initialized: Missing required class files. Please contact the plugin developer for support."
-msgstr ""
+msgstr "Wtyczka nie może zostać zainicjalizowana: Brakuje wymaganych plików klas. Skontaktuj się z deweloperem wtyczki w celu uzyskania pomocy."

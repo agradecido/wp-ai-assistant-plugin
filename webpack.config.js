@@ -1,24 +1,27 @@
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
+
 
 module.exports = {
   mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
-  
+
   entry: {
     'chatbot': './assets/src/js/index.js',
-    'admin': './assets/src/js/admin.index.js',
-    'history': './assets/src/js/history.index.js', // Add this new entry point
-    'summary': './assets/src/js/summary.js'
+    'admin': './assets/src/js/admin.js',
+    'history': './assets/src/js/history.js',
+    'summary': './assets/src/js/summary.js',
+    'tailwind': './assets/src/scss/tailwind.scss' // Add Tailwind CSS entry
   },
-  
+
   output: {
-    filename: 'js/[name].js',
+    filename: 'js/[name].[contenthash].js',
     path: path.resolve(__dirname, 'assets/dist'),
     clean: true,
   },
-  
+
   devtool: 'source-map',
-  
+
   module: {
     rules: [
       {
@@ -50,10 +53,14 @@ module.exports = {
       }
     ]
   },
-  
+
   plugins: [
     new MiniCssExtractPlugin({
-      filename: 'css/[name].css'
+      filename: 'css/[name].[contenthash].css'
+    }),
+    new WebpackManifestPlugin({
+      fileName: 'manifest.json',
+      publicPath: '',
     })
   ]
 };

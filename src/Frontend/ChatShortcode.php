@@ -60,10 +60,23 @@ class ChatShortcode {
 		$plugin_url = plugin_dir_url( dirname( __DIR__ ) );
 		$version    = defined( 'WP_DEBUG' ) && WP_DEBUG ? time() : '1.0.1';
 
-		// Enqueue main chatbot styles and scripts.
-		wp_enqueue_style( 'wp-ai-assistant-style', $plugin_url . 'assets/dist/css/chatbot.css', array(), $version );
-		wp_enqueue_script( 'wp-ai-assistant-script', $plugin_url . 'assets/dist/js/chatbot.js', array( 'jquery' ), $version, true );
+		$manifest_path = plugin_dir_path(__FILE__) . 'assets/dist/manifest.json';
+    	$manifest      = file_exists($manifest_path) ? json_decode(file_get_contents($manifest_path), true) : [];
+		
+		$js_file  = $manifest['chatbot.js'] ?? 'chatbot.js';
+    	$css_file = $manifest['chatbot.css'] ?? 'chatbot.css';
+		$history_js_file = $manifest['history.js'] ?? 'history.js';
+		$history_css_file = $manifest['history.css'] ?? 'history.css';
 
+
+
+		// Enqueue main chatbot styles and scripts.
+		wp_enqueue_style( 'wp-ai-assistant-style', $plugin_url . 'assets/dist/css/' . $css_file, array() );
+		wp_enqueue_script( 'wp-ai-assistant-script', $plugin_url . 'assets/dist/js/' . $js_file, array( 'jquery' ) , $version, true );
+		
+		wp_enqueue_style( 'wp-ai-assistant-history-style', $plugin_url . 'assets/dist/css/' . $history_css_file, array( 'wp-ai-assistant-style' ) );
+		wp_enqueue_script( 'wp-ai-assistant-history-script', $plugin_url . 'assets/dist/js/' . $history_js_file, array( 'jquery', 'wp-ai-assistant-script' ), $version, true );
+		
 		// Also enqueue history-related assets if they exist.
 		// if ( file_exists( plugin_dir_path( dirname( __DIR__ ) ) . 'assets/dist/js/history.js' ) ) {
 		// wp_enqueue_script( 'wp-ai-assistant-history-script', $plugin_url . 'assets/dist/js/history.js', array( 'jquery', 'wp-ai-assistant-script' ), $version, true );
@@ -91,6 +104,24 @@ class ChatShortcode {
 				),
 			)
 		);
+
+
+		wp_localize_script(
+			'wp-ai-assistant-history-script',
+			'wpAIAssistantHistory',
+			array(
+				'ajaxurl' => admin_url( 'admin-ajax.php' ),
+				'nonce'   => wp_create_nonce( 'wp_ai_assistant_history_nonce' ),
+				'i18n'    => array(
+					'viewFullConversation'            => __( 'View full conversation', 'wp-ai-assistant' ),
+					'hideConversation'                => __( 'Hide conversation', 'wp-ai-assistant' ),
+					'continueConversationMessage'     => __( '<p>Continuing previous conversation... How can I help you further?</p>', 'wp-ai-assistant' ),
+					'continueConversationPlaceholder' => __( 'Continue conversation...', 'wp-ai-assistant' ),
+					'chatbotNotAvailableAlert'        => __( 'The chatbot is not available on this page. Please go to a page with the chatbot to continue the conversation.', 'wp-ai-assistant' ),
+					'sessionStorageNotAvailable'      => __( 'Session storage not available', 'wp-ai-assistant' ),
+				),
+			)
+		);		
 
 		wp_add_inline_style( 'wp-ai-assistant-style', self::get_styles() );
 	}
