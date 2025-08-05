@@ -11,7 +11,7 @@ module.exports = {
     'admin': './assets/src/js/admin.js',
     'history': './assets/src/js/history.js',
     'summary': './assets/src/js/summary.js',
-    'tailwind': './assets/src/scss/tailwind.scss' // Add Tailwind CSS entry
+    'tailwind': './assets/src/scss/tailwind.scss',
   },
 
   output: {
