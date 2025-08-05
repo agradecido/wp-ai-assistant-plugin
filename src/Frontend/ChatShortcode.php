@@ -9,190 +9,223 @@ use WPAIS\Utils\Logger;
  * @package WPAIS
  * @since   1.0
  */
-class ChatShortcode {
+class ChatShortcode
+{
+    /**
+     * Registers the shortcode.
+     */
+    public static function register()
+    {
+        add_shortcode('wp_ai_assistant', array( self::class, 'render' ));
+        add_action('wp_enqueue_scripts', array( self::class, 'enqueue_assets' ));
+    }
+
+    /**
+     * Checks if the chatbot is enabled.
+     *
+     * @return bool
+     */
+    private static function is_enabled(): bool
+    {
+        return get_option('wp_ai_assistant_enable') === '1';
+    }
+
+    /**
+     * Retrieves an option with a default value.
+     *
+     * @param  string $option_name   Option key.
+     * @param  mixed  $default_value Default value if the option is not set.
+     * @return mixed
+     */
+    private static function get_option_with_default( string $option_name, $default_value )
+    {
+        $value = get_option($option_name, $default_value);
+        return ! empty($value) ? $value : $default_value;
+    }
+
+    /**
+     * Gets the assistant ID from the shortcode or settings.
+     *
+     * @param  array $atts Shortcode attributes.
+     * @return string|null
+     */
+    private static function get_assistant_id( array $atts ): ?string
+    {
+        $assistant_id = $atts['assistant_id'] ?? '';
+        return ! empty($assistant_id) ? $assistant_id : self::get_option_with_default('wp_ai_assistant_assistant_id', '');
+    }
+
+    /**
+     * Enqueues styles and scripts for the chatbot.
+     */
+    public static function enqueue_assets()
+    {
+        // Use plugin constants for reliable paths.
+        $plugin_url = WP_AI_ASSISTANT_PLUGIN_URL;
+        $plugin_path = WP_AI_ASSISTANT_PLUGIN_DIR;
+        $version = defined('WP_DEBUG') && WP_DEBUG ? time() : '1.0.1';
+
+        $manifest_path = $plugin_path . 'assets/dist/manifest.json';
+
+        if (file_exists($manifest_path)) {
+            $manifest = json_decode(file_get_contents($manifest_path), true);
+        } else {
+            $manifest = array();
+        }
+        
+        $js_file  = isset($manifest['chatbot.js']) ? $manifest['chatbot.js'] : 'js/chatbot.js';
+        $css_file = isset($manifest['chatbot.css']) ? $manifest['chatbot.css'] : 'css/chatbot.css';
+        $history_js_file = isset($manifest['history.js']) ? $manifest['history.js'] : 'js/history.js';
+        $history_css_file = isset($manifest['history.css']) ? $manifest['history.css'] : null;
+
+        // Debug log final URLs
+        $css_url = $plugin_url . 'assets/dist/' . $css_file;
+        $js_url = $plugin_url . 'assets/dist/' . $js_file;
+
+        // Enqueue main chatbot styles and scripts.
+        wp_enqueue_style(
+            'wp-ai-assistant-style', 
+            $css_url, 
+            array(),
+            $version
+        );
+        
+        wp_enqueue_script(
+            'wp-ai-assistant-script', 
+            $js_url, 
+            array( 'jquery' ), 
+            $version, 
+            true
+        );
+        
+        // Enqueue history script
+        wp_enqueue_script(
+            'wp-ai-assistant-history-script', 
+            $plugin_url . 'assets/dist/' . $history_js_file, 
+            array( 'jquery', 'wp-ai-assistant-script' ), 
+            $version, 
+            true
+        );
+        
+        // Enqueue history CSS only if it exists
+        if ($history_css_file) {
+            wp_enqueue_style(
+                'wp-ai-assistant-history-style', 
+                $plugin_url . 'assets/dist/' . $history_css_file, 
+                array( 'wp-ai-assistant-style' ),
+                $version
+            );
+        }
+
+        // Pass data to scripts.
+        wp_localize_script(
+            'wp-ai-assistant-script',
+            'wpAIAssistant',
+            array(
+            'ajax_url' => admin_url('admin-ajax.php'),
+            'nonce'    => wp_create_nonce('wp_ai_assistant_nonce'),
+            'i18n'     => array(
+            'continueConversationPlaceholder' => __('Continue conversation...', 'wp-ai-assistant'),
+            'chatDisabledDefault'             => __('Chat temporarily disabled, please try again later or contact us', 'wp-ai-assistant'),
+            'continueConversationMessage'     => __('<p>Continuing previous conversation... How can I help you further?</p>', 'wp-ai-assistant'),
+            'helloMessage'                    => __('<p>Hello! How can I help you?</p>', 'wp-ai-assistant'),
+            'unknownChatbotError'             => __('Unknown error in chatbot response.', 'wp-ai-assistant'),
+            'couldNotGetResponseError'        => __('<strong>Error:</strong> Could not get response.', 'wp-ai-assistant'),
+            ),
+            )
+        );
 
 
+        wp_localize_script(
+            'wp-ai-assistant-history-script',
+            'wpAIAssistantHistory',
+            array(
+            'ajaxurl' => admin_url('admin-ajax.php'),
+            'nonce'   => wp_create_nonce('wp_ai_assistant_history_nonce'),
+            'i18n'    => array(
+            'viewFullConversation'            => __('View full conversation', 'wp-ai-assistant'),
+            'hideConversation'                => __('Hide conversation', 'wp-ai-assistant'),
+            'continueConversationMessage'     => __('<p>Continuing previous conversation... How can I help you further?</p>', 'wp-ai-assistant'),
+            'continueConversationPlaceholder' => __('Continue conversation...', 'wp-ai-assistant'),
+            'chatbotNotAvailableAlert'        => __('The chatbot is not available on this page. Please go to a page with the chatbot to continue the conversation.', 'wp-ai-assistant'),
+            'sessionStorageNotAvailable'      => __('Session storage not available', 'wp-ai-assistant'),
+            ),
+            )
+        );        
 
-	/**
-	 * Registers the shortcode.
-	 */
-	public static function register() {
-		add_shortcode( 'wp_ai_assistant', array( self::class, 'render' ) );
-		add_action( 'wp_enqueue_scripts', array( self::class, 'enqueue_assets' ) );
-	}
+        wp_add_inline_style('wp-ai-assistant-style', self::get_styles());
+    }
 
-	/**
-	 * Checks if the chatbot is enabled.
-	 *
-	 * @return bool
-	 */
-	private static function is_enabled(): bool {
-		return get_option( 'wp_ai_assistant_enable' ) === '1';
-	}
+    /**
+     * Generates dynamic styles for the chatbot.
+     *
+     * @return string
+     */
+    private static function get_styles(): string
+    {
+        $main_color      = self::get_option_with_default('wp_ai_assistant_main_color', '#93c462');
+        $secondary_color = self::get_option_with_default('wp_ai_assistant_secondary_color', '#549626');
 
-	/**
-	 * Retrieves an option with a default value.
-	 *
-	 * @param  string $option_name   Option key.
-	 * @param  mixed  $default_value Default value if the option is not set.
-	 * @return mixed
-	 */
-	private static function get_option_with_default( string $option_name, $default_value ) {
-		$value = get_option( $option_name, $default_value );
-		return ! empty( $value ) ? $value : $default_value;
-	}
-
-	/**
-	 * Gets the assistant ID from the shortcode or settings.
-	 *
-	 * @param  array $atts Shortcode attributes.
-	 * @return string|null
-	 */
-	private static function get_assistant_id( array $atts ): ?string {
-		$assistant_id = $atts['assistant_id'] ?? '';
-		return ! empty( $assistant_id ) ? $assistant_id : self::get_option_with_default( 'wp_ai_assistant_assistant_id', '' );
-	}
-
-	/**
-	 * Enqueues styles and scripts for the chatbot.
-	 */
-	public static function enqueue_assets() {
-		$plugin_url = plugin_dir_url( dirname( __DIR__ ) );
-		$version    = defined( 'WP_DEBUG' ) && WP_DEBUG ? time() : '1.0.1';
-
-		$manifest_path = plugin_dir_path(__FILE__) . 'assets/dist/manifest.json';
-    	$manifest      = file_exists($manifest_path) ? json_decode(file_get_contents($manifest_path), true) : [];
-		
-		$js_file  = $manifest['chatbot.js'] ?? 'chatbot.js';
-    	$css_file = $manifest['chatbot.css'] ?? 'chatbot.css';
-		$history_js_file = $manifest['history.js'] ?? 'history.js';
-		$history_css_file = $manifest['history.css'] ?? 'history.css';
-
-
-
-		// Enqueue main chatbot styles and scripts.
-		wp_enqueue_style( 'wp-ai-assistant-style', $plugin_url . 'assets/dist/css/' . $css_file, array() );
-		wp_enqueue_script( 'wp-ai-assistant-script', $plugin_url . 'assets/dist/js/' . $js_file, array( 'jquery' ) , $version, true );
-		
-		wp_enqueue_style( 'wp-ai-assistant-history-style', $plugin_url . 'assets/dist/css/' . $history_css_file, array( 'wp-ai-assistant-style' ) );
-		wp_enqueue_script( 'wp-ai-assistant-history-script', $plugin_url . 'assets/dist/js/' . $history_js_file, array( 'jquery', 'wp-ai-assistant-script' ), $version, true );
-		
-		// Also enqueue history-related assets if they exist.
-		// if ( file_exists( plugin_dir_path( dirname( __DIR__ ) ) . 'assets/dist/js/history.js' ) ) {
-		// wp_enqueue_script( 'wp-ai-assistant-history-script', $plugin_url . 'assets/dist/js/history.js', array( 'jquery', 'wp-ai-assistant-script' ), $version, true );
-		// }
-
-		// If history CSS exists, enqueue it too.
-		// if ( file_exists( plugin_dir_path( dirname( __DIR__ ) ) . 'assets/dist/css/history.css' ) ) {
-		// 	wp_enqueue_style( 'wp-ai-assistant-history-style', $plugin_url . 'assets/dist/css/history.css', array( 'wp-ai-assistant-style' ), $version );
-		// }
-
-		// Pass data to scripts.
-		wp_localize_script(
-			'wp-ai-assistant-script',
-			'wpAIAssistant',
-			array(
-				'ajax_url' => admin_url( 'admin-ajax.php' ),
-				'nonce'    => wp_create_nonce( 'wp_ai_assistant_nonce' ),
-				'i18n'     => array(
-					'continueConversationPlaceholder' => __( 'Continue conversation...', 'wp-ai-assistant' ),
-					'chatDisabledDefault'             => __( 'Chat temporarily disabled, please try again later or contact us', 'wp-ai-assistant' ),
-					'continueConversationMessage'     => __( '<p>Continuing previous conversation... How can I help you further?</p>', 'wp-ai-assistant' ),
-					'helloMessage'                    => __( '<p>Hello! How can I help you?</p>', 'wp-ai-assistant' ),
-					'unknownChatbotError'             => __( 'Unknown error in chatbot response.', 'wp-ai-assistant' ),
-					'couldNotGetResponseError'        => __( '<strong>Error:</strong> Could not get response.', 'wp-ai-assistant' ),
-				),
-			)
-		);
-
-
-		wp_localize_script(
-			'wp-ai-assistant-history-script',
-			'wpAIAssistantHistory',
-			array(
-				'ajaxurl' => admin_url( 'admin-ajax.php' ),
-				'nonce'   => wp_create_nonce( 'wp_ai_assistant_history_nonce' ),
-				'i18n'    => array(
-					'viewFullConversation'            => __( 'View full conversation', 'wp-ai-assistant' ),
-					'hideConversation'                => __( 'Hide conversation', 'wp-ai-assistant' ),
-					'continueConversationMessage'     => __( '<p>Continuing previous conversation... How can I help you further?</p>', 'wp-ai-assistant' ),
-					'continueConversationPlaceholder' => __( 'Continue conversation...', 'wp-ai-assistant' ),
-					'chatbotNotAvailableAlert'        => __( 'The chatbot is not available on this page. Please go to a page with the chatbot to continue the conversation.', 'wp-ai-assistant' ),
-					'sessionStorageNotAvailable'      => __( 'Session storage not available', 'wp-ai-assistant' ),
-				),
-			)
-		);		
-
-		wp_add_inline_style( 'wp-ai-assistant-style', self::get_styles() );
-	}
-
-	/**
-	 * Generates dynamic styles for the chatbot.
-	 *
-	 * @return string
-	 */
-	private static function get_styles(): string {
-		$main_color      = self::get_option_with_default( 'wp_ai_assistant_main_color', '#93c462' );
-		$secondary_color = self::get_option_with_default( 'wp_ai_assistant_secondary_color', '#549626' );
-
-		return "
+        return "
 			#chatbot-container {
 				--accent-color: {$main_color};
 				--button-color: {$secondary_color};
 			}";
-	}
+    }
 
-	/**
-	 * Loads the chatbot HTML template.
-	 *
-	 * @param  string $nonce            Security nonce.
-	 * @param  bool   $is_enabled       Whether the chatbot is enabled.
-	 * @param  string $disabled_message Message to show when chatbot is disabled.
-	 * @return string
-	 */
-	private static function get_html( string $nonce, bool $is_enabled, string $disabled_message ): string {
-		ob_start();
+    /**
+     * Loads the chatbot HTML template.
+     *
+     * @param  string $nonce            Security nonce.
+     * @param  bool   $is_enabled       Whether the chatbot is enabled.
+     * @param  string $disabled_message Message to show when chatbot is disabled.
+     * @return string
+     */
+    private static function get_html( string $nonce, bool $is_enabled, string $disabled_message ): string
+    {
+        ob_start();
 
-		$template_path = dirname( dirname( __DIR__ ) ) . '/src/Frontend/templates/chatbot-template.php';
+        $template_path = dirname(dirname(__DIR__)) . '/src/Frontend/templates/chatbot-template.php';
 
-		if ( file_exists( $template_path ) ) {
-			include $template_path;
-		}
+        if (file_exists($template_path) ) {
+            include $template_path;
+        }
 
-		return ob_get_clean();
-	}
+        return ob_get_clean();
+    }
 
-	/**
-	 * Render the shortcode.
-	 *
-	 * @param  array $atts Shortcode attributes.
-	 * @return string
-	 */
-	public static function render( $atts ): string {
-		$is_enabled = self::is_enabled();
+    /**
+     * Render the shortcode.
+     *
+     * @param  array $atts Shortcode attributes.
+     * @return string
+     */
+    public static function render( $atts ): string
+    {
+        $is_enabled = self::is_enabled();
 
-		$assistant_id = self::get_assistant_id( $atts );
+        $assistant_id = self::get_assistant_id($atts);
 
-		if ( empty( $assistant_id ) ) {
-			Logger::log( 'Error: No assistant ID configured.' );
-			return '<p>' . __( 'Error: No assistant ID configured.', 'wp-ai-assistant' ) . '</p>';
-		}
+        if (empty($assistant_id) ) {
+            Logger::log('Error: No assistant ID configured.');
+            return '<p>' . __('Error: No assistant ID configured.', 'wp-ai-assistant') . '</p>';
+        }
 
-		if ( ! $is_enabled ) {
-			Logger::log( 'Chatbot is disabled.' );
-			$disabled_message = self::get_option_with_default(
-				'wp_ai_assistant_disabled_message',
-				__( 'Chat temporarily disabled, please try again later or contact us', 'wp-ai-assistant' )
-			);
-			return '<p>' . $disabled_message . '</p>';
-		}
+        if (! $is_enabled ) {
+            Logger::log('Chatbot is disabled.');
+            $disabled_message = self::get_option_with_default(
+                'wp_ai_assistant_disabled_message',
+                __('Chat temporarily disabled, please try again later or contact us', 'wp-ai-assistant')
+            );
+            return '<p>' . $disabled_message . '</p>';
+        }
 
-		$nonce            = wp_create_nonce( 'wp_ai_assistant_nonce' );
-		$disabled_message = self::get_option_with_default(
-			'wp_ai_assistant_disabled_message',
-			__( 'Chat temporarily disabled, please try again later or contact us', 'wp-ai-assistant' )
-		);
+        $nonce            = wp_create_nonce('wp_ai_assistant_nonce');
+        $disabled_message = self::get_option_with_default(
+            'wp_ai_assistant_disabled_message',
+            __('Chat temporarily disabled, please try again later or contact us', 'wp-ai-assistant')
+        );
 
-		return self::get_html( $nonce, $is_enabled, $disabled_message );
-	}
+        return self::get_html($nonce, $is_enabled, $disabled_message);
+    }
 }
