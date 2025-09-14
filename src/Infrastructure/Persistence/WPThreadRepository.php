@@ -42,10 +42,14 @@ class WPThreadRepository implements ThreadRepository {
 			return 0;
 		}
 
-		// Save thread metadata.
-		update_post_meta( $post_id, 'thread_external_id', $thread_id );
-		update_post_meta( $post_id, 'session_id', $session_id );
-		update_post_meta( $post_id, 'messages', array() );
+                // Save thread metadata.
+                update_post_meta( $post_id, 'thread_external_id', $thread_id );
+                update_post_meta( $post_id, 'session_id', $session_id );
+                update_post_meta( $post_id, 'messages', array() );
+               $user_ip    = $this->getClientIp();
+               $user_agent = isset( $_SERVER['HTTP_USER_AGENT'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_USER_AGENT'] ) ) : '';
+               update_post_meta( $post_id, 'user_ip', $user_ip );
+               update_post_meta( $post_id, 'user_agent', $user_agent );
 
 		Logger::log( 'Created new thread post #' . $post_id . ' for thread ' . $thread_id );
 
@@ -128,17 +132,19 @@ class WPThreadRepository implements ThreadRepository {
 			return null;
 		}
 
-		$post    = $posts[0];
-		$post_id = $post->ID;
+                $post    = $posts[0];
+                $post_id = $post->ID;
 
-		return array(
-			'post_id'    => $post_id,
-			'title'      => $post->post_title,
-			'thread_id'  => $thread_id,
-			'session_id' => get_post_meta( $post_id, 'session_id', true ),
-			'messages'   => get_post_meta( $post_id, 'messages', true ) ?: array(),
-		);
-	}
+                return array(
+                        'post_id'    => $post_id,
+                        'title'      => $post->post_title,
+                        'thread_id'  => $thread_id,
+                        'session_id' => get_post_meta( $post_id, 'session_id', true ),
+                       'messages'   => get_post_meta( $post_id, 'messages', true ) ?: array(),
+                       'user_ip'    => get_post_meta( $post_id, 'user_ip', true ),
+                       'user_agent' => get_post_meta( $post_id, 'user_agent', true ),
+                );
+        }
 
 	/**
 	 * Get threads for a specific user or session ID.
@@ -175,17 +181,19 @@ class WPThreadRepository implements ThreadRepository {
 
 		foreach ( $posts as $post ) {
 			$summary   = has_excerpt( $post ) ? get_the_excerpt( $post ) : $this->getFirstUserMessage( $post->ID );
-			$threads[] = array(
-				'post_id'      => $post->ID,
-				'title'        => $post->post_title,
-				'summary'      => $summary,
-				'date'         => get_the_date( 'Y-m-d H:i:s', $post->ID ),
-				'thread_id'    => get_post_meta( $post->ID, 'thread_external_id', true ),
-				'session_id'   => get_post_meta( $post->ID, 'session_id', true ),
-				'messages'     => get_post_meta( $post->ID, 'messages', true ) ?: array(),
-				'last_message' => $this->getLastMessages( $post->ID ),
-			);
-		}
+                       $threads[] = array(
+                               'post_id'      => $post->ID,
+                               'title'        => $post->post_title,
+                               'summary'      => $summary,
+                               'date'         => get_the_date( 'Y-m-d H:i:s', $post->ID ),
+                               'thread_id'    => get_post_meta( $post->ID, 'thread_external_id', true ),
+                               'session_id'   => get_post_meta( $post->ID, 'session_id', true ),
+                               'messages'     => get_post_meta( $post->ID, 'messages', true ) ?: array(),
+                               'last_message' => $this->getLastMessages( $post->ID ),
+                               'user_ip'      => get_post_meta( $post->ID, 'user_ip', true ),
+                               'user_agent'   => get_post_meta( $post->ID, 'user_agent', true ),
+                       );
+               }
 
 		return $threads;
 	}
@@ -244,14 +252,34 @@ class WPThreadRepository implements ThreadRepository {
 	 * @param array $messages The array of message data.
 	 * @return string Formatted content.
 	 */
-	private function generatePostContent( array $messages ): string {
-		$content = '';
+        private function generatePostContent( array $messages ): string {
+                $content = '';
 
 		foreach ( $messages as $message ) {
 			$role     = ucfirst( $message['role'] );
 			$content .= "{$role}: {$message['content']}\n\n";
 		}
 
-		return $content;
-	}
+                return $content;
+        }
+
+       /**
+        * Retrieve the client's IP address.
+        *
+        * @return string IP address if available.
+        */
+       private function getClientIp(): string {
+               $ip = '';
+
+               if ( ! empty( $_SERVER['HTTP_CLIENT_IP'] ) ) {
+                       $ip = $_SERVER['HTTP_CLIENT_IP'];
+               } elseif ( ! empty( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) {
+                       $ip_list = explode( ',', $_SERVER['HTTP_X_FORWARDED_FOR'] );
+                       $ip      = trim( $ip_list[0] );
+               } elseif ( ! empty( $_SERVER['REMOTE_ADDR'] ) ) {
+                       $ip = $_SERVER['REMOTE_ADDR'];
+               }
+
+               return sanitize_text_field( wp_unslash( $ip ) );
+       }
 }
