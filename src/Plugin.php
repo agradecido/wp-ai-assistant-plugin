@@ -88,10 +88,12 @@ class Plugin {
 		Assistant::set_thread_repository( $thread_repository );
 
 		// Hooks AJAX.
-		add_action( 'wp_ajax_wp_ai_assistant_request', array( $this, 'handle_chatbot_request' ) );
-		add_action( 'wp_ajax_nopriv_wp_ai_assistant_request', array( $this, 'handle_chatbot_request' ) );
-		add_action( 'wp_ajax_wp_ai_assistant_admin_test', array( $this, 'handle_admin_test_request' ) );
-		add_action( 'wp_ajax_wp_ai_assistant_generate_summary', array( $this, 'handle_generate_summary_request' ) );
+                add_action( 'wp_ajax_wp_ai_assistant_request', array( $this, 'handle_chatbot_request' ) );
+                add_action( 'wp_ajax_nopriv_wp_ai_assistant_request', array( $this, 'handle_chatbot_request' ) );
+                add_action( 'wp_ajax_wp_ai_assistant_admin_test', array( $this, 'handle_admin_test_request' ) );
+                add_action( 'wp_ajax_wp_ai_assistant_generate_summary', array( $this, 'handle_generate_summary_request' ) );
+                add_action( 'wp_ajax_wp_ai_assistant_delete_threads', array( $this, 'handle_delete_threads' ) );
+                add_action( 'wp_ajax_nopriv_wp_ai_assistant_delete_threads', array( $this, 'handle_delete_threads' ) );
 	}
 
 	/**
@@ -279,5 +281,106 @@ class Plugin {
 
                 wp_send_json_success( array( 'summary' => $summary ) );
                 wp_die();
+        }
+
+        /**
+         * Handle AJAX requests to delete conversation threads.
+         */
+        public function handle_delete_threads() {
+                $nonce = isset( $_POST['_ajax_nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['_ajax_nonce'] ) ) : '';
+
+                if ( empty( $nonce ) || ! wp_verify_nonce( $nonce, 'wp_ai_assistant_history_nonce' ) ) {
+                        wp_send_json_error(
+                                array( 'message' => __( 'Security check failed.', 'wp-ai-assistant' ) ),
+                                403
+                        );
+                }
+
+                $raw_ids    = isset( $_POST['thread_ids'] ) ? wp_unslash( $_POST['thread_ids'] ) : '[]';
+                $thread_ids = json_decode( $raw_ids, true );
+
+                if ( ! is_array( $thread_ids ) ) {
+                        wp_send_json_error(
+                                array( 'message' => __( 'Invalid conversation data received.', 'wp-ai-assistant' ) ),
+                                400
+                        );
+                }
+
+                $thread_ids = array_filter(
+                        array_map( 'absint', $thread_ids ),
+                        static function ( $id ) {
+                                return $id > 0;
+                        }
+                );
+
+                if ( empty( $thread_ids ) ) {
+                        wp_send_json_error(
+                                array( 'message' => __( 'Select at least one conversation to delete.', 'wp-ai-assistant' ) ),
+                                400
+                        );
+                }
+
+                $session_id = '';
+
+                try {
+                        $session_id = Session::get_session_id();
+                } catch ( \Throwable $e ) {
+                        $session_id = '';
+                }
+
+                $current_user_id = get_current_user_id();
+                $deleted         = array();
+                $failed          = array();
+
+                foreach ( $thread_ids as $post_id ) {
+                        $post = get_post( $post_id );
+
+                        if ( ! $post || 'ai_chat_thread' !== $post->post_type ) {
+                                $failed[] = $post_id;
+                                continue;
+                        }
+
+                        $allowed = false;
+
+                        if ( $current_user_id > 0 && ( (int) $post->post_author === $current_user_id || current_user_can( 'delete_post', $post_id ) ) ) {
+                                $allowed = true;
+                        } else {
+                                $stored_session = get_post_meta( $post_id, 'session_id', true );
+                                if ( $session_id && ! empty( $stored_session ) && $stored_session === $session_id ) {
+                                        $allowed = true;
+                                }
+                        }
+
+                        if ( ! $allowed ) {
+                                $failed[] = $post_id;
+                                continue;
+                        }
+
+                        $result = wp_delete_post( $post_id, true );
+
+                        if ( false === $result ) {
+                                $failed[] = $post_id;
+                                continue;
+                        }
+
+                        $deleted[] = $post_id;
+                }
+
+                if ( empty( $deleted ) ) {
+                        wp_send_json_error(
+                                array(
+                                        'message' => __( 'No conversations could be deleted.', 'wp-ai-assistant' ),
+                                        'failed'  => $failed,
+                                ),
+                                403
+                        );
+                }
+
+                wp_send_json_success(
+                        array(
+                                'deleted' => $deleted,
+                                'failed'  => $failed,
+                        )
+                );
         }
 }

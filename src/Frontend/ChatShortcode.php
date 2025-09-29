@@ -149,9 +149,18 @@ class ChatShortcode
             'continueConversationPlaceholder' => __('Continue conversation...', 'wp-ai-assistant'),
             'chatbotNotAvailableAlert'        => __('The chatbot is not available on this page. Please go to a page with the chatbot to continue the conversation.', 'wp-ai-assistant'),
             'sessionStorageNotAvailable'      => __('Session storage not available', 'wp-ai-assistant'),
+            'noSelection'                     => __('Please select at least one conversation to apply an action.', 'wp-ai-assistant'),
+            'selectAction'                    => __('Please choose an action to apply.', 'wp-ai-assistant'),
+            'deleteConfirmation'              => __('Are you sure you want to permanently delete the selected conversations?', 'wp-ai-assistant'),
+            'deleteError'                     => __('We could not delete the selected conversations. Please try again.', 'wp-ai-assistant'),
+            'deletePartial'                   => __('Some conversations could not be deleted because of missing permissions.', 'wp-ai-assistant'),
+            'selectionSingle'                 => __('%d conversation selected', 'wp-ai-assistant'),
+            'selectionPlural'                 => __('%d conversations selected', 'wp-ai-assistant'),
+            'noFilterResults'                 => __('No conversations match the selected filters.', 'wp-ai-assistant'),
+            'noConversations'                 => __('There are no conversations to display yet.', 'wp-ai-assistant'),
             ),
             )
-        );        
+        );
 
         wp_add_inline_style('wp-ai-assistant-style', self::get_styles());
     }
