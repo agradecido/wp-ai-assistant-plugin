@@ -67,33 +67,55 @@ class ChatThreadPostType {
 			)
 		);
 
-		register_meta(
-			'post',
-			'messages',
-			array(
-				'object_subtype' => 'ai_chat_thread',
-				'type'           => 'array',
-				'single'         => true,
-				'show_in_rest'   => array(
-					'schema' => array(
-						'type'  => 'array',
-						'items' => array(
-							'type'       => 'object',
-							'properties' => array(
-								'role'      => array(
-									'type' => 'string',
-								),
-								'content'   => array(
-									'type' => 'string',
-								),
-								'timestamp' => array(
-									'type' => 'integer',
-								),
-							),
-						),
-					),
-				),
-			)
-		);
-	}
+                register_meta(
+                        'post',
+                        'messages',
+                        array(
+                                'object_subtype' => 'ai_chat_thread',
+                                'type'           => 'array',
+                                'single'         => true,
+                                'show_in_rest'   => array(
+                                        'schema' => array(
+                                                'type'  => 'array',
+                                                'items' => array(
+                                                        'type'       => 'object',
+                                                        'properties' => array(
+                                                                'role'      => array(
+                                                                        'type' => 'string',
+                                                                ),
+                                                                'content'   => array(
+                                                                        'type' => 'string',
+                                                                ),
+                                                                'timestamp' => array(
+                                                                        'type' => 'integer',
+                                                                ),
+                                                        ),
+                                                ),
+                                        ),
+                                ),
+                        )
+                );
+
+               register_meta(
+                       'post',
+                       'user_ip',
+                       array(
+                               'object_subtype' => 'ai_chat_thread',
+                               'type'           => 'string',
+                               'single'         => true,
+                               'show_in_rest'   => true,
+                       )
+               );
+
+               register_meta(
+                       'post',
+                       'user_agent',
+                       array(
+                               'object_subtype' => 'ai_chat_thread',
+                               'type'           => 'string',
+                               'single'         => true,
+                               'show_in_rest'   => true,
+                       )
+               );
+        }
 }

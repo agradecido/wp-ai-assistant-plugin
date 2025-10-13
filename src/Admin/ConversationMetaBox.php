@@ -33,15 +33,29 @@ class ConversationMetaBox {
 	 * Render the meta box content.
 	 *
 	 * @param \WP_Post $post Current post object.
-	 */
-	public static function render_meta_box( \WP_Post $post ): void {
-		// Get conversation messages
-		$messages = get_post_meta( $post->ID, 'messages', true );
+        */
+       public static function render_meta_box( \WP_Post $post ): void {
+               $ip        = get_post_meta( $post->ID, 'user_ip', true );
+               $user_agent = get_post_meta( $post->ID, 'user_agent', true );
 
-		if ( empty( $messages ) ) {
-			echo '<p>' . esc_html__( 'There are no messages in this conversation.', 'wp-ai-assistant' ) . '</p>';
-			return;
-		}
+               if ( $ip || $user_agent ) {
+                       echo '<p class="ai-visitor-info">';
+                       if ( $ip ) {
+                               echo '<strong>' . esc_html__( 'IP Address', 'wp-ai-assistant' ) . ':</strong> ' . esc_html( $ip ) . '<br />';
+                       }
+                       if ( $user_agent ) {
+                               echo '<strong>' . esc_html__( 'User Agent', 'wp-ai-assistant' ) . ':</strong> ' . esc_html( $user_agent ) . '<br />';
+                       }
+                       echo '</p>';
+               }
+
+               // Get conversation messages
+               $messages = get_post_meta( $post->ID, 'messages', true );
+
+               if ( empty( $messages ) ) {
+                       echo '<p>' . esc_html__( 'There are no messages in this conversation.', 'wp-ai-assistant' ) . '</p>';
+                       return;
+               }
 
 		echo '<div class="ai-conversation-history">';
 
@@ -64,10 +78,10 @@ class ConversationMetaBox {
 			echo '</div>';
 		}
 
-		echo '</div>';
+                echo '</div>';
 
-		// Add some basic styling
-		echo '<style>
+                // Add some basic styling
+                echo '<style>
             .ai-conversation-history {
                 max-height: 500px;
                 overflow-y: auto;
@@ -102,6 +116,9 @@ class ConversationMetaBox {
             .message-content p:last-child {
                 margin-bottom: 0;
             }
+            .ai-visitor-info {
+                margin-bottom: 10px;
+            }
         </style>';
-	}
+        }
 }
