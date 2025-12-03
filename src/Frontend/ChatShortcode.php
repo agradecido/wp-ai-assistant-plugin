@@ -180,9 +180,10 @@ class ChatShortcode
      * @param  string $nonce            Security nonce.
      * @param  bool   $is_enabled       Whether the chatbot is enabled.
      * @param  string $disabled_message Message to show when chatbot is disabled.
+     * @param  string $assistant_id     Assistant ID for the chatbot.
      * @return string
      */
-    private static function get_html( string $nonce, bool $is_enabled, string $disabled_message ): string
+    private static function get_html( string $nonce, bool $is_enabled, string $disabled_message, string $assistant_id ): string
     {
         ob_start();
 
@@ -229,6 +230,6 @@ class ChatShortcode
             __('Chat temporarily disabled, please try again later or contact us', 'wp-ai-assistant')
         );
 
-        return self::get_html($nonce, $is_enabled, $disabled_message);
+        return self::get_html($nonce, $is_enabled, $disabled_message, $assistant_id);
     }
 }

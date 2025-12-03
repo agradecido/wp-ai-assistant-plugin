@@ -7,6 +7,7 @@
  * @var string $nonce Security nonce for AJAX requests.
  * @var bool $is_enabled Whether the chatbot is enabled.
  * @var string $disabled_message Message to show when chatbot is disabled.
+ * @var string $assistant_id Assistant ID for the chatbot.
  * @package WPAIS
  */
 
@@ -15,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 
-<div id="chatbot-container" data-nonce="<?php echo esc_attr( $nonce ); ?>" data-enabled="<?php echo $is_enabled ? '1' : '0'; ?>" data-disabled-message="<?php echo esc_attr( $disabled_message ); ?>">
+<div id="chatbot-container" data-nonce="<?php echo esc_attr( $nonce ); ?>" data-enabled="<?php echo $is_enabled ? '1' : '0'; ?>" data-disabled-message="<?php echo esc_attr( $disabled_message ); ?>" data-assistant-id="<?php echo esc_attr( $assistant_id ); ?>">
 	<div class="chatgpt-style-container">
 		<div id="chat-header">
 				<div class="chat-title"><?php echo esc_html__( 'T16 Assistant', 'wp-ai-assistant' ); ?></div>
