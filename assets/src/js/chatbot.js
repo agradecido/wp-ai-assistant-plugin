@@ -16,14 +16,14 @@ document.addEventListener("DOMContentLoaded", function () {
     if (chatbotContainer.dataset.threadId) {
         threadId = chatbotContainer.dataset.threadId;
     }
-    
+
     // Check if we have a thread ID in sessionStorage
     try {
         const storedThreadId = sessionStorage.getItem('wpai_current_thread');
         if (storedThreadId && !threadId) {
             threadId = storedThreadId;
             chatbotContainer.dataset.threadId = threadId;
-            
+
             // Indicate continuing conversation
             chatInput.placeholder = wpAIAssistant.i18n.continueConversationPlaceholder;
         }
@@ -52,7 +52,7 @@ document.addEventListener("DOMContentLoaded", function () {
             chatOutput.appendChild(botMessage);
             chatOutput.style.display = 'flex';
         }
-        
+
         // Scroll to bottom of the container after displaying the message
         const chatMessagesContainer = document.getElementById('chat-messages-container');
         if (chatMessagesContainer) {
@@ -85,8 +85,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
         showSpinner(true);
 
+        // Determine AJAX action based on mode
+        const mode = wpAIAssistant.mode || 'assistant';
+        const ajaxAction = mode === 'chat_completions' ? 'wp_ai_chat_completions_request' : 'wp_ai_assistant_request';
+
         let formData = new URLSearchParams();
-        formData.append("action", "wp_ai_assistant_request");
+        formData.append("action", ajaxAction);
         formData.append("query", userInput);
         formData.append("assistant_id", assistantId);
         formData.append("_ajax_nonce", nonce);
@@ -103,12 +107,12 @@ document.addEventListener("DOMContentLoaded", function () {
             .then(response => response.json())
             .then(data => {
                 handleResponse(data);
-                
+
                 // Store thread ID if present
                 if (data.thread_id && !threadId) {
                     threadId = data.thread_id;
                     chatbotContainer.dataset.threadId = threadId;
-                    
+
                     // Store in session storage for potential recovery
                     try {
                         sessionStorage.setItem('wpai_current_thread', threadId);
@@ -140,7 +144,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function addAssistantMessage(message) {
         let assistantMessage = document.createElement("div");
         assistantMessage.classList.add("chat-message", "assistant");
-        
+
         // Si el mensaje no comienza con <p>, lo envolvemos en un párrafo
         if (!message.trim().startsWith('<p>')) {
             // Además, procesamos posibles bloques de código
@@ -149,13 +153,13 @@ document.addEventListener("DOMContentLoaded", function () {
             message = message.replace(/`([^`]+)`/g, '<code>$1</code>');
             // Envolvemos el resto en párrafos
             message = `<p>${message}</p>`;
-            
+
             // Aseguramos que los párrafos estén bien formados cuando hay saltos de línea dobles
             message = message.replace(/\n\n/g, '</p><p>');
             // Saltos de línea simples dentro de párrafos
             message = message.replace(/\n/g, '<br>');
         }
-        
+
         assistantMessage.innerHTML = message;
         chatOutput.appendChild(assistantMessage);
         scrollToBottom();
@@ -167,10 +171,10 @@ document.addEventListener("DOMContentLoaded", function () {
      */
     function handleResponse(data) {
         showSpinner(false);
-        
+
         // Re-enable the submit button
         chatSubmit.disabled = false;
-        
+
         // Focus the input for better UX
         chatInput.focus();
 

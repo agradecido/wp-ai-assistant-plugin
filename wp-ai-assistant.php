@@ -2,7 +2,7 @@
 /**
  * Plugin Name: WP AI Assistant
  * Description: Plugin for chat with an OpenAI Assistant.
- * Version: 1.1
+ * Version: 1.2
  * Author: Javier Sierra
  * Text Domain: wp-ai-assistant
  * Domain Path: /languages

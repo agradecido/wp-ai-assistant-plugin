@@ -6,6 +6,7 @@ use WPAIS\Admin\Settings;
 use WPAIS\Admin\ConversationMetaBox;
 use WPAIS\Admin\SummaryMetaBox;
 use WPAIS\Api\Assistant;
+use WPAIS\Api\ChatCompletions;
 use WPAIS\Frontend\ChatShortcode;
 use WPAIS\Frontend\HistoryShortcode;
 use WPAIS\Infrastructure\Migration\CreateQuotaTable;
@@ -92,6 +93,10 @@ class Plugin {
 		add_action( 'wp_ajax_nopriv_wp_ai_assistant_request', array( $this, 'handle_chatbot_request' ) );
 		add_action( 'wp_ajax_wp_ai_assistant_admin_test', array( $this, 'handle_admin_test_request' ) );
 		add_action( 'wp_ajax_wp_ai_assistant_generate_summary', array( $this, 'handle_generate_summary_request' ) );
+		
+		// Chat Completions AJAX.
+		add_action( 'wp_ajax_wp_ai_chat_completions_request', array( $this, 'handle_chat_completions_request' ) );
+		add_action( 'wp_ajax_nopriv_wp_ai_chat_completions_request', array( $this, 'handle_chat_completions_request' ) );
 	}
 
 	/**
@@ -280,4 +285,81 @@ class Plugin {
                 wp_send_json_success( array( 'summary' => $summary ) );
                 wp_die();
         }
+
+	/**
+	 * Handle Chat Completions requests.
+	 */
+	public function handle_chat_completions_request() {
+		$nonce = isset( $_POST['_ajax_nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['_ajax_nonce'] ) ) : '';
+
+		if ( empty( $nonce ) || ! wp_verify_nonce( $nonce, 'wp_ai_assistant_nonce' ) ) {
+			Logger::error( 'Nonce verification failed' );
+			wp_send_json_error( array( 'message' => 'Nonce verification failed' ), 403 );
+			wp_die();
+		}
+
+		// Check if the chatbot is enabled.
+		if ( get_option( 'wp_ai_assistant_enable' ) !== '1' ) {
+			$disabled_message = get_option(
+				'wp_ai_assistant_disabled_message',
+				'Chat desactivado temporalmente, vuelva más tarde o póngase en contacto con nosotros'
+			);
+
+			wp_send_json(
+				array(
+					'success' => true,
+					'message' => $disabled_message,
+				)
+			);
+			wp_die();
+		}
+
+		// Check the quota.
+		$sid = Session::get_session_id();
+		try {
+			$this->quotaManager->checkAndIncrement( $sid );
+		} catch ( \RuntimeException $e ) {
+			Logger::error( 'Quota exceeded: ' . $e->getMessage() );
+			wp_send_json_error(
+				array(
+					'message' => $e->getMessage(),
+					'code'    => 'quota_exceeded',
+				),
+				429
+			);
+			wp_die();
+		}
+
+		$query = sanitize_text_field( wp_unslash( $_POST['query'] ?? '' ) );
+
+		Logger::log( 'Chat Completions query: ' . $query );
+
+		try {
+			// Get configuration.
+			$vector_store_id    = get_option( 'wp_ai_assistant_vector_store_id' );
+			$enable_web_search  = (bool) get_option( 'wp_ai_assistant_enable_web_search', 0 );
+
+			// Query Chat Completions API.
+			$response = ChatCompletions::query( $query, $sid, $vector_store_id, $enable_web_search );
+
+			// Check if response is array and has content.
+			if ( is_array( $response ) ) {
+				Logger::log( 'Response received: ' . ( $response['error'] ? 'Error: ' . $response['message'] : 'Success' ) );
+			} else {
+				Logger::log( 'Response: ' . wp_remote_retrieve_body( $response ) );
+			}
+
+			wp_send_json( $response );
+		} catch ( \Exception $e ) {
+			Logger::error( 'Exception in Chat Completions: ' . $e->getMessage() );
+			wp_send_json_error(
+				array(
+					'error'   => true,
+					'message' => 'An error occurred while processing your request. Please try again.',
+				),
+				500
+			);
+		}
+		wp_die();
+	}
 }
