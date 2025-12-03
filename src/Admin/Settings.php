@@ -146,6 +146,52 @@ class Settings {
 						'sanitize_callback' => 'wp_kses_post',
 					)
 				);
+
+		// Mode selection - Assistant API or Chat Completions.
+		register_setting(
+			'wp_ai_assistant_settings_group',
+			'wp_ai_assistant_mode',
+			array(
+				'type'              => 'string',
+				'sanitize_callback' => 'sanitize_text_field',
+				'default'           => 'assistant',
+			)
+		);
+
+		// Chat Completions model.
+		register_setting(
+			'wp_ai_assistant_settings_group',
+			'wp_ai_assistant_chat_model',
+			array(
+				'type'              => 'string',
+				'sanitize_callback' => 'sanitize_text_field',
+				'default'           => 'gpt-4o',
+			)
+		);
+
+		// Vector Store ID for Chat Completions.
+		register_setting(
+			'wp_ai_assistant_settings_group',
+			'wp_ai_assistant_vector_store_id',
+			array(
+				'type'              => 'string',
+				'sanitize_callback' => 'sanitize_text_field',
+				'default'           => '',
+			)
+		);
+
+		// Enable web search for Chat Completions.
+		register_setting(
+			'wp_ai_assistant_settings_group',
+			'wp_ai_assistant_enable_web_search',
+			array(
+				'type'              => 'boolean',
+				'sanitize_callback' => function ( $value ) {
+					return $value ? 1 : 0;
+				},
+				'default'           => 0,
+			)
+		);
 	}
 
 	/**

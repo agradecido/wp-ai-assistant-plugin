@@ -124,6 +124,7 @@ class ChatShortcode
             array(
             'ajax_url' => admin_url('admin-ajax.php'),
             'nonce'    => wp_create_nonce('wp_ai_assistant_nonce'),
+            'mode'     => get_option('wp_ai_assistant_mode', 'assistant'), // Operation mode.
             'i18n'     => array(
             'continueConversationPlaceholder' => __('Continue conversation...', 'wp-ai-assistant'),
             'chatDisabledDefault'             => __('Chat temporarily disabled, please try again later or contact us', 'wp-ai-assistant'),
