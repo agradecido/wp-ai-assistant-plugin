@@ -63,7 +63,7 @@ class ChatShortcode
         // Use plugin constants for reliable paths.
         $plugin_url = WP_AI_ASSISTANT_PLUGIN_URL;
         $plugin_path = WP_AI_ASSISTANT_PLUGIN_DIR;
-        $version = defined('WP_DEBUG') && WP_DEBUG ? time() : '1.0.1';
+        $version = defined('WP_DEBUG') && WP_DEBUG ? time() : '1.2';
 
         $manifest_path = $plugin_path . 'assets/dist/manifest.json';
 
@@ -206,8 +206,10 @@ class ChatShortcode
         $is_enabled = self::is_enabled();
 
         $assistant_id = self::get_assistant_id($atts);
+        $mode         = get_option('wp_ai_assistant_mode', 'assistant');
 
-        if (empty($assistant_id) ) {
+        // Only require Assistant ID if we are in Assistant mode.
+        if ( 'assistant' === $mode && empty($assistant_id) ) {
             Logger::log('Error: No assistant ID configured.');
             return '<p>' . __('Error: No assistant ID configured.', 'wp-ai-assistant') . '</p>';
         }
